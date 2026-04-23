@@ -83,7 +83,7 @@ const ALL_VERBS = [
   { present: "stay", past: "stayed", participle: "stayed", type: "regular", sound: "/d/", sentence: "<b>Stay</b> here. I <b>stayed</b>.", gif: "stay" }
 ];
 
-const GIPHY_KEY = typeof process !== 'undefined' ? process.env.GIPHY_KEY : "";
+const GIPHY_KEY = "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
 
 let deck = [];
 let cursor = 0;
