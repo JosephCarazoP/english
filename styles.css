@@ -574,6 +574,34 @@ header {
   font-weight: 600;
 }
 
+/* ── NUEVAS SECCIONES DE EJEMPLO EN MODAL ── */
+
+/* Ajuste para que las etiquetas de título (Present/Past) se vean mejor */
+.modal-section-label {
+  margin-top: 10px; /* Espacio extra arriba de cada título */
+  color: var(--text); /* Un poco más oscuro para que se lea bien */
+  opacity: 0.8;
+}
+
+/* Estilo para las cajas de las oraciones */
+.modal-sentence {
+  background: var(--bg); /* Usa el color de fondo del tema (claro o oscuro) */
+  border-left: 4px solid var(--progress-fill); /* Una barrita lateral para dar estilo */
+  font-style: italic;
+  transition: all 0.3s ease;
+}
+
+/* Resaltado de la palabra clave dentro de la oración */
+.modal-sentence b {
+  color: #22c55e; /* Color verde para que el verbo resalte */
+  text-decoration: underline;
+}
+
+/* Un pequeño ajuste al GIF para que no quede pegado a la última oración */
+.modal-gif {
+  margin-top: 10px;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
   header         { padding: 18px 20px; }

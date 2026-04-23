@@ -4,86 +4,83 @@ const START_DATE = new Date(2026, 3, 23);
 
 /* ── DATA ── */
 const ALL_VERBS = [
-  /* --- GRUPO PRIORITARIO (Día 1 y parte del 2) --- */
-  { present: "bear", past: "bore", participle: "borne", type: "irregular", sound: "", sentence: "I can't <b>bear</b> the cold. She <b>bore</b> the pain.", gif: "bear heavy" },
-  { present: "buy", past: "bought", participle: "bought", type: "irregular", sound: "", sentence: "I <b>buy</b> food. I <b>bought</b> a gift.", gif: "buying" },
-  { present: "drive", past: "drove", participle: "driven", type: "irregular", sound: "", sentence: "<b>Drive</b> slowly. He <b>drove</b> home.", gif: "driving" },
-  { present: "eat", past: "ate", participle: "eaten", type: "irregular", sound: "", sentence: "Let's <b>eat</b>. We <b>ate</b> pizza.", gif: "eating" },
-  { present: "find", past: "found", participle: "found", type: "irregular", sound: "", sentence: "<b>Find</b> the key. I <b>found</b> it.", gif: "find" },
-  { present: "grow", past: "grew", participle: "grown", type: "irregular", sound: "", sentence: "Plants <b>grow</b>. He <b>grew</b> tall.", gif: "growing" },
-  { present: "have", past: "had", participle: "had", type: "irregular", sound: "", sentence: "I <b>have</b> time. We <b>had</b> fun.", gif: "having" },
-  { present: "know", past: "knew", participle: "known", type: "irregular", sound: "", sentence: "I <b>know</b> you. I <b>knew</b> that.", gif: "smart" },
-  { present: "lose", past: "lost", participle: "lost", type: "irregular", sound: "", sentence: "Don't <b>lose</b> it. I <b>lost</b> my way.", gif: "lost" },
-  { present: "meet", past: "met", participle: "met", type: "irregular", sound: "", sentence: "<b>Meet</b> me here. We <b>met</b> before.", gif: "meeting" },
-  { present: "read", past: "read", participle: "read", type: "irregular", sound: "", sentence: "<b>Read</b> a book. I <b>read</b> the news.", gif: "reading" },
-  { present: "speak", past: "spoke", participle: "spoken", type: "irregular", sound: "", sentence: "<b>Speak</b> up. He <b>spoke</b> to me.", gif: "speaking" },
-  { present: "swim", past: "swam", participle: "swum", type: "irregular", sound: "", sentence: "I <b>swim</b> daily. We <b>swam</b> fast.", gif: "swimming" },
-  { present: "take", past: "took", participle: "taken", type: "irregular", sound: "", sentence: "<b>Take</b> a seat. She <b>took</b> the bus.", gif: "taking" },
-  { present: "write", past: "wrote", participle: "written", type: "irregular", sound: "", sentence: "<b>Write</b> a note. I <b>wrote</b> it.", gif: "writing" },
-  { present: "visit", past: "visited", participle: "visited", type: "regular", sound: "/id/", sentence: "<b>Visit</b> Rome. We <b>visited</b> them.", gif: "visiting" },
-  { present: "paint", past: "painted", participle: "painted", type: "regular", sound: "/id/", sentence: "I <b>paint</b>. She <b>painted</b> a bird.", gif: "painting" },
-  { present: "cook", past: "cooked", participle: "cooked", type: "regular", sound: "/t/", sentence: "<b>Cook</b> dinner. He <b>cooked</b> eggs.", gif: "cooking" },
-  { present: "talk", past: "talked", participle: "talked", type: "regular", sound: "/t/", sentence: "<b>Talk</b> to me. We <b>talked</b> a lot.", gif: "talking" },
-  { present: "walk", past: "walked", participle: "walked", type: "regular", sound: "/t/", sentence: "<b>Walk</b> fast. I <b>walked</b> home.", gif: "walking" },
-  { present: "work", past: "worked", participle: "worked", type: "regular", sound: "/t/", sentence: "I <b>work</b> now. He <b>worked</b> late.", gif: "working" },
-  { present: "watch", past: "watched", participle: "watched", type: "regular", sound: "/t/", sentence: "<b>Watch</b> this. We <b>watched</b> TV.", gif: "watching" },
-  { present: "laugh", past: "laughed", participle: "laughed", type: "regular", sound: "/t/", sentence: "Don't <b>laugh</b>. She <b>laughed</b>.", gif: "laughing" },
-  { present: "listen", past: "listened", participle: "listened", type: "regular", sound: "/d/", sentence: "<b>Listen</b>! I <b>listened</b> well.", gif: "listening" },
-  { present: "play", past: "played", participle: "played", type: "regular", sound: "/d/", sentence: "<b>Play</b> music. We <b>played</b>.", gif: "playing" },
-  { present: "call", past: "called", participle: "called", type: "regular", sound: "/d/", sentence: "<b>Call</b> me. She <b>called</b> you.", gif: "calling" },
+  /* --- GRUPO PRIORITARIO --- */
+  { present: "bear", past: "bore", participle: "borne", type: "irregular", sound: "", sentencePres: "Some people cannot <b>bear</b> the cold weather.", sentencePast: "She <b>bore</b> the pain with great courage.", gif: "bear heavy" },
+  { present: "buy", past: "bought", participle: "bought", type: "irregular", sound: "", sentencePres: "I <b>buy</b> fresh vegetables every morning.", sentencePast: "Yesterday, I <b>bought</b> a gift for my mother.", gif: "buying" },
+  { present: "drive", past: "drove", participle: "driven", type: "irregular", sound: "", sentencePres: "Please <b>drive</b> slowly near the school.", sentencePast: "He <b>drove</b> all night to get to the beach.", gif: "driving" },
+  { present: "eat", past: "ate", participle: "eaten", type: "irregular", sound: "", sentencePres: "I always <b>eat</b> breakfast at 7:00 AM.", sentencePast: "We <b>ate</b> a delicious pizza last night.", gif: "eating" },
+  { present: "find", past: "found", participle: "found", type: "irregular", sound: "", sentencePres: "It is hard to <b>find</b> a parking spot here.", sentencePast: "I <b>found</b> my lost keys under the sofa.", gif: "find" },
+  { present: "grow", past: "grew", participle: "grown", type: "irregular", sound: "", sentencePres: "Plants <b>grow</b> faster with enough sunlight.", sentencePast: "The city <b>grew</b> quickly in the last decade.", gif: "growing" },
+  { present: "have", past: "had", participle: "had", type: "irregular", sound: "", sentencePres: "I <b>have</b> two brothers and one sister.", sentencePast: "We <b>had</b> a great time at the party.", gif: "having" },
+  { present: "know", past: "knew", participle: "known", type: "irregular", sound: "", sentencePres: "I <b>know</b> the answer to your question.", sentencePast: "I <b>knew</b> you were going to call me.", gif: "smart" },
+  { present: "lose", past: "lost", participle: "lost", type: "irregular", sound: "", sentencePres: "Don't <b>lose</b> your passport at the airport.", sentencePast: "Our team <b>lost</b> the game by one goal.", gif: "lost" },
+  { present: "meet", past: "met", participle: "met", type: "irregular", sound: "", sentencePres: "I want to <b>meet</b> your new friends.", sentencePast: "We <b>met</b> for the first time in high school.", gif: "meeting" },
+  { present: "read", past: "read", participle: "read", type: "irregular", sound: "", sentencePres: "You should <b>read</b> the instructions carefully.", sentencePast: "Last night, I <b>read</b> a very long article.", gif: "reading" },
+  { present: "speak", past: "spoke", participle: "spoken", type: "irregular", sound: "", sentencePres: "Can you <b>speak</b> more slowly, please?", sentencePast: "He <b>spoke</b> to the manager about the problem.", gif: "speaking" },
+  { present: "swim", past: "swam", participle: "swum", type: "irregular", sound: "", sentencePres: "I <b>swim</b> in the pool every Saturday.", sentencePast: "We <b>swam</b> in the ocean during our vacation.", gif: "swimming" },
+  { present: "take", past: "took", participle: "taken", type: "irregular", sound: "", sentencePres: "Remember to <b>take</b> your umbrella with you.", sentencePast: "She <b>took</b> the bus to go to the city center.", gif: "taking" },
+  { present: "write", past: "wrote", participle: "written", type: "irregular", sound: "", sentencePres: "I <b>write</b> in my journal every evening.", sentencePast: "He <b>wrote</b> a beautiful poem for his wife.", gif: "writing" },
+  { present: "visit", past: "visited", participle: "visited", type: "regular", sound: "/id/", sentencePres: "I like to <b>visit</b> museums on weekends.", sentencePast: "They <b>visited</b> many countries last year.", gif: "visiting" },
+  { present: "paint", past: "painted", participle: "painted", type: "regular", sound: "/id/", sentencePres: "She wants to <b>paint</b> her room blue.", sentencePast: "He <b>painted</b> a beautiful landscape yesterday.", gif: "painting" },
+  { present: "cook", past: "cooked", participle: "cooked", type: "regular", sound: "/t/", sentencePres: "I often <b>cook</b> dinner for my family.", sentencePast: "He <b>cooked</b> a special meal for her birthday.", gif: "cooking" },
+  { present: "talk", past: "talked", participle: "talked", type: "regular", sound: "/t/", sentencePres: "We need to <b>talk</b> about the new project.", sentencePast: "I <b>talked</b> to the teacher after the class.", gif: "talking" },
+  { present: "walk", past: "walked", participle: "walked", type: "regular", sound: "/t/", sentencePres: "I <b>walk</b> to work when the weather is nice.", sentencePast: "We <b>walked</b> for three miles in the park.", gif: "walking" },
+  { present: "work", past: "worked", participle: "worked", type: "regular", sound: "/t/", sentencePres: "They <b>work</b> in a very large office.", sentencePast: "She <b>worked</b> until late last Friday night.", gif: "working" },
+  { present: "watch", past: "watched", participle: "watched", type: "regular", sound: "/t/", sentencePres: "Do you want to <b>watch</b> a movie tonight?", sentencePast: "We <b>watched</b> the football game on TV.", gif: "watching" },
+  { present: "laugh", past: "laughed", participle: "laughed", type: "regular", sound: "/t/", sentencePres: "Funny movies make me <b>laugh</b> a lot.", sentencePast: "She <b>laughed</b> at the joke I told her.", gif: "laughing" },
+  { present: "listen", past: "listened", participle: "listened", type: "regular", sound: "/d/", sentencePres: "I <b>listen</b> to music while I study.", sentencePast: "He <b>listened</b> carefully to the instructions.", gif: "listening" },
+  { present: "play", past: "played", participle: "played", type: "regular", sound: "/d/", sentencePres: "The children <b>play</b> in the garden every day.", sentencePast: "We <b>played</b> soccer for two hours yesterday.", gif: "playing" },
+  { present: "call", past: "called", participle: "called", type: "regular", sound: "/d/", sentencePres: "I will <b>call</b> you as soon as I arrive.", sentencePast: "She <b>called</b> her mother this morning.", gif: "calling" },
 
-  /* --- RESTO DE LA LISTA (Irregulares) --- */
-  { present: "arise", past: "arose", participle: "arisen", type: "irregular", sound: "", sentence: "Problems <b>arise</b>. Hope <b>arose</b>.", gif: "rising" },
-  { present: "awake", past: "awoke", participle: "awoken", type: "irregular", sound: "", sentence: "I <b>awake</b> early. He <b>awoke</b>.", gif: "awake" },
-  { present: "be", past: "was / were", participle: "been", type: "irregular", sound: "", sentence: "Just <b>be</b> you. I <b>was</b> there.", gif: "being" },
-  { present: "beat", past: "beat", participle: "beaten", type: "irregular", sound: "", sentence: "<b>Beat</b> it! We <b>beat</b> the record.", gif: "beat" },
-  { present: "become", past: "became", participle: "become", type: "irregular", sound: "", sentence: "<b>Become</b> strong. He <b>became</b> king.", gif: "transformation" },
-  { present: "begin", past: "began", participle: "begun", type: "irregular", sound: "", sentence: "<b>Begin</b> now. It <b>began</b> late.", gif: "starting" },
-  { present: "bend", past: "bent", participle: "bent", type: "irregular", sound: "", sentence: "<b>Bend</b> the metal. I <b>bent</b> it.", gif: "bending" },
-  { present: "bet", past: "bet", participle: "bet", type: "irregular", sound: "", sentence: "I <b>bet</b> on you. He <b>bet</b> money.", gif: "betting" },
-  { present: "bite", past: "bit", participle: "bit / bitten", type: "irregular", sound: "", sentence: "Don't <b>bite</b>. The dog <b>bit</b> me.", gif: "bite" },
-  { present: "blow", past: "blew", participle: "blown", type: "irregular", sound: "", sentence: "<b>Blow</b> bubbles. Wind <b>blew</b>.", gif: "blowing" },
-  { present: "break", past: "broke", participle: "broken", type: "irregular", sound: "", sentence: "Don't <b>break</b> it. It <b>broke</b>.", gif: "broken" },
-  { present: "bring", past: "brought", participle: "brought", type: "irregular", sound: "", sentence: "<b>Bring</b> help. I <b>brought</b> food.", gif: "carrying" },
-  { present: "choose", past: "chose", participle: "chosen", type: "irregular", sound: "", sentence: "<b>Choose</b> well. I <b>chose</b> this.", gif: "choosing" },
-  { present: "come", past: "came", participle: "come", type: "irregular", sound: "", sentence: "<b>Come</b> here. They <b>came</b> back.", gif: "coming" },
-  { present: "cut", past: "cut", participle: "cut", type: "irregular", sound: "", sentence: "<b>Cut</b> the paper. I <b>cut</b> it.", gif: "cutting" },
-  { present: "do", past: "did", participle: "done", type: "irregular", sound: "", sentence: "Just <b>do</b> it. I <b>did</b> my job.", gif: "doing" },
-  { present: "drink", past: "drank", participle: "drunk", type: "irregular", sound: "", sentence: "<b>Drink</b> water. He <b>drank</b> juice.", gif: "drinking" },
-  { present: "fall", past: "fell", participle: "fallen", type: "irregular", sound: "", sentence: "Don't <b>fall</b>. She <b>fell</b> down.", gif: "falling" },
-  { present: "forget", past: "forgot", participle: "forgotten", type: "irregular", sound: "", sentence: "I <b>forget</b> names. I <b>forgot</b>.", gif: "forget" },
-  { present: "get", past: "got", participle: "got / gotten", type: "irregular", sound: "", sentence: "<b>Get</b> ready. I <b>got</b> a prize.", gif: "getting" },
-  { present: "give", past: "gave", participle: "given", type: "irregular", sound: "", sentence: "<b>Give</b> thanks. He <b>gave</b> me this.", gif: "giving" },
-  { present: "go", past: "went", participle: "gone", type: "irregular", sound: "", sentence: "<b>Go</b> home. They <b>went</b> out.", gif: "going" },
-  { present: "make", past: "made", participle: "made", type: "irregular", sound: "", sentence: "<b>Make</b> a wish. I <b>made</b> lunch.", gif: "making" },
-  { present: "see", past: "saw", participle: "seen", type: "irregular", sound: "", sentence: "I <b>see</b> you. I <b>saw</b> a movie.", gif: "seeing" },
-  { present: "sing", past: "sang", participle: "sung", type: "irregular", sound: "", sentence: "<b>Sing</b> a song. We <b>sang</b> loud.", gif: "singing" },
-  { present: "sleep", past: "slept", participle: "slept", type: "irregular", sound: "", sentence: "<b>Sleep</b> well. I <b>slept</b> 8 hours.", gif: "sleeping" },
-  { present: "think", past: "thought", participle: "thought", type: "irregular", sound: "", sentence: "<b>Think</b> fast. I <b>thought</b> so.", gif: "thinking" },
-  { present: "win", past: "won", participle: "won", type: "irregular", sound: "", sentence: "<b>Win</b> the game. We <b>won</b>!", gif: "winning" },
+  /* --- IRREGULARES RESTO --- */
+  { present: "arise", past: "arose", participle: "arisen", type: "irregular", sound: "", sentencePres: "New problems <b>arise</b> every single day.", sentencePast: "A huge conflict <b>arose</b> during the meeting.", gif: "rising" },
+  { present: "awake", past: "awoke", participle: "awoken", type: "irregular", sound: "", sentencePres: "I usually <b>awake</b> when the sun rises.", sentencePast: "He <b>awoke</b> suddenly in the middle of the night.", gif: "awake" },
+  { present: "be", past: "was / were", participle: "been", type: "irregular", sound: "", sentencePres: "Please <b>be</b> patient with the new students.", sentencePast: "I <b>was</b> very happy to see you yesterday.", gif: "being" },
+  { present: "beat", past: "beat", participle: "beaten", type: "irregular", sound: "", sentencePres: "Can you <b>beat</b> the high score in this game?", sentencePast: "They <b>beat</b> the rival team last Saturday.", gif: "beat" },
+  { present: "become", past: "became", participle: "become", type: "irregular", sound: "", sentencePres: "It is hard to <b>become</b> a professional doctor.", sentencePast: "He <b>became</b> a famous singer in a short time.", gif: "transformation" },
+  { present: "begin", past: "began", participle: "begun", type: "irregular", sound: "", sentencePres: "The classes <b>begin</b> at eight in the morning.", sentencePast: "It <b>began</b> to rain just after we left home.", gif: "starting" },
+  { present: "bend", past: "bent", participle: "bent", type: "irregular", sound: "", sentencePres: "Be careful not to <b>bend</b> the credit card.", sentencePast: "He <b>bent</b> the metal pipe with his hands.", gif: "bending" },
+  { present: "bet", past: "bet", participle: "bet", type: "irregular", sound: "", sentencePres: "I <b>bet</b> you can't finish that huge burger.", sentencePast: "He <b>bet</b> all his money and lost it all.", gif: "betting" },
+  { present: "bite", past: "bit", participle: "bit / bitten", type: "irregular", sound: "", sentencePres: "Be careful! That dog might <b>bite</b> you.", sentencePast: "A mosquito <b>bit</b> me on the arm last night.", gif: "bite" },
+  { present: "blow", past: "blew", participle: "blown", type: "irregular", sound: "", sentencePres: "The kids love to <b>blow</b> soap bubbles.", sentencePast: "A strong wind <b>blew</b> the leaves away.", gif: "blowing" },
+  { present: "break", past: "broke", participle: "broken", type: "irregular", sound: "", sentencePres: "If you <b>break</b> the rules, you will be punished.", sentencePast: "The glass <b>broke</b> into a thousand pieces.", gif: "broken" },
+  { present: "bring", past: "brought", participle: "brought", type: "irregular", sound: "", sentencePres: "Always <b>bring</b> your notebook to the class.", sentencePast: "She <b>brought</b> some cookies for the party.", gif: "carrying" },
+  { present: "choose", past: "chose", participle: "chosen", type: "irregular", sound: "", sentencePres: "You must <b>choose</b> the correct answer now.", sentencePast: "I <b>chose</b> the red shirt instead of the blue one.", gif: "choosing" },
+  { present: "come", past: "came", participle: "come", type: "irregular", sound: "", sentencePres: "Please <b>come</b> to my house this afternoon.", sentencePast: "They <b>came</b> back from their trip yesterday.", gif: "coming" },
+  { present: "cut", past: "cut", participle: "cut", type: "irregular", sound: "", sentencePres: "Use these scissors to <b>cut</b> the paper.", sentencePast: "He <b>cut</b> the cake into eight equal pieces.", gif: "cutting" },
+  { present: "do", past: "did", participle: "done", type: "irregular", sound: "", sentencePres: "I need to <b>do</b> my homework tonight.", sentencePast: "You <b>did</b> a very good job on the project.", gif: "doing" },
+  { present: "drink", past: "drank", participle: "drunk", type: "irregular", sound: "", sentencePres: "You should <b>drink</b> eight glasses of water.", sentencePast: "He <b>drank</b> a cold soda after the race.", gif: "drinking" },
+  { present: "fall", past: "fell", participle: "fallen", type: "irregular", sound: "", sentencePres: "Be careful or you will <b>fall</b> on the ice.", sentencePast: "The leaves <b>fell</b> from the trees in autumn.", gif: "falling" },
+  { present: "forget", past: "forgot", participle: "forgotten", type: "irregular", sound: "", sentencePres: "I often <b>forget</b> where I put my glasses.", sentencePast: "I <b>forgot</b> to buy milk at the supermarket.", gif: "forget" },
+  { present: "get", past: "got", participle: "got / gotten", type: "irregular", sound: "", sentencePres: "I need to <b>get</b> a new pair of shoes.", sentencePast: "She <b>got</b> a perfect score on her exam.", gif: "getting" },
+  { present: "give", past: "gave", participle: "given", type: "irregular", sound: "", sentencePres: "Please <b>give</b> me a hand with this box.", sentencePast: "My father <b>gave</b> me this watch for my birthday.", gif: "giving" },
+  { present: "go", past: "went", participle: "gone", type: "irregular", sound: "", sentencePres: "I <b>go</b> to the gym four times a week.", sentencePast: "We <b>went</b> to the cinema last Sunday.", gif: "going" },
+  { present: "make", past: "made", participle: "made", type: "irregular", sound: "", sentencePres: "I like to <b>make</b> my own clothes.", sentencePast: "She <b>made</b> a delicious chocolate cake.", gif: "making" },
+  { present: "see", past: "saw", participle: "seen", type: "irregular", sound: "", sentencePres: "I can <b>see</b> the mountains from my window.", sentencePast: "I <b>saw</b> a famous actor at the airport.", gif: "seeing" },
+  { present: "sing", past: "sang", participle: "sung", type: "irregular", sound: "", sentencePres: "She can <b>sing</b> very high notes beautifully.", sentencePast: "We <b>sang</b> happy birthday to our friend.", gif: "singing" },
+  { present: "sleep", past: "slept", participle: "slept", type: "irregular", sound: "", sentencePres: "I need to <b>sleep</b> at least seven hours.", sentencePast: "The baby <b>slept</b> peacefully all night.", gif: "sleeping" },
+  { present: "think", past: "thought", participle: "thought", type: "irregular", sound: "", sentencePres: "I <b>think</b> it is going to rain today.", sentencePast: "I <b>thought</b> you were at the office.", gif: "thinking" },
+  { present: "win", past: "won", participle: "won", type: "irregular", sound: "", sentencePres: "We want to <b>win</b> the championship this year.", sentencePast: "They <b>won</b> the lottery two years ago.", gif: "winning" },
 
-  /* --- RESTO DE REGULARES POR SONIDO --- */
-  // /id/ sound
-  { present: "accept", past: "accepted", participle: "accepted", type: "regular", sound: "/id/", sentence: "<b>Accept</b> it. I <b>accepted</b>.", gif: "yes" },
-  { present: "count", past: "counted", participle: "counted", type: "regular", sound: "/id/", sentence: "<b>Count</b> to ten. He <b>counted</b>.", gif: "numbers" },
-  { present: "need", past: "needed", participle: "needed", type: "regular", sound: "/id/", sentence: "I <b>need</b> help. You <b>needed</b> me.", gif: "need" },
-  { present: "start", past: "started", participle: "started", type: "regular", sound: "/id/", sentence: "<b>Start</b> now. It <b>started</b>.", gif: "start" },
-  { present: "want", past: "wanted", participle: "wanted", type: "regular", sound: "/id/", sentence: "I <b>want</b> cake. She <b>wanted</b> it.", gif: "want" },
-  // /t/ sound
-  { present: "ask", past: "asked", participle: "asked", type: "regular", sound: "/t/", sentence: "<b>Ask</b> him. I <b>asked</b> why.", gif: "asking" },
-  { present: "dance", past: "danced", participle: "danced", type: "regular", sound: "/t/", sentence: "Let's <b>dance</b>. We <b>danced</b>.", gif: "dancing" },
-  { present: "finish", past: "finished", participle: "finished", type: "regular", sound: "/t/", sentence: "<b>Finish</b> it. I <b>finished</b>.", gif: "finish" },
-  { present: "help", past: "helped", participle: "helped", type: "regular", sound: "/t/", sentence: "<b>Help</b> me! You <b>helped</b> us.", gif: "help" },
-  { present: "look", past: "looked", participle: "looked", type: "regular", sound: "/t/", sentence: "<b>Look</b>! I <b>looked</b> at you.", gif: "looking" },
-  // /d/ sound
-  { present: "answer", past: "answered", participle: "answered", type: "regular", sound: "/d/", sentence: "<b>Answer</b> me. He <b>answered</b>.", gif: "answering" },
-  { present: "clean", past: "cleaned", participle: "cleaned", type: "regular", sound: "/d/", sentence: "<b>Clean</b> up. We <b>cleaned</b> it.", gif: "cleaning" },
-  { present: "love", past: "loved", participle: "loved", type: "regular", sound: "/d/", sentence: "I <b>love</b> it. She <b>loved</b> you.", gif: "love" },
-  { present: "open", past: "opened", participle: "opened", type: "regular", sound: "/d/", sentence: "<b>Open</b> it. I <b>opened</b> it.", gif: "opening" },
-  { present: "stay", past: "stayed", participle: "stayed", type: "regular", sound: "/d/", sentence: "<b>Stay</b> here. I <b>stayed</b>.", gif: "stay" }
+  /* --- REGULARES POR SONIDO --- */
+  { present: "accept", past: "accepted", participle: "accepted", type: "regular", sound: "/id/", sentencePres: "Do you <b>accept</b> credit cards here?", sentencePast: "She <b>accepted</b> the job offer immediately.", gif: "yes" },
+  { present: "count", past: "counted", participle: "counted", type: "regular", sound: "/id/", sentencePres: "Can you <b>count</b> from one to twenty?", sentencePast: "He <b>counted</b> the money twice to be sure.", gif: "numbers" },
+  { present: "need", past: "needed", participle: "needed", type: "regular", sound: "/id/", sentencePres: "I <b>need</b> some help with my homework.", sentencePast: "We <b>needed</b> a bigger car for the trip.", gif: "need" },
+  { present: "start", past: "started", participle: "started", type: "regular", sound: "/id/", sentencePres: "The movie will <b>start</b> in five minutes.", sentencePast: "It <b>started</b> to snow early this morning.", gif: "start" },
+  { present: "want", past: "wanted", participle: "wanted", type: "regular", sound: "/id/", sentencePres: "I <b>want</b> to travel around the world.", sentencePast: "He <b>wanted</b> to buy a new computer.", gif: "want" },
+  { present: "ask", past: "asked", participle: "asked", type: "regular", sound: "/t/", sentencePres: "Don't be afraid to <b>ask</b> questions.", sentencePast: "I <b>asked</b> the police for directions.", gif: "asking" },
+  { present: "dance", past: "danced", participle: "danced", type: "regular", sound: "/t/", sentencePres: "They <b>dance</b> salsa very well together.", sentencePast: "We <b>danced</b> all night at the wedding.", gif: "dancing" },
+  { present: "finish", past: "finished", participle: "finished", type: "regular", sound: "/t/", sentencePres: "I must <b>finish</b> this report by Friday.", sentencePast: "She <b>finished</b> her dinner very quickly.", gif: "finish" },
+  { present: "help", past: "helped", participle: "helped", type: "regular", sound: "/t/", sentencePres: "I am happy to <b>help</b> you with that.", sentencePast: "He <b>helped</b> me carry the heavy bags.", gif: "help" },
+  { present: "look", past: "looked", participle: "looked", type: "regular", sound: "/t/", sentencePres: "Please <b>look</b> at the whiteboard now.", sentencePast: "I <b>looked</b> for my keys everywhere.", gif: "looking" },
+  { present: "answer", past: "answered", participle: "answered", type: "regular", sound: "/d/", sentencePres: "I always <b>answer</b> my emails promptly.", sentencePast: "He <b>answered</b> all the questions correctly.", gif: "answering" },
+  { present: "clean", past: "cleaned", participle: "cleaned", type: "regular", sound: "/d/", sentencePres: "I <b>clean</b> my bedroom every Saturday.", sentencePast: "We <b>cleaned</b> the entire house yesterday.", gif: "cleaning" },
+  { present: "love", past: "loved", participle: "loved", type: "regular", sound: "/d/", sentencePres: "I <b>love</b> spending time with my family.", sentencePast: "She <b>loved</b> that movie when she was a kid.", gif: "love" },
+  { present: "open", past: "opened", participle: "opened", type: "regular", sound: "/d/", sentencePres: "Could you <b>open</b> the window, please?", sentencePast: "He <b>opened</b> the door for the lady.", gif: "opening" },
+  { present: "stay", past: "stayed", participle: "stayed", type: "regular", sound: "/d/", sentencePres: "I usually <b>stay</b> at home on Sundays.", sentencePast: "They <b>stayed</b> in a very nice hotel.", gif: "stay" }
 ];
 
-const GIPHY_KEY = "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
+const GIPHY_KEY = window.GIPHY_KEY || "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
 
 let deck = [];
 let cursor = 0;
@@ -241,7 +238,8 @@ async function openDetail() {
 
   document.getElementById("modalPresent").innerHTML = `${verb.present} ${soundHTML}`;
   document.getElementById("modalPast").textContent = verb.past;
-  document.getElementById("modalSentence").innerHTML = verb.sentence;
+  document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
+  document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
 
   const badge = document.getElementById("modalBadge");
   badge.textContent = verb.type === "irregular" ? "Irregular" : "Regular";
