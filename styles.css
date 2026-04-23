@@ -37,10 +37,10 @@ body {
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; 
   padding: 24px 32px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 .logo {
@@ -56,6 +56,7 @@ header {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  margin-left: auto; 
 }
 
 .filter-btn {
@@ -574,6 +575,19 @@ header {
   font-weight: 600;
 }
 
+.footer-controls {
+  display: flex;
+  justify-content: space-between; /* Uno a la izquierda y otro a la derecha */
+  align-items: center;
+  padding: 0 20px 15px 20px; /* Espacio a los lados y abajo */
+  max-width: 500px; /* Para que no queden demasiado lejos en pantallas grandes */
+  margin: 0 auto;   /* Centra el contenedor del footer */
+}
+
+/* Opcional: Si quieres que solo se muevan abajo en móviles, 
+   podrías ocultarlos en el header y mostrarlos aquí con Media Queries. 
+   Pero tenerlos fijos abajo es muy cómodo para el pulgar del estudiante. */
+
 /* ── NUEVAS SECCIONES DE EJEMPLO EN MODAL ── */
 
 /* Ajuste para que las etiquetas de título (Present/Past) se vean mejor */
@@ -601,14 +615,40 @@ header {
 .modal-gif {
   margin-top: 10px;
 }
+/* ── RESPONSIVE GENERAL (Tablets y Celulares) ── */
+@media (max-width: 600px) {
+  header {
+    justify-content: center; /* Centra el logo y botones */
+    padding: 15px;
+    gap: 15px;
+  }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 480px) {
-  header         { padding: 18px 20px; }
+  .header-right {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .filter-btn {
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+
+  /* Ajustes de espacio para pantallas pequeñas */
   .progress-wrap { padding: 0 20px 8px; }
   .score-row     { padding: 0 20px 16px; gap: 24px; }
   .stage         { padding: 0 20px 24px; }
-  .card-scene    { height: 230px; }
+  .card-scene    { height: 230px; } /* Tarjeta un poco más pequeña */
   .modal         { padding: 20px 20px 36px; }
   .act-btn       { padding: 12px 20px; }
+}
+
+/* ── AJUSTE EXTRA (Celulares muy pequeños < 400px) ── */
+@media (max-width: 400px) {
+  .header-right {
+    gap: 4px; /* Pegamos más los botones para que no se desborden */
+  }
+  .filter-btn {
+    letter-spacing: 0; /* Quitamos espacio entre letras para ganar espacio */
+    padding: 5px 8px;
+  }
 }
