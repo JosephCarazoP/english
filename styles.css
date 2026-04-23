@@ -546,9 +546,11 @@ header {
 [data-theme="dark"] .col-9 .front { background: #0a2e40; color: #b8ecff; }
 
 .logo-web {
-  height: 45px;      /* Altura ideal para un header */
-  width: auto;        /* Mantiene la proporción original */
-  object-fit: contain;
+  height: 45px;      /* Altura que ya tenías */
+  width: 45px;       /* IMPORTANTE: Misma medida para que sea un cuadrado perfecto */
+  object-fit: cover; /* Recorta la imagen para que encaje sin estirarse */
+  border-radius: 50%; /* ¡ESTA ES LA MAGIA QUE LO HACE REDONDO! */
+  border: 2px solid var(--text); /* Opcional: Un borde para que resalte */
   display: block;
 }
 
@@ -556,6 +558,20 @@ header {
 .logo {
   display: flex;
   align-items: center;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid var(--progress-bg);
+  color: var(--subtext);
+  font-size: 0.9rem;
+}
+
+.site-footer b {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* ── RESPONSIVE ── */
