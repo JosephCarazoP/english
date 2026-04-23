@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Verb Flashcards</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
   <!-- HEADER -->
   <header>
-    <div class="logo">Verb Cards</div>
+    <div class="logo">
+      <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" alt="Logo" class="logo-web">
+    </div>
     <div class="header-right">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="irregular">Irregular</button>
-      <button class="filter-btn" data-filter="regular">Regular</button>
-      <button class="icon-btn" id="shuffleBtn" title="Shuffle">⇄</button>
-      <button class="icon-btn" id="themeToggle" title="Toggle theme">☀︎</button>
+    </div>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="irregular">Irregular</button>
+    <button class="filter-btn" data-filter="regular">Regular</button>
+    <button class="icon-btn" id="shuffleBtn" title="Shuffle">⇄</button>
+    <button class="icon-btn" id="themeToggle" title="Toggle theme">☀︎</button>
     </div>
   </header>
 
@@ -60,9 +65,9 @@
     </div>
 
     <div class="actions" id="actions">
-      <button class="act-btn btn-skip"    id="btnSkip">Skip ›</button>
+      <button class="act-btn btn-skip" id="btnSkip">Skip ›</button>
       <button class="act-btn btn-correct" id="btnCorrect">Got it ✓</button>
-      <button class="act-btn btn-detail"  id="btnDetail">✦</button>
+      <button class="act-btn btn-detail" id="btnDetail">✦</button>
     </div>
   </div>
 
@@ -73,8 +78,8 @@
     <div class="finish-subtitle" id="finishSubtitle"></div>
     <div class="finish-stats">
       <div class="finish-stat ok"><b id="fCorrect">0</b><span>Learned</span></div>
-      <div class="finish-stat">   <b id="fSkip">0</b>   <span>Skipped</span></div>
-      <div class="finish-stat">   <b id="fTotal">0</b>   <span>Total</span></div>
+      <div class="finish-stat"> <b id="fSkip">0</b> <span>Skipped</span></div>
+      <div class="finish-stat"> <b id="fTotal">0</b> <span>Total</span></div>
     </div>
     <button class="restart-btn" id="restartBtn">Shuffle &amp; Restart</button>
   </div>
@@ -88,7 +93,7 @@
       <div class="modal-verbs">
         <span class="modal-present" id="modalPresent"></span>
         <span class="modal-arrow">→</span>
-        <span class="modal-past"    id="modalPast"></span>
+        <span class="modal-past" id="modalPast"></span>
       </div>
       <div class="modal-section-label">Example sentences</div>
       <div class="modal-sentence" id="modalSentence"></div>
@@ -101,4 +106,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

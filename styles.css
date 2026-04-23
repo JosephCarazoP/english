@@ -545,6 +545,19 @@ header {
 [data-theme="dark"] .col-8 .front { background: #4d2c00; color: #ffe4b0; }
 [data-theme="dark"] .col-9 .front { background: #0a2e40; color: #b8ecff; }
 
+.logo-web {
+  height: 45px;      /* Altura ideal para un header */
+  width: auto;        /* Mantiene la proporción original */
+  object-fit: contain;
+  display: block;
+}
+
+/* Asegúrate de que el contenedor esté alineado */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
   header         { padding: 18px 20px; }
