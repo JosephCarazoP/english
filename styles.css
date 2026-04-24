@@ -662,6 +662,13 @@ header {
   outline: none;
   -webkit-appearance: none;
 }
+
+.quiz-option:focus,
+.quiz-option:focus-visible {
+  border-color: var(--progress-bg) !important;
+  outline: none !important;
+  box-shadow: var(--shadow) !important;
+}
  
 .quiz-option:hover:not(:disabled) {
   border-color: var(--text);
@@ -689,14 +696,6 @@ header {
 .quiz-option:disabled {
   cursor: default;
 }
- 
-.quiz-option:focus,
-.quiz-option:focus-visible,
-.quiz-option:focus-within {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
 
 .quiz-option:disabled:focus,
 .quiz-option:disabled:focus-visible {
