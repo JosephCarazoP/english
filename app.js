@@ -393,7 +393,7 @@ function renderQuizQuestion() {
 
     <div class="quiz-options" id="quizOptions">
       ${q.options.map(opt => `
-        <div class="quiz-option" role="button" data-value="${opt}">${opt}</div>
+        <div class="quiz-option" role="button" tabindex="-1" data-value="${opt}">${opt}</div>
       `).join("")}
     </div>
   `;
