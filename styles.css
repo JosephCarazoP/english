@@ -658,7 +658,9 @@ header {
   box-shadow: var(--shadow);
   text-align: center;
   -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
+  -webkit-touch-callout: none;  
+  outline: none;
+  -webkit-appearance: none;
 }
  
 .quiz-option:hover:not(:disabled) {
