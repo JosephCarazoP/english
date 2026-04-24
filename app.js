@@ -425,6 +425,7 @@ function handleQuizAnswer(selectedBtn, correct) {
   allBtns.forEach(b => {
     b.disabled = true;
     b.blur();
+    b.setAttribute("tabindex", "-1");
   });
 
   // Actualizar score visible
