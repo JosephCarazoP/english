@@ -399,9 +399,11 @@ function renderQuizQuestion() {
     <div class="quiz-question">${q.question}</div>
 
     <div class="quiz-options" id="quizOptions">
-      ${q.options.map(opt => `
-        <div class="quiz-option" role="button" tabindex="-1" data-value="${opt}">${opt}</div>
-      `).join("")}
+     ${q.options.map(opt => `
+        <div class="quiz-option" role="button" tabindex="-1" 
+        style="outline:none;-webkit-tap-highlight-color:transparent;" 
+        data-value="${opt}">${opt}</div>
+     `).join("")}
     </div>
   `;
 
