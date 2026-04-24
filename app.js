@@ -407,6 +407,7 @@ function renderQuizQuestion() {
 function handleQuizAnswer(selectedEl, correct) {
   if (quizAnswered) return;
   quizAnswered = true;
+  selectedEl.blur();
 
   const allBtns = document.querySelectorAll(".quiz-option");
   const isRight = selectedEl.dataset.value === correct;
