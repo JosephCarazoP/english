@@ -374,7 +374,6 @@ function startQuiz() {
   }, 50);
 }
 
-/* ── Renderiza la pregunta actual ── */
 function renderQuizQuestion() {
   quizAnswered = false;
   const q = quizQuestions[quizIdx];
@@ -398,16 +397,37 @@ function renderQuizQuestion() {
     <div class="quiz-question">${q.question}</div>
 
     <div class="quiz-options" id="quizOptions">
-     ${q.options.map(opt => `
-        <div class="quiz-option" role="button" tabindex="-1" 
-        style="outline:none;-webkit-tap-highlight-color:transparent;" 
-        data-value="${opt}">${opt}</div>
-     `).join("")}
+      ${q.options.map(opt => `
+        <button 
+          class="quiz-option" 
+          type="button"
+          tabindex="-1"
+          data-value="${opt}"
+        >${opt}</button>
+      `).join("")}
     </div>
   `;
 
-  container.querySelectorAll(".quiz-option").forEach(el => {
-    el.addEventListener("click", () => handleQuizAnswer(el, q.correct));
+  // Usar mousedown + touchstart para disparar ANTES del focus
+  container.querySelectorAll(".quiz-option").forEach(btn => {
+    let handled = false;
+
+    btn.addEventListener("touchstart", (e) => {
+      e.preventDefault();      // evita el click fantasma y el focus ring de iOS
+      btn.blur();
+      if (!quizAnswered) {
+        handled = true;
+        handleQuizAnswer(btn, q.correct);
+      }
+    }, { passive: false });
+
+    btn.addEventListener("mousedown", (e) => {
+      btn.blur();
+      if (!quizAnswered && !handled) {
+        handleQuizAnswer(btn, q.correct);
+      }
+      handled = false;
+    });
   });
 }
 
@@ -416,9 +436,15 @@ function handleQuizAnswer(selectedEl, correct) {
   if (quizAnswered) return;
   quizAnswered = true;
   selectedEl.blur();
+  document.activeElement?.blur?.();
 
   const allBtns = document.querySelectorAll(".quiz-option");
   const isRight = selectedEl.dataset.value === correct;
+
+  allBtns.forEach(b => {
+    b.setAttribute("disabled", "true");
+    b.blur();
+  });
 
   if (isRight) {
     quizScore++;
@@ -429,10 +455,6 @@ function handleQuizAnswer(selectedEl, correct) {
       if (b.dataset.value === correct) b.classList.add("quiz-correct");
     });
   }
-
-  allBtns.forEach(b => {
-    b.style.pointerEvents = "none";
-  });
 
   document.getElementById("scoreCorrect").textContent = quizScore;
   document.getElementById("scoreSkip").textContent    = (quizIdx + 1) - quizScore;
