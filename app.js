@@ -195,49 +195,39 @@ updateDeck();
 
 /* ── ELIMINACIÓN TOTAL DEL SPOILER ── */
 function next() {
-  const scene = document.getElementById("cardScene");
-  const backText = document.getElementById("cardPast");
+  const scene     = document.getElementById("cardScene");
+  const cardInner = scene.querySelector(".card-inner");
+  const backText  = document.getElementById("cardPast");
 
-  // 1. CORTINA INVISIBLE INSTANTÁNEA
-  // 'hidden' hace que el elemento desaparezca de la vista sin esperar a la opacidad
+  // 1. Ocultar texto del reverso de inmediato
   backText.style.visibility = "hidden";
-  backText.style.opacity = "0"; 
-  
-  // 2. Iniciamos el desvanecimiento de la carta
-  scene.classList.add("fade-out");
 
-  setTimeout(() => {
-    // 3. LIMPIEZA DE DATOS EN LA OSCURIDAD
-    backText.textContent = "";
-    
-    // 4. RESET DE GIRO
-    isFlipped = false;
-    scene.classList.remove("flipped");
-    document.getElementById("actions").classList.remove("visible");
-    document.getElementById("sideHint").textContent = "Present tense";
-    
-    cursor++;
+  // 2. Desactivar la transición del giro para reset instantáneo
+  //    (sin esto, el reverso con el NUEVO verbo se ve durante los 0.6s de animación)
+  cardInner.style.transition = "none";
+  scene.classList.remove("flipped");
+  isFlipped = false;
 
-    if (cursor >= deck.length) {
-      showFinish();
-      // Limpiamos estados para el reinicio
-      scene.classList.remove("fade-out");
-      backText.style.visibility = "visible";
-      backText.style.opacity = "1";
-    } else {
-      // 5. CARGAMOS NUEVO VERBO
-      renderCard(false);
+  // 3. Forzar reflow para que el navegador aplique el cambio sin animación
+  void cardInner.offsetWidth;
 
-      // 6. ENTRADA SUAVE
-      // Esperamos un poco más para asegurar que el renderCard terminó
-      setTimeout(() => {
-        scene.classList.remove("fade-out");
-        // Devolvemos la visibilidad solo cuando la carta ya está de frente
-        backText.style.visibility = "visible";
-        backText.style.opacity = "1";
-      }, 100);
-    }
-  }, 400); 
+  // 4. Restaurar la transición para el próximo giro del usuario
+  cardInner.style.transition = "";
+
+  // 5. Limpiar UI
+  document.getElementById("actions").classList.remove("visible");
+  document.getElementById("sideHint").textContent = "Present tense";
+  backText.textContent = "";
+
+  cursor++;
+
+  if (cursor >= deck.length) {
+    backText.style.visibility = "visible";
+    showFinish();
+  } else {
+    renderCard(true);
+    backText.style.visibility = "visible";
+  }
 }
 
 /* ── FINISH ── */
