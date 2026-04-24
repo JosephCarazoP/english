@@ -648,59 +648,66 @@ header {
   letter-spacing: -0.01em;
   padding: 18px 12px;
   border-radius: 16px;
-  border: 2px solid transparent;
-  box-shadow: var(--shadow), inset 0 0 0 2px var(--progress-bg);
+  border: 2px solid var(--progress-bg);
+  box-shadow: var(--shadow);
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
-  user-select: none;      
+  user-select: none;
   -webkit-user-select: none;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
   text-align: center;
   -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;  
-  outline: none;
+  -webkit-touch-callout: none;
+  outline: none !important;
   -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
 }
 
 .quiz-option:focus,
-.quiz-option:focus-visible {
-  border-color: var(--progress-bg) !important;
+.quiz-option:focus-visible,
+.quiz-option:focus-within {
   outline: none !important;
+  border-color: var(--progress-bg) !important;
   box-shadow: var(--shadow) !important;
 }
- 
+
 .quiz-option:hover:not(:disabled) {
   border-color: var(--text);
   transform: translateY(-2px);
 }
- 
+
 .quiz-option:active:not(:disabled) {
   transform: scale(0.97);
 }
- 
+
 .quiz-option.quiz-correct {
-  background: #22c55e;
-  border-color: transparent;
-  box-shadow: var(--shadow), inset 0 0 0 2px #22c55e;
-  color: #fff;
+  background: #22c55e !important;
+  border-color: #22c55e !important;
+  box-shadow: var(--shadow) !important;
+  color: #fff !important;
+  outline: none !important;
 }
 
 .quiz-option.quiz-wrong {
-  background: #ef4444;
-  border-color: transparent;
-  box-shadow: var(--shadow), inset 0 0 0 2px #ef4444;
-  color: #fff;
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  box-shadow: var(--shadow) !important;
+  color: #fff !important;
+  outline: none !important;
 }
- 
+
 .quiz-option:disabled {
   cursor: default;
 }
 
 .quiz-option:disabled:focus,
 .quiz-option:disabled:focus-visible {
-  outline: none;
-  box-shadow: none;
+  outline: none !important;
+  border-color: var(--progress-bg) !important;
+  box-shadow: var(--shadow) !important;
 }
 
 /* ── Pantalla de resultados ── */
