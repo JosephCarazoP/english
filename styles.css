@@ -44,12 +44,13 @@ header {
 }
 
 .logo-web {
-  height: 45px;      /* Altura que ya tenías */
-  width: 45px;       /* IMPORTANTE: Misma medida para que sea un cuadrado perfecto */
-  object-fit: cover; /* Recorta la imagen para que encaje sin estirarse */
-  border-radius: 50%; /* ¡ESTA ES LA MAGIA QUE LO HACE REDONDO! */
-  border: 2px solid var(--text); /* Opcional: Un borde para que resalte */
+  height: 45px;
+  width: 45px;      
+  object-fit: cover;
+  border-radius: 50%; 
+  border: 2px solid var(--text);
   display: block;
+  cursor: pointer;
 }
 
 .logo {
