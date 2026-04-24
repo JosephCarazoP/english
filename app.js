@@ -351,17 +351,17 @@ function startQuiz() {
   quizIdx       = 0;
   quizScore     = 0;
   quizAnswered  = false;
- 
+
   // Cambiar etiquetas del score row al modo quiz
   document.querySelector(".score-correct .score-lbl").textContent = "Correct";
   document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
   document.getElementById("scoreCorrect").textContent = "0";
   document.getElementById("scoreSkip").textContent    = "0";
- 
+
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display       = "none";
   document.getElementById("quizScreen").style.display  = "flex";
- 
+
   renderQuizQuestion();
 }
 
@@ -488,7 +488,7 @@ function backToCards() {
   // Restaurar etiquetas al modo cards
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
- 
+
   document.getElementById("quizScreen").style.display = "none";
   buildDeck();
   document.getElementById("stage").style.display = "flex";
@@ -545,6 +545,9 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
+    // Restaurar etiquetas por si venimos del quiz
+    document.querySelector(".score-correct .score-lbl").textContent = "Learned";
+    document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
     buildDeck();
     document.getElementById("finishScreen").classList.remove("show");
     document.getElementById("quizScreen").style.display = "none";
@@ -555,6 +558,9 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 
 // Shuffle button
 document.getElementById("shuffleBtn").addEventListener("click", () => {
+  // Restaurar etiquetas por si venimos del quiz
+  document.querySelector(".score-correct .score-lbl").textContent = "Learned";
+  document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
   buildDeck();
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("quizScreen").style.display = "none";
