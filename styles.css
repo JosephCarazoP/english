@@ -652,6 +652,8 @@ header {
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+  user-select: none;      
+  -webkit-user-select: none;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
   box-shadow: var(--shadow);
   text-align: center;
