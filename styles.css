@@ -43,12 +43,18 @@ header {
   gap: 10px;
 }
 
+.logo-web {
+  height: 45px;      /* Altura que ya tenías */
+  width: 45px;       /* IMPORTANTE: Misma medida para que sea un cuadrado perfecto */
+  object-fit: cover; /* Recorta la imagen para que encaje sin estirarse */
+  border-radius: 50%; /* ¡ESTA ES LA MAGIA QUE LO HACE REDONDO! */
+  border: 2px solid var(--text); /* Opcional: Un borde para que resalte */
+  display: block;
+}
+
 .logo {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--subtext);
+  display: flex;
+  align-items: center;
 }
 
 .header-right {
