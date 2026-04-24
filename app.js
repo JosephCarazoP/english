@@ -193,22 +193,24 @@ function updateDeck() {
 // Llama a esta función al iniciar la página
 updateDeck();
 
+/* ── ELIMINACIÓN TOTAL DEL SPOILER ── */
 function next() {
   const scene = document.getElementById("cardScene");
   const backText = document.getElementById("cardPast");
 
-  // 1. LIMPIEZA INSTANTÁNEA (Antes que el fade-out)
-  // Esto hace que el texto desaparezca YA, mientras la carta empieza a desvanecerse
+  // 1. CORTINA INVISIBLE INSTANTÁNEA
+  // 'hidden' hace que el elemento desaparezca de la vista sin esperar a la opacidad
+  backText.style.visibility = "hidden";
   backText.style.opacity = "0"; 
   
-  // 2. Iniciamos el desvanecimiento de la carta completa
+  // 2. Iniciamos el desvanecimiento de la carta
   scene.classList.add("fade-out");
 
   setTimeout(() => {
-    // 3. Borramos el contenido físicamente en la oscuridad
+    // 3. LIMPIEZA DE DATOS EN LA OSCURIDAD
     backText.textContent = "";
     
-    // 4. Reset de la posición de la carta
+    // 4. RESET DE GIRO
     isFlipped = false;
     scene.classList.remove("flipped");
     document.getElementById("actions").classList.remove("visible");
@@ -218,16 +220,22 @@ function next() {
 
     if (cursor >= deck.length) {
       showFinish();
+      // Limpiamos estados para el reinicio
       scene.classList.remove("fade-out");
-      backText.style.opacity = "1"; // Restauramos para la próxima vez
+      backText.style.visibility = "visible";
+      backText.style.opacity = "1";
     } else {
+      // 5. CARGAMOS NUEVO VERBO
       renderCard(false);
 
-      // 5. Entrada: La carta vuelve y el texto recupera su opacidad
+      // 6. ENTRADA SUAVE
+      // Esperamos un poco más para asegurar que el renderCard terminó
       setTimeout(() => {
         scene.classList.remove("fade-out");
+        // Devolvemos la visibilidad solo cuando la carta ya está de frente
+        backText.style.visibility = "visible";
         backText.style.opacity = "1";
-      }, 50);
+      }, 100);
     }
   }, 400); 
 }
