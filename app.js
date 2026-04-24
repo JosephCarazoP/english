@@ -197,34 +197,36 @@ function next() {
   const scene = document.getElementById("cardScene");
   const backText = document.getElementById("cardPast");
 
-  // 1. Iniciamos el desvanecimiento (Fade Out)
+  // 1. LIMPIEZA INSTANTÁNEA (Antes que el fade-out)
+  // Esto hace que el texto desaparezca YA, mientras la carta empieza a desvanecerse
+  backText.style.opacity = "0"; 
+  
+  // 2. Iniciamos el desvanecimiento de la carta completa
   scene.classList.add("fade-out");
 
-  // 2. Cuando la carta es totalmente invisible (400ms después)
   setTimeout(() => {
-    
-    // A. LIMPIEZA TOTAL: Quitamos el texto de atrás mientras nadie ve
+    // 3. Borramos el contenido físicamente en la oscuridad
     backText.textContent = "";
     
-    // B. RESET DE GIRO: Volvemos la carta al frente en la oscuridad
+    // 4. Reset de la posición de la carta
     isFlipped = false;
     scene.classList.remove("flipped");
     document.getElementById("actions").classList.remove("visible");
     document.getElementById("sideHint").textContent = "Present tense";
     
-    // C. CAMBIO DE DATOS
     cursor++;
 
     if (cursor >= deck.length) {
       showFinish();
-      scene.classList.remove("fade-out"); // Limpiar para el reinicio
+      scene.classList.remove("fade-out");
+      backText.style.opacity = "1"; // Restauramos para la próxima vez
     } else {
-      // Cargamos el nuevo verbo
       renderCard(false);
 
-      // 3. Fase de Entrada (Fade In): La carta aparece ya reseteada
+      // 5. Entrada: La carta vuelve y el texto recupera su opacidad
       setTimeout(() => {
         scene.classList.remove("fade-out");
+        backText.style.opacity = "1";
       }, 50);
     }
   }, 400); 
