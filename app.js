@@ -351,11 +351,17 @@ function startQuiz() {
   quizIdx       = 0;
   quizScore     = 0;
   quizAnswered  = false;
-
+ 
+  // Cambiar etiquetas del score row al modo quiz
+  document.querySelector(".score-correct .score-lbl").textContent = "Correct";
+  document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
+  document.getElementById("scoreCorrect").textContent = "0";
+  document.getElementById("scoreSkip").textContent    = "0";
+ 
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display       = "none";
   document.getElementById("quizScreen").style.display  = "flex";
-
+ 
   renderQuizQuestion();
 }
 
@@ -479,6 +485,10 @@ function showQuizResults() {
 
 /* ── Vuelve a las tarjetas ── */
 function backToCards() {
+  // Restaurar etiquetas al modo cards
+  document.querySelector(".score-correct .score-lbl").textContent = "Learned";
+  document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
+ 
   document.getElementById("quizScreen").style.display = "none";
   buildDeck();
   document.getElementById("stage").style.display = "flex";
