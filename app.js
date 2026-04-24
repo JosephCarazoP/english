@@ -378,9 +378,10 @@ document.addEventListener("keydown", (e) => {
   if (document.getElementById("overlay").classList.contains("open")) return;
   if (document.getElementById("finishScreen").classList.contains("show")) return;
 
+  // CAMBIO AQUÍ: flipCard -> toggleFlip
   if ((e.key === " " || e.key === "ArrowUp") && !isFlipped) {
     e.preventDefault();
-    flipCard();
+    toggleFlip(); 
   }
   if (e.key === "ArrowRight" && isFlipped) { correct++; next(); }
   if (e.key === "ArrowLeft" && isFlipped) { skipped++; next(); }
@@ -466,14 +467,13 @@ function checkAnswer(selected, correct, btn) {
   buttons.forEach(b => b.style.pointerEvents = "none");
 
   if (selected === correct) {
-    quizCorrectScore++; // Sumamos acierto
+    quizCorrectScore++; 
     btn.style.background = "#4caf50";
     btn.style.color = "white";
   } else {
-    quizWrongScore++; // Sumamos error
+    quizWrongScore++; 
     btn.style.background = "#f44336";
     btn.style.color = "white";
-    // Resaltamos la correcta para que el alumno aprenda del error
     buttons.forEach(b => {
       if(b.textContent === correct) {
         b.style.background = "#4caf50";
@@ -487,19 +487,7 @@ function checkAnswer(selected, correct, btn) {
     if (quizIdx < currentQuiz.length) {
       renderQuizQuestion();
     } else {
-      showQuizResults(); // Llamamos al nuevo resumen
-    }
-  }, 1500);
-}
-
-  setTimeout(() => {
-    quizIdx++;
-    if (quizIdx < currentQuiz.length) {
-      renderQuizQuestion();
-    } else {
-      // Final del quiz: volvemos al inicio
-      alert("Perfect! You've finished the quiz. 🎉");
-      location.reload(); 
+      showQuizResults(); // Esto mostrará el resumen final
     }
   }, 1500);
 }
