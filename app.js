@@ -193,21 +193,27 @@ function updateDeck() {
 // Llama a esta función al iniciar la página
 updateDeck();
 
-/* ── NEXT CARD ── */
+/* ── NEXT CARD SINCRONIZADO ── */
 function next() {
   const scene = document.getElementById("cardScene");
   const backText = document.getElementById("cardPast");
 
-  // 1. BORRADO INMEDIATO: Vaciamos el texto de atrás para que no haya nada que ver durante el giro
-  backText.textContent = "";
-
-  // 2. Iniciamos el giro hacia el frente
+  // 1. Iniciamos el giro PRIMERO
+  // La carta empieza a moverse hacia el frente
   isFlipped = false;
   scene.classList.remove("flipped");
   document.getElementById("actions").classList.remove("visible");
   document.getElementById("sideHint").textContent = "Present tense";
 
-  // 3. Esperamos el tiempo de la animación para cargar los datos del siguiente verbo
+  // 2. BORRADO "INVISIBLE" (Retrasado 150ms)
+  // Borramos el texto cuando la carta ya está a mitad de camino del giro
+  // así el ojo humano no nota que el texto desapareció
+  setTimeout(() => {
+    backText.textContent = "";
+  }, 150); 
+
+  // 3. CARGA DE NUEVOS DATOS (Retrasado 450ms)
+  // Cargamos el nuevo verbo cuando la carta ya casi terminó de girar
   setTimeout(() => {
     cursor++;
     if (cursor >= deck.length) {
@@ -215,7 +221,7 @@ function next() {
     } else {
       renderCard(false); 
     }
-  }, 450); // 300ms es el punto donde la carta ya no muestra su cara trasera
+  }, 450); 
 }
 
 /* ── FINISH ── */
