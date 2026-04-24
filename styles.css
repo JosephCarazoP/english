@@ -637,7 +637,6 @@ header {
 }
 
 /* Botón de opción */
-/* Botón de opción */
 .quiz-option {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
@@ -652,6 +651,8 @@ header {
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
   box-shadow: var(--shadow);
   text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
  
 .quiz-option:hover:not(:disabled) {
@@ -682,9 +683,12 @@ header {
 }
  
 .quiz-option:focus,
-.quiz-option:focus-visible {
-  outline: none;
+.quiz-option:focus-visible,
+.quiz-option:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
 }
+
 
 .quiz-option:disabled:focus,
 .quiz-option:disabled:focus-visible {
