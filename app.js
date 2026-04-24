@@ -370,7 +370,6 @@ function renderQuizQuestion() {
   quizAnswered = false;
   const q = quizQuestions[quizIdx];
 
-  // Cabecera de progreso del quiz
   const progressPct = (quizIdx / quizQuestions.length) * 100;
   document.getElementById("progressFill").style.width  = progressPct + "%";
   document.getElementById("progressLabel").textContent = `${quizIdx + 1} / ${quizQuestions.length}`;
@@ -391,53 +390,41 @@ function renderQuizQuestion() {
 
     <div class="quiz-options" id="quizOptions">
       ${q.options.map(opt => `
-        <button class="quiz-option" data-value="${opt}">${opt}</button>
+        <div class="quiz-option" role="button" data-value="${opt}">${opt}</div>
       `).join("")}
     </div>
   `;
 
-  // 👇 Fix autofocus de Safari iOS
-  container.setAttribute("tabindex", "-1");
-  container.focus({ preventScroll: true });
-  container.removeAttribute("tabindex");
-
-  // Asociar eventos a las opciones
-  container.querySelectorAll(".quiz-option").forEach(btn => {
-    btn.addEventListener("click", () => handleQuizAnswer(btn, q.correct));
+  container.querySelectorAll(".quiz-option").forEach(el => {
+    el.addEventListener("click", () => handleQuizAnswer(el, q.correct));
   });
 }
 
 /* ── Maneja la respuesta seleccionada ── */
-function handleQuizAnswer(selectedBtn, correct) {
+function handleQuizAnswer(selectedEl, correct) {
   if (quizAnswered) return;
   quizAnswered = true;
 
   const allBtns = document.querySelectorAll(".quiz-option");
-  const isRight = selectedBtn.dataset.value === correct;
+  const isRight = selectedEl.dataset.value === correct;
 
   if (isRight) {
     quizScore++;
-    selectedBtn.classList.add("quiz-correct");
+    selectedEl.classList.add("quiz-correct");
   } else {
-    selectedBtn.classList.add("quiz-wrong");
-    // Marcar la correcta
+    selectedEl.classList.add("quiz-wrong");
     allBtns.forEach(b => {
       if (b.dataset.value === correct) b.classList.add("quiz-correct");
     });
   }
 
-  // Deshabilitar todos los botones
   allBtns.forEach(b => {
-    b.disabled = true;
-    b.blur();
-    b.setAttribute("tabindex", "-1");
+    b.style.pointerEvents = "none";
   });
 
-  // Actualizar score visible
   document.getElementById("scoreCorrect").textContent = quizScore;
   document.getElementById("scoreSkip").textContent    = (quizIdx + 1) - quizScore;
 
-  // Avanzar a la siguiente pregunta tras un breve delay
   setTimeout(() => {
     quizIdx++;
     if (quizIdx < quizQuestions.length) {
