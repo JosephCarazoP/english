@@ -347,12 +347,13 @@ function buildQuiz(verbPool) {
 
 /* ── Inicia el quiz ── */
 function startQuiz() {
+  if (document.activeElement) document.activeElement.blur();
+
   quizQuestions = buildQuiz(deck);
   quizIdx       = 0;
   quizScore     = 0;
   quizAnswered  = false;
 
-  // Cambiar etiquetas del score row al modo quiz
   document.querySelector(".score-correct .score-lbl").textContent = "Correct";
   document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
   document.getElementById("scoreCorrect").textContent = "0";
@@ -360,9 +361,11 @@ function startQuiz() {
 
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display       = "none";
-  document.getElementById("quizScreen").style.display  = "flex";
 
-  renderQuizQuestion();
+  setTimeout(() => {
+    document.getElementById("quizScreen").style.display = "flex";
+    renderQuizQuestion();
+  }, 50);
 }
 
 /* ── Renderiza la pregunta actual ── */
