@@ -196,24 +196,26 @@ updateDeck();
 /* ── NEXT CARD ── */
 function next() {
   const scene = document.getElementById("cardScene");
-  
-  // A. Iniciamos el giro hacia el frente (Reset visual)
+  const backText = document.getElementById("cardPast");
+
+  // 1. BORRADO INMEDIATO: Vaciamos el texto de atrás para que no haya nada que ver durante el giro
+  backText.textContent = "";
+
+  // 2. Iniciamos el giro hacia el frente
   isFlipped = false;
   scene.classList.remove("flipped");
   document.getElementById("actions").classList.remove("visible");
   document.getElementById("sideHint").textContent = "Present tense";
 
-  // B. Esperamos 300ms (el punto medio del giro) para cambiar la información
-  // Así el cambio de texto ocurre cuando la carta está "de perfil" y es invisible
+  // 3. Esperamos el tiempo de la animación para cargar los datos del siguiente verbo
   setTimeout(() => {
     cursor++;
     if (cursor >= deck.length) {
       showFinish();
     } else {
-      // Llamamos a renderCard sin resetear el giro porque ya lo hicimos arriba
       renderCard(false); 
     }
-  }, 300);
+  }, 300); // 300ms es el punto donde la carta ya no muestra su cara trasera
 }
 
 /* ── FINISH ── */
@@ -387,13 +389,15 @@ document.addEventListener("keydown", (e) => {
 /* ── LÓGICA DEL QUIZ (EL MOTOR) ── */
 let currentQuiz = [];
 let quizIdx = 0;
+let quizCorrectScore = 0; // Contador de aciertos
+let quizWrongScore = 0;   // Contador de errores
 
 function startQuiz() {
-  // 1. Generamos las preguntas basadas en los verbos que el usuario estudió
   currentQuiz = generateQuiz();
   quizIdx = 0;
+  quizCorrectScore = 0; // Reiniciamos puntajes
+  quizWrongScore = 0;
 
-  // 2. Cambiamos de pantalla: ocultamos resultados y mostramos quiz
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display = "none";
   document.getElementById("quizScreen").style.display = "flex";
@@ -462,12 +466,14 @@ function checkAnswer(selected, correct, btn) {
   buttons.forEach(b => b.style.pointerEvents = "none");
 
   if (selected === correct) {
+    quizCorrectScore++; // Sumamos acierto
     btn.style.background = "#4caf50";
     btn.style.color = "white";
   } else {
+    quizWrongScore++; // Sumamos error
     btn.style.background = "#f44336";
     btn.style.color = "white";
-    // Mostrar la correcta al fallar
+    // Resaltamos la correcta para que el alumno aprenda del error
     buttons.forEach(b => {
       if(b.textContent === correct) {
         b.style.background = "#4caf50";
@@ -481,11 +487,56 @@ function checkAnswer(selected, correct, btn) {
     if (quizIdx < currentQuiz.length) {
       renderQuizQuestion();
     } else {
+      showQuizResults(); // Llamamos al nuevo resumen
+    }
+  }, 1500);
+}
+
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < currentQuiz.length) {
+      renderQuizQuestion();
+    } else {
       // Final del quiz: volvemos al inicio
       alert("Perfect! You've finished the quiz. 🎉");
       location.reload(); 
     }
   }, 1500);
+}
+
+/* ── NUEVA PANTALLA DE RESUMEN DEL QUIZ ── */
+function showQuizResults() {
+  const quizContainer = document.querySelector(".quiz-container");
+  const total = currentQuiz.length;
+  const percentage = Math.round((quizCorrectScore / total) * 100);
+  
+  let message = percentage >= 80 ? "Master level! 🔥" : "Good job! Keep practicing. 💪";
+  
+  quizContainer.innerHTML = `
+    <div style="text-align: center; padding: 20px;">
+      <h2 style="font-size: 2rem; margin-bottom: 10px;">Quiz Finished!</h2>
+      <p style="font-size: 1.2rem; color: var(--subtext);">${message}</p>
+      
+      <div style="display: flex; justify-content: space-around; margin: 30px 0; background: var(--card-bg); padding: 20px; border-radius: 15px;">
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: #4caf50;">${quizCorrectScore}</div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Correct</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: #f44336;">${quizWrongScore}</div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Wrong</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: var(--text);">${total}</div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Total</div>
+        </div>
+      </div>
+
+      <button class="restart-btn" onclick="location.reload()" style="width: 100%; background: var(--text); color: var(--bg);">
+        Back to Start
+      </button>
+    </div>
+  `;
 }
 
 /* ── INIT ── */
