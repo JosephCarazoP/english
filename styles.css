@@ -766,3 +766,17 @@ header {
   vertical-align: middle;
   margin-left: 6px;
 }
+
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid var(--progress-bg);
+  color: var(--subtext);
+  font-size: 0.9rem;
+}
+
+.site-footer b {
+  color: var(--text);
+  font-weight: 600;
+}
