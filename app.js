@@ -396,6 +396,11 @@ function renderQuizQuestion() {
     </div>
   `;
 
+  // 👇 Fix autofocus de Safari iOS
+  container.setAttribute("tabindex", "-1");
+  container.focus({ preventScroll: true });
+  container.removeAttribute("tabindex");
+
   // Asociar eventos a las opciones
   container.querySelectorAll(".quiz-option").forEach(btn => {
     btn.addEventListener("click", () => handleQuizAnswer(btn, q.correct));
