@@ -210,7 +210,7 @@ function next() {
   // así el ojo humano no nota que el texto desapareció
   setTimeout(() => {
     backText.textContent = "";
-  }, 80); 
+  }, 100); 
 
   // 3. CARGA DE NUEVOS DATOS (Retrasado 450ms)
   // Cargamos el nuevo verbo cuando la carta ya casi terminó de girar
