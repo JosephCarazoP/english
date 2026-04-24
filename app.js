@@ -193,35 +193,38 @@ function updateDeck() {
 // Llama a esta función al iniciar la página
 updateDeck();
 
-/* ── NEXT CARD SINCRONIZADO ── */
 function next() {
   const scene = document.getElementById("cardScene");
-  const backText = document.getElementById("cardPast");
 
-  // 1. Iniciamos el giro PRIMERO
-  // La carta empieza a moverse hacia el frente
-  isFlipped = false;
-  scene.classList.remove("flipped");
-  document.getElementById("actions").classList.remove("visible");
-  document.getElementById("sideHint").textContent = "Present tense";
+  // 1. Fase de Salida: Desvanecemos la carta
+  scene.classList.add("fade-out");
 
-  // 2. BORRADO "INVISIBLE" (Retrasado 150ms)
-  // Borramos el texto cuando la carta ya está a mitad de camino del giro
-  // así el ojo humano no nota que el texto desapareció
+  // 2. Esperamos a que la carta sea invisible (400ms coincide con el CSS)
   setTimeout(() => {
-    backText.textContent = "";
-  }, 100); 
-
-  // 3. CARGA DE NUEVOS DATOS (Retrasado 450ms)
-  // Cargamos el nuevo verbo cuando la carta ya casi terminó de girar
-  setTimeout(() => {
+    // A. Reseteamos el giro en secreto mientras nadie ve la carta
+    isFlipped = false;
+    scene.classList.remove("flipped");
+    document.getElementById("actions").classList.remove("visible");
+    document.getElementById("sideHint").textContent = "Present tense";
+    
+    // B. Avanzamos al siguiente verbo
     cursor++;
+
     if (cursor >= deck.length) {
       showFinish();
+      // Limpiamos la clase por si el usuario reinicia
+      scene.classList.remove("fade-out");
     } else {
-      renderCard(false); 
+      // C. Renderizamos los nuevos datos
+      renderCard(false);
+
+      // D. Fase de Entrada: Volvemos a mostrar la carta suavemente
+      // Usamos un pequeño delay extra para que el cambio de texto no parpadee
+      setTimeout(() => {
+        scene.classList.remove("fade-out");
+      }, 50);
     }
-  }, 450); 
+  }, 400); 
 }
 
 /* ── FINISH ── */
