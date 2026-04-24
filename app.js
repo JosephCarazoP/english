@@ -384,30 +384,46 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft" && isFlipped) { skipped++; next(); }
 });
 
+/* ── LÓGICA DEL QUIZ (EL MOTOR) ── */
+let currentQuiz = [];
+let quizIdx = 0;
+
+function startQuiz() {
+  // 1. Generamos las preguntas basadas en los verbos que el usuario estudió
+  currentQuiz = generateQuiz();
+  quizIdx = 0;
+
+  // 2. Cambiamos de pantalla: ocultamos resultados y mostramos quiz
+  document.getElementById("finishScreen").classList.remove("show");
+  document.getElementById("stage").style.display = "none";
+  document.getElementById("quizScreen").style.display = "flex";
+
+  renderQuizQuestion();
+}
+
 function generateQuiz() {
+  // Usamos 'deck' porque son los verbos que el alumno acaba de ver
   return deck.map(verb => {
-    const isSentenceType = Math.random() > 0.5; // 50% probabilidad de cada tipo
+    const isSentenceType = Math.random() > 0.5;
     
     if (isSentenceType) {
-      // TIPO 1: Completar la oración
       const usePast = Math.random() > 0.5;
       const originalSentence = usePast ? verb.sentencePast : verb.sentencePres;
       const correctAnswer = usePast ? verb.past : verb.present;
       
-      // Limpiamos los tags <b> y reemplazamos el verbo por una línea
+      // Reemplazamos el verbo por una línea ______
       const questionText = originalSentence
-        .replace(/<[^>]*>/g, "") // Quita los <b>
+        .replace(/<[^>]*>/g, "") 
         .replace(new RegExp(`\\b${correctAnswer}\\b`, "i"), "_______");
 
       return {
-        question: `Complete the sentence: "${questionText}"`,
+        question: `Complete: "${questionText}"`,
         options: generateOptions(correctAnswer, usePast ? "past" : "present"),
         correct: correctAnswer
       };
     } else {
-      // TIPO 2: Gramática directa
       return {
-        question: `What is the past tense of the verb "${verb.present}"?`,
+        question: `What is the past tense of "${verb.present}"?`,
         options: generateOptions(verb.past, "past"),
         correct: verb.past
       };
@@ -415,14 +431,61 @@ function generateQuiz() {
   });
 }
 
-// Función para crear opciones falsas creíbles
 function generateOptions(correct, mode) {
   const distractors = ALL_VERBS
     .filter(v => (mode === "past" ? v.past : v.present) !== correct)
     .map(v => (mode === "past" ? v.past : v.present));
   
-  const picked = shuffle(distractors).slice(0, 3); // Agarramos 3 al azar
-  return shuffle([...picked, correct]); // Mezclamos la correcta con las falsas
+  const picked = shuffle(distractors).slice(0, 3); 
+  return shuffle([...picked, correct]); 
+}
+
+function renderQuizQuestion() {
+  const q = currentQuiz[quizIdx];
+  const questionEl = document.getElementById("quizQuestion");
+  const optionsDiv = document.getElementById("quizOptions");
+
+  questionEl.textContent = q.question;
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt, q.correct, btn);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(selected, correct, btn) {
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach(b => b.style.pointerEvents = "none");
+
+  if (selected === correct) {
+    btn.style.background = "#4caf50";
+    btn.style.color = "white";
+  } else {
+    btn.style.background = "#f44336";
+    btn.style.color = "white";
+    // Mostrar la correcta al fallar
+    buttons.forEach(b => {
+      if(b.textContent === correct) {
+        b.style.background = "#4caf50";
+        b.style.color = "white";
+      }
+    });
+  }
+
+  setTimeout(() => {
+    quizIdx++;
+    if (quizIdx < currentQuiz.length) {
+      renderQuizQuestion();
+    } else {
+      // Final del quiz: volvemos al inicio
+      alert("Perfect! You've finished the quiz. 🎉");
+      location.reload(); 
+    }
+  }, 1500);
 }
 
 /* ── INIT ── */
