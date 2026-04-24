@@ -685,6 +685,12 @@ header {
   outline: none;
 }
 
+.quiz-option:disabled:focus,
+.quiz-option:disabled:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 /* ── Pantalla de resultados ── */
 .quiz-results {
   display: flex;
