@@ -365,13 +365,12 @@ function startQuiz() {
   setTimeout(() => {
     document.getElementById("quizScreen").style.display = "flex";
     renderQuizQuestion();
-    // Foco trampa: evita que iOS marque cualquier botón
-    const trap = document.createElement("button");
-    trap.setAttribute("tabindex", "0");
-    trap.style.cssText = "position:fixed;opacity:0;pointer-events:none;width:0;height:0;";
-    document.body.appendChild(trap);
-    trap.focus();
-    setTimeout(() => trap.remove(), 100);
+    // Dar foco al contenedor no-interactivo para limpiar el foco de iOS
+    const container = document.getElementById("quizScreen").querySelector(".quiz-container");
+    container.setAttribute("tabindex", "-1");
+    container.focus();
+    container.blur();
+    container.removeAttribute("tabindex");
   }, 50);
 }
 
