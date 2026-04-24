@@ -384,6 +384,47 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft" && isFlipped) { skipped++; next(); }
 });
 
+function generateQuiz() {
+  return deck.map(verb => {
+    const isSentenceType = Math.random() > 0.5; // 50% probabilidad de cada tipo
+    
+    if (isSentenceType) {
+      // TIPO 1: Completar la oración
+      const usePast = Math.random() > 0.5;
+      const originalSentence = usePast ? verb.sentencePast : verb.sentencePres;
+      const correctAnswer = usePast ? verb.past : verb.present;
+      
+      // Limpiamos los tags <b> y reemplazamos el verbo por una línea
+      const questionText = originalSentence
+        .replace(/<[^>]*>/g, "") // Quita los <b>
+        .replace(new RegExp(`\\b${correctAnswer}\\b`, "i"), "_______");
+
+      return {
+        question: `Complete the sentence: "${questionText}"`,
+        options: generateOptions(correctAnswer, usePast ? "past" : "present"),
+        correct: correctAnswer
+      };
+    } else {
+      // TIPO 2: Gramática directa
+      return {
+        question: `What is the past tense of the verb "${verb.present}"?`,
+        options: generateOptions(verb.past, "past"),
+        correct: verb.past
+      };
+    }
+  });
+}
+
+// Función para crear opciones falsas creíbles
+function generateOptions(correct, mode) {
+  const distractors = ALL_VERBS
+    .filter(v => (mode === "past" ? v.past : v.present) !== correct)
+    .map(v => (mode === "past" ? v.past : v.present));
+  
+  const picked = shuffle(distractors).slice(0, 3); // Agarramos 3 al azar
+  return shuffle([...picked, correct]); // Mezclamos la correcta con las falsas
+}
+
 /* ── INIT ── */
 buildDeck();
 renderCard(false);
