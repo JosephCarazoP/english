@@ -195,31 +195,34 @@ updateDeck();
 
 function next() {
   const scene = document.getElementById("cardScene");
+  const backText = document.getElementById("cardPast");
 
-  // 1. Fase de Salida: Desvanecemos la carta
+  // 1. Iniciamos el desvanecimiento (Fade Out)
   scene.classList.add("fade-out");
 
-  // 2. Esperamos a que la carta sea invisible (400ms coincide con el CSS)
+  // 2. Cuando la carta es totalmente invisible (400ms después)
   setTimeout(() => {
-    // A. Reseteamos el giro en secreto mientras nadie ve la carta
+    
+    // A. LIMPIEZA TOTAL: Quitamos el texto de atrás mientras nadie ve
+    backText.textContent = "";
+    
+    // B. RESET DE GIRO: Volvemos la carta al frente en la oscuridad
     isFlipped = false;
     scene.classList.remove("flipped");
     document.getElementById("actions").classList.remove("visible");
     document.getElementById("sideHint").textContent = "Present tense";
     
-    // B. Avanzamos al siguiente verbo
+    // C. CAMBIO DE DATOS
     cursor++;
 
     if (cursor >= deck.length) {
       showFinish();
-      // Limpiamos la clase por si el usuario reinicia
-      scene.classList.remove("fade-out");
+      scene.classList.remove("fade-out"); // Limpiar para el reinicio
     } else {
-      // C. Renderizamos los nuevos datos
+      // Cargamos el nuevo verbo
       renderCard(false);
 
-      // D. Fase de Entrada: Volvemos a mostrar la carta suavemente
-      // Usamos un pequeño delay extra para que el cambio de texto no parpadee
+      // 3. Fase de Entrada (Fade In): La carta aparece ya reseteada
       setTimeout(() => {
         scene.classList.remove("fade-out");
       }, 50);
