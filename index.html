@@ -11,22 +11,19 @@
 
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" alt="Logo" class="logo-web">
     </div>
     <div class="header-right">
-    </div>
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="irregular">Irregular</button>
-    <button class="filter-btn" data-filter="regular">Regular</button>
-    <button class="icon-btn" id="shuffleBtn" title="Shuffle">⇄</button>
-    <button class="icon-btn" id="themeToggle" title="Toggle theme">☀︎</button>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="irregular">Irregular</button>
+      <button class="filter-btn" data-filter="regular">Regular</button>
+      <button class="icon-btn" id="shuffleBtn" title="Shuffle">⇄</button>
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">☀︎</button>
     </div>
   </header>
 
-  <!-- PROGRESS BAR -->
   <div class="progress-wrap">
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
@@ -34,7 +31,6 @@
     <div class="progress-label" id="progressLabel">0 / 0</div>
   </div>
 
-  <!-- SCORE ROW -->
   <div class="score-row">
     <div class="score-item score-correct">
       <span class="score-val" id="scoreCorrect">0</span>
@@ -46,7 +42,6 @@
     </div>
   </div>
 
-  <!-- CARD STAGE -->
   <div class="stage" id="stage">
     <div class="side-hint" id="sideHint">Present tense</div>
 
@@ -72,7 +67,14 @@
     </div>
   </div>
 
-  <!-- FINISH SCREEN -->
+  <div class="stage" id="quizScreen" style="display: none; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="quiz-container" style="width: 100%; max-width: 500px; padding: 20px;">
+      <h2 id="quizQuestion" style="text-align: center; margin-bottom: 30px; min-height: 80px; font-size: 1.5rem;"></h2>
+      <div id="quizOptions" class="options-grid">
+        </div>
+    </div>
+  </div>
+
   <div class="finish-screen" id="finishScreen">
     <div class="finish-emoji" id="finishEmoji">🎉</div>
     <div class="finish-title">Round complete!</div>
@@ -82,10 +84,12 @@
       <div class="finish-stat"> <b id="fSkip">0</b> <span>Skipped</span></div>
       <div class="finish-stat"> <b id="fTotal">0</b> <span>Total</span></div>
     </div>
-    <button class="restart-btn" id="restartBtn">Shuffle &amp; Restart</button>
+    <div class="finish-actions" style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px;">
+      <button class="restart-btn" onclick="startQuiz()" id="startQuizBtn" style="background: var(--text); color: var(--bg);">Take Final Quiz 📝</button>
+      <button class="restart-btn" id="restartBtn" style="background: transparent; border: 2px solid var(--progress-bg); color: var(--text);">Shuffle &amp; Restart</button>
+    </div>
   </div>
 
-  <!-- DETAIL MODAL -->
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="modal-handle"></div>
@@ -108,18 +112,10 @@
     </div>
   </div>
 
-<footer class="site-footer">
-  <!-- <div class="footer-controls">
-    <button id="randomBtn" class="icon-btn" title="Random">🎲</button>
-    <button id="themeToggle" class="icon-btn" title="Toggle Theme">🌓</button>
-  </div> -->
-  
-  <p>Made by <b>Joseph Carazo</b> 🫡</p>
-</footer>
+  <footer class="site-footer">
+    <p>Made by <b>Joseph Carazo</b> 🫡</p>
+  </footer>
+
   <script src="app.js"></script>
 </body>
-
-<script src="app.js"></script>
-</body>
-
 </html>
