@@ -199,6 +199,10 @@ header {
   transform: scale(0.9) translateY(10px); /* Un pequeño efecto de caída */
 }
 
+#cardPast {
+  transition: opacity 0.2s ease-in-out; /* El texto se desvanece más rápido que la carta */
+}
+
 .card-inner {
   position: relative;
   width: 100%;
