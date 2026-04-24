@@ -123,40 +123,34 @@ function buildDeck() {
 function renderCard(animate = true) {
   const verb = deck[cursor];
 
-  // Show stage, hide finish
+  // Asegurar que el escenario esté visible
   document.getElementById("stage").style.display = "flex";
   document.getElementById("finishScreen").classList.remove("show");
 
-  // Reset flip state
   const scene = document.getElementById("cardScene");
-  isFlipped = false;
-  scene.classList.remove("flipped");
-  document.getElementById("actions").classList.remove("visible");
-  document.getElementById("sideHint").textContent = "Present tense";
 
-  // Card color
+  // 1. Actualizamos el color y contenido (Los textos cambian aquí)
   scene.className = `card-scene col-${colorIdx(verb)}`;
-
-  // Card content
   document.getElementById("cardPresent").textContent = verb.present;
   document.getElementById("cardPast").textContent = verb.past;
   document.getElementById("cardPresentRef").textContent = `← ${verb.present}`;
 
+  // 2. Badge de tipo
   const badge = document.getElementById("cardBadge");
   badge.textContent = verb.type === "irregular" ? "Irregular" : "Regular";
   badge.className = "type-badge " + (verb.type === "irregular" ? "badge-irr" : "badge-reg");
 
-  // Progress
+  // 3. Progreso y puntuación
   const pct = (cursor / deck.length) * 100;
   document.getElementById("progressFill").style.width = pct + "%";
   document.getElementById("progressLabel").textContent = `${cursor + 1} / ${deck.length}`;
   document.getElementById("scoreCorrect").textContent = correct;
   document.getElementById("scoreSkip").textContent = skipped;
 
-  // Entrance animation
+  // 4. Animación de entrada (opcional)
   if (animate) {
     scene.classList.remove("animate");
-    void scene.offsetWidth; // force reflow
+    void scene.offsetWidth; 
     scene.classList.add("animate");
   }
 }
@@ -201,12 +195,25 @@ updateDeck();
 
 /* ── NEXT CARD ── */
 function next() {
-  cursor++;
-  if (cursor >= deck.length) {
-    showFinish();
-  } else {
-    renderCard(true);
-  }
+  const scene = document.getElementById("cardScene");
+  
+  // A. Iniciamos el giro hacia el frente (Reset visual)
+  isFlipped = false;
+  scene.classList.remove("flipped");
+  document.getElementById("actions").classList.remove("visible");
+  document.getElementById("sideHint").textContent = "Present tense";
+
+  // B. Esperamos 300ms (el punto medio del giro) para cambiar la información
+  // Así el cambio de texto ocurre cuando la carta está "de perfil" y es invisible
+  setTimeout(() => {
+    cursor++;
+    if (cursor >= deck.length) {
+      showFinish();
+    } else {
+      // Llamamos a renderCard sin resetear el giro porque ya lo hicimos arriba
+      renderCard(false); 
+    }
+  }, 300);
 }
 
 /* ── FINISH ── */
