@@ -215,7 +215,7 @@ function next() {
     } else {
       renderCard(false); 
     }
-  }, 300); // 300ms es el punto donde la carta ya no muestra su cara trasera
+  }, 450); // 300ms es el punto donde la carta ya no muestra su cara trasera
 }
 
 /* ── FINISH ── */
