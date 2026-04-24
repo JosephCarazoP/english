@@ -422,7 +422,10 @@ function handleQuizAnswer(selectedBtn, correct) {
   }
 
   // Deshabilitar todos los botones
-  allBtns.forEach(b => b.disabled = true);
+  allBtns.forEach(b => {
+    b.disabled = true;
+    b.blur();
+  });
 
   // Actualizar score visible
   document.getElementById("scoreCorrect").textContent = quizScore;
