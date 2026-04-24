@@ -196,7 +196,7 @@ header {
 
 .card-scene.fade-out {
   opacity: 0;
-  transform: scale(0.95); /* Opcional: un pequeño efecto de encogimiento */
+  transform: scale(0.9) translateY(10px); /* Un pequeño efecto de caída */
 }
 
 .card-inner {
