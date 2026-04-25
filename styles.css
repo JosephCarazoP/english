@@ -126,9 +126,9 @@ header {
 
 .filter-btn.active,
 .filter-btn:hover {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--bg);
+  border-color: color-mix(in srgb, var(--accent-2) 50%, var(--text));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-1) 70%, #fff), color-mix(in srgb, var(--accent-2) 70%, #fff));
+  color: #161616;
 }
 
 .icon-btn {
@@ -147,9 +147,9 @@ header {
 }
 
 .icon-btn:hover {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--bg);
+  border-color: color-mix(in srgb, var(--accent-2) 55%, var(--text));
+  background: color-mix(in srgb, var(--accent-2) 65%, var(--text));
+  color: #fff;
 }
 
 /* ── PROGRESS ── */
@@ -610,16 +610,16 @@ header {
 }
 
 /* ── CARD COLORS (light) ── */
-.col-0 .front { background: #ff9e7e; color: #1a1a1a; }
-.col-1 .front { background: #74c69d; color: #1a1a1a; }
-.col-2 .front { background: #74b3f0; color: #1a1a1a; }
-.col-3 .front { background: #f4a0c0; color: #1a1a1a; }
-.col-4 .front { background: #ffd166; color: #1a1a1a; }
-.col-5 .front { background: #a8dadc; color: #1a1a1a; }
-.col-6 .front { background: #c77dff; color: #1a1a1a; }
-.col-7 .front { background: #b7e4c7; color: #1a1a1a; }
-.col-8 .front { background: #ffb347; color: #1a1a1a; }
-.col-9 .front { background: #90dbf4; color: #1a1a1a; }
+.col-0 .front { background: linear-gradient(140deg, #ff7b54, #ffb088); color: #1a1a1a; }
+.col-1 .front { background: linear-gradient(140deg, #4bbf88, #8de0b8); color: #10241a; }
+.col-2 .front { background: linear-gradient(140deg, #5da9ff, #9dccff); color: #102033; }
+.col-3 .front { background: linear-gradient(140deg, #f47ab0, #f7b4d1); color: #2f1421; }
+.col-4 .front { background: linear-gradient(140deg, #ffcb3a, #ffe08f); color: #2f2500; }
+.col-5 .front { background: linear-gradient(140deg, #70d7db, #b6ecee); color: #113336; }
+.col-6 .front { background: linear-gradient(140deg, #b66bff, #d7acff); color: #231238; }
+.col-7 .front { background: linear-gradient(140deg, #8fdb9f, #c5efd0); color: #16301e; }
+.col-8 .front { background: linear-gradient(140deg, #ff9f2f, #ffd08c); color: #341d00; }
+.col-9 .front { background: linear-gradient(140deg, #57c3f6, #9be0ff); color: #07293a; }
 
 /* ── CARD COLORS (dark) ── */
 [data-theme="dark"] .col-0 .front { background: #7a3520; color: #fde0d6; }
@@ -670,7 +670,7 @@ header {
 .quiz-card {
   position: absolute;
   inset: 0;
-  background: var(--surface);
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--quiz-accent-soft) 32%, var(--surface)));
   border: 1.5px solid var(--progress-bg);
   border-radius: 20px;
   display: flex;
@@ -1034,7 +1034,7 @@ header {
 
 .qrs {
   text-align: center;
-  background: var(--surface);
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--quiz-accent-soft) 40%, var(--surface)));
   border: 1.5px solid var(--progress-bg);
   border-radius: 16px;
   padding: 16px 20px;
@@ -1058,9 +1058,12 @@ header {
   color: var(--subtext);
 }
 
+.qrs.ok { border-color: color-mix(in srgb, var(--quiz-ok) 34%, var(--progress-bg)); }
+.qrs.no { border-color: color-mix(in srgb, var(--quiz-no) 34%, var(--progress-bg)); }
+.qrs.score { border-color: color-mix(in srgb, var(--accent-2) 30%, var(--progress-bg)); }
 .qrs.ok b { color: var(--quiz-ok); }
 .qrs.no b { color: var(--quiz-no); }
-.qrs.score b { color: var(--text); }
+.qrs.score b { color: color-mix(in srgb, var(--accent-2) 62%, var(--text)); }
 
 .qresult-btns {
   display: flex;
