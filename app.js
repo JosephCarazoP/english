@@ -75,6 +75,77 @@ const ALL_VERBS = [
 ];
 
 const GIPHY_KEY = window.GIPHY_KEY || "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
+const VERB_MEANINGS_ES = {
+  bear: "soportar",
+  buy: "comprar",
+  drive: "conducir",
+  eat: "comer",
+  find: "encontrar",
+  grow: "crecer",
+  have: "tener",
+  know: "saber / conocer",
+  lose: "perder",
+  meet: "conocer / reunirse",
+  read: "leer",
+  speak: "hablar",
+  swim: "nadar",
+  take: "tomar / llevar",
+  write: "escribir",
+  visit: "visitar",
+  paint: "pintar",
+  cook: "cocinar",
+  talk: "hablar",
+  walk: "caminar",
+  work: "trabajar",
+  watch: "mirar / ver",
+  laugh: "reír",
+  listen: "escuchar",
+  play: "jugar / tocar",
+  call: "llamar",
+  arise: "surgir",
+  awake: "despertar",
+  be: "ser / estar",
+  beat: "golpear / vencer",
+  become: "convertirse",
+  begin: "empezar",
+  bend: "doblar",
+  bet: "apostar",
+  bite: "morder",
+  blow: "soplar",
+  break: "romper",
+  bring: "traer",
+  choose: "elegir",
+  come: "venir",
+  cut: "cortar",
+  do: "hacer",
+  drink: "beber",
+  fall: "caer",
+  forget: "olvidar",
+  get: "obtener / conseguir",
+  give: "dar",
+  go: "ir",
+  make: "hacer",
+  see: "ver",
+  sing: "cantar",
+  sleep: "dormir",
+  think: "pensar",
+  win: "ganar",
+  accept: "aceptar",
+  count: "contar",
+  need: "necesitar",
+  start: "empezar / iniciar",
+  want: "querer",
+  ask: "preguntar",
+  dance: "bailar",
+  finish: "terminar",
+  help: "ayudar",
+  look: "mirar",
+  answer: "responder",
+  clean: "limpiar",
+  love: "amar",
+  open: "abrir",
+  stay: "quedarse",
+};
 
 /* ── FLASHCARD STATE ── */
 let deck          = [];
@@ -96,6 +167,29 @@ function shuffle(arr) {
 
 function colorIdx(verb) {
   return ALL_VERBS.indexOf(verb) % 10;
+}
+
+function speakVerb(text) {
+  if (!("speechSynthesis" in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-US";
+  utter.rate = 0.92;
+  utter.pitch = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+function hideSwipeGhosts() {
+  const ok = document.getElementById("qGhostOk");
+  const no = document.getElementById("qGhostNo");
+  if (ok) {
+    ok.style.opacity = "0";
+    ok.textContent = "";
+  }
+  if (no) {
+    no.style.opacity = "0";
+    no.textContent = "";
+  }
 }
 
 /* ── DECK CON PROGRESIÓN DIARIA ── */
@@ -223,8 +317,14 @@ async function openDetail() {
   const soundHTML = verb.sound ? `<span class="sound-tag">${verb.sound}</span>` : "";
   document.getElementById("modalPresent").innerHTML  = `${verb.present} ${soundHTML}`;
   document.getElementById("modalPast").textContent   = verb.past;
+  document.getElementById("modalMeaningEs").textContent = VERB_MEANINGS_ES[verb.present] || "Sin traducción disponible";
   document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
   document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
+  document.getElementById("speakPresent").onclick = () => speakVerb(verb.present);
+  document.getElementById("speakPast").onclick = () => {
+    const normalizedPast = verb.past.split("/")[0].trim();
+    speakVerb(normalizedPast);
+  };
 
   const badge            = document.getElementById("modalBadge");
   badge.textContent      = verb.type === "irregular" ? "Irregular" : "Regular";
@@ -373,8 +473,7 @@ function renderQuizQuestion() {
   c1.className     = "quiz-card top";
   if (q.mech === "choice") c1.classList.add("no-drag");
 
-  document.getElementById("qGhostOk").style.opacity = "0";
-  document.getElementById("qGhostNo").style.opacity = "0";
+  hideSwipeGhosts();
   document.getElementById("qLabel").textContent     = q.label;
 
   const dirRow = document.getElementById("qDirRow");
@@ -398,6 +497,7 @@ function renderQuizQuestion() {
     body.innerHTML =
       `<div class="qtype-verb">${q.verb.present}</div>` +
       `<div class="qtype-wrap">` +
+        `<div class="qtype-tip">Write the past tense below</div>` +
         `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="past tense…" />` +
         `<div class="qtype-fb" id="qTypeFb"></div>` +
       `</div>`;
@@ -501,8 +601,7 @@ function quizAdvance(swiped) {
     c1.style.transition = "transform .30s cubic-bezier(.4,0,.2,1), opacity .30s";
     c1.style.transform  = swiped === "right" ? "translateX(150%) rotate(14deg)" : "translateX(-150%) rotate(-14deg)";
     c1.style.opacity    = "0";
-    document.getElementById("qGhostOk").style.opacity = "0";
-    document.getElementById("qGhostNo").style.opacity = "0";
+    hideSwipeGhosts();
     setTimeout(() => { quizIdx++; renderQuizQuestion(); }, 320);
   }, 280);
 }
@@ -539,8 +638,7 @@ function qDragMove(e) {
       optR.style.background = ""; optR.style.color = "";
     }
   }
-  document.getElementById("qGhostOk").style.opacity = x > t  ? Math.min((x - t) / 50, 1) : "0";
-  document.getElementById("qGhostNo").style.opacity = x < -t ? Math.min((-x - t) / 50, 1) : "0";
+  hideSwipeGhosts();
 }
 function qDragEnd() {
   if (!qDrag) return;
@@ -555,8 +653,7 @@ function qDragEnd() {
     const optR = document.getElementById("qOptR");
     if (optL) { optL.style.background = ""; optL.style.color = ""; }
     if (optR) { optR.style.background = ""; optR.style.color = ""; }
-    document.getElementById("qGhostOk").style.opacity = "0";
-    document.getElementById("qGhostNo").style.opacity = "0";
+    hideSwipeGhosts();
   }
 }
 
@@ -577,8 +674,7 @@ function showQuizResults() {
   document.getElementById("qCard3").innerHTML = "";
   document.getElementById("qLabel").textContent = "";
   document.getElementById("qDirRow").style.display = "none";
-  document.getElementById("qGhostOk").style.opacity = "0";
-  document.getElementById("qGhostNo").style.opacity = "0";
+  hideSwipeGhosts();
 
   const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
   const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
