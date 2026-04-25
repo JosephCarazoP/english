@@ -19,9 +19,6 @@
   --quiz-hover-text: #0369a1;
   --quiz-accent:     #7c9cff;
   --quiz-accent-soft:#eef1ff;
-  --accent-1:        #ff8fab;
-  --accent-2:        #7c9cff;
-  --accent-3:        #22c55e;
 }
 
 [data-theme="dark"] {
@@ -37,9 +34,6 @@
   --quiz-no-bg:      #450a0a;
   --quiz-hover:      #0c4a6e;
   --quiz-hover-text: #bae6fd;
-  --accent-1:        #7a2848;
-  --accent-2:        #3f4f9e;
-  --accent-3:        #1c6a3b;
 }
 
 /* ── BASE ── */
@@ -52,32 +46,6 @@ body {
   flex-direction: column;
   transition: background 0.3s, color 0.3s;
   overflow-x: hidden;
-  position: relative;
-}
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  filter: blur(60px);
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.28;
-}
-
-body::before {
-  top: -110px;
-  left: -90px;
-  background: color-mix(in srgb, var(--accent-1) 60%, transparent);
-}
-
-body::after {
-  right: -90px;
-  bottom: -120px;
-  background: color-mix(in srgb, var(--accent-2) 65%, transparent);
 }
 
 /* ── HEADER ── */
@@ -170,7 +138,7 @@ header {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--progress-fill), color-mix(in srgb, var(--accent-2) 34%, var(--progress-fill)));
+  background: var(--progress-fill);
   border-radius: 3px;
   transition: width 0.4s ease;
 }
@@ -347,7 +315,7 @@ header {
 }
 
 .card-scene.animate {
-  animation: slideIn 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* ── FLASHCARD ACTIONS ── */
@@ -380,8 +348,7 @@ header {
 .btn-correct { background: #22c55e; color: #fff; }
 .btn-skip    { background: var(--progress-bg); color: var(--subtext); }
 .btn-detail  {
-  background: linear-gradient(140deg, var(--text), color-mix(in srgb, var(--accent-2) 36%, var(--text)));
-  color: var(--bg);
+  background: var(--text); color: var(--bg);
   padding: 14px 20px; border-radius: 50%;
   width: 50px; height: 50px;
   display: flex; align-items: center; justify-content: center;
@@ -685,8 +652,8 @@ header {
   touch-action: none;
   box-shadow: 0 10px 28px rgba(12, 20, 36, 0.08);
   /* Transición suave para c2/c3 al promover */
-  transition: transform 0.46s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity   0.34s ease;
+  transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+              opacity   0.35s ease;
 }
 
 /* Cards de fondo */
@@ -707,7 +674,7 @@ header {
   cursor: grab;
   border-color: color-mix(in srgb, var(--quiz-accent) 25%, var(--progress-bg));
   /* Transición para el arrastre manual y el regreso */
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1),
               opacity   0.32s ease;
 }
 .quiz-card.top.dragging {
@@ -721,7 +688,7 @@ header {
 @keyframes quizCardEnter {
   from {
     opacity: 0;
-    transform: translateY(22px) scale(0.965);
+    transform: translateY(20px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -741,20 +708,20 @@ header {
 
 @keyframes quizCardFlyUp {
   from { opacity: 1; transform: translateY(0) scale(1); }
-  to   { opacity: 0; transform: translateY(-44px) scale(0.94); }
+  to   { opacity: 0; transform: translateY(-24px) scale(0.96); }
 }
 
 .quiz-card.quiz-enter {
-  animation: quizCardEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: quizCardEnter 0.30s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 }
 .quiz-card.fly-right {
-  animation: quizCardFlyRight 0.34s cubic-bezier(0.4, 0, 0.6, 1) both;
+  animation: quizCardFlyRight 0.30s cubic-bezier(0.4, 0, 0.6, 1) both;
 }
 .quiz-card.fly-left {
-  animation: quizCardFlyLeft 0.34s cubic-bezier(0.4, 0, 0.6, 1) both;
+  animation: quizCardFlyLeft 0.30s cubic-bezier(0.4, 0, 0.6, 1) both;
 }
 .quiz-card.fly-up {
-  animation: quizCardFlyUp 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: quizCardFlyUp 0.24s cubic-bezier(0.4, 0, 0.6, 1) both;
 }
 
 /* Etiquetas */

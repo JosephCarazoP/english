@@ -111,16 +111,6 @@ function shuffle(arr) {
 
 function colorIdx(verb) { return ALL_VERBS.indexOf(verb) % 10; }
 
-function setCardToPresentState() {
-  const scene = document.getElementById("cardScene");
-  const actions = document.getElementById("actions");
-  const sideHint = document.getElementById("sideHint");
-  if (scene) scene.classList.remove("flipped");
-  if (actions) actions.classList.remove("visible");
-  if (sideHint) sideHint.textContent = "Present tense";
-  isFlipped = false;
-}
-
 function speakVerb(text) {
   if (!("speechSynthesis" in window)) return;
   const utter = new SpeechSynthesisUtterance(text);
@@ -159,7 +149,6 @@ function renderCard(animate = true) {
   const verb = deck[cursor];
   document.getElementById("stage").style.display = "flex";
   document.getElementById("finishScreen").classList.remove("show");
-  setCardToPresentState();
 
   const scene = document.getElementById("cardScene");
   scene.className = `card-scene col-${colorIdx(verb)}`;
@@ -208,9 +197,13 @@ function next() {
 
   backText.style.visibility = "hidden";
   cardInner.style.transition = "none";
-  setCardToPresentState();
+  scene.classList.remove("flipped");
+  isFlipped = false;
   void cardInner.offsetWidth;
   cardInner.style.transition = "";
+
+  document.getElementById("actions").classList.remove("visible");
+  document.getElementById("sideHint").textContent = "Present tense";
   backText.textContent = "";
   cursor++;
 
@@ -392,16 +385,10 @@ function animateToNextQuestion(flyDirection, delay) {
     // Mientras vuela, promover las de atrás
     promoteBackCards();
 
-    let transitioned = false;
-    const finishTransition = () => {
-      if (transitioned) return;
-      transitioned = true;
+    setTimeout(() => {
       quizIdx++;
       renderQuizQuestion(true);
-    };
-
-    c1.addEventListener("animationend", finishTransition, { once: true });
-    setTimeout(finishTransition, 420);
+    }, 280);
   }, wait);
 }
 
@@ -583,15 +570,10 @@ function quizAdvanceSwipe(swiped) {
 
   promoteBackCards();
 
-  let swipeTransitioned = false;
-  const finishSwipeTransition = () => {
-    if (swipeTransitioned) return;
-    swipeTransitioned = true;
+  setTimeout(() => {
     quizIdx++;
     renderQuizQuestion(true);
-  };
-  c1.addEventListener("transitionend", finishSwipeTransition, { once: true });
-  setTimeout(finishSwipeTransition, 420);
+  }, 300);
 }
 
 /* ════════════════════════════════════════════════════════
