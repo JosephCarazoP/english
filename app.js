@@ -665,7 +665,6 @@ function showQuizResults() {
 
   // Mostrar la pantalla de resultados separada
   const qResultScreen = document.getElementById("quizResultScreen");
-  if (!qResultScreen) return;
   const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
   const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
   const message = pct >= 90 ? "You nailed every conjugation."
