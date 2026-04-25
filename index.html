@@ -13,9 +13,9 @@
 
   <header>
     <div class="logo">
-      <img 
-        src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" 
-        alt="Logo" 
+      <img
+        src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg"
+        alt="Logo"
         class="logo-web"
         onclick="location.reload()"
         title="Restart"
@@ -48,6 +48,7 @@
     </div>
   </div>
 
+  <!-- ── FLASHCARD STAGE ── -->
   <div class="stage" id="stage">
     <div class="side-hint" id="sideHint">Present tense</div>
 
@@ -67,35 +68,49 @@
     </div>
 
     <div class="actions" id="actions">
-      <button class="act-btn btn-skip" id="btnSkip">Skip ›</button>
+      <button class="act-btn btn-skip"    id="btnSkip">Skip ›</button>
       <button class="act-btn btn-correct" id="btnCorrect">Got it ✓</button>
-      <button class="act-btn btn-detail" id="btnDetail">✦</button>
+      <button class="act-btn btn-detail"  id="btnDetail">✦</button>
     </div>
   </div>
 
-  <div class="stage" id="quizScreen" style="display: none; flex-direction: column; align-items: center; justify-content: center;">
-    <div class="quiz-container" style="width: 100%; max-width: 500px; padding: 20px;">
-      <h2 id="quizQuestion" style="text-align: center; margin-bottom: 30px; min-height: 80px; font-size: 1.5rem;"></h2>
-      <div id="quizOptions" class="options-grid">
+  <!-- ── QUIZ STAGE ── -->
+  <div class="stage quiz-stage" id="quizScreen" style="display:none;">
+    <div class="quiz-stack-wrap" id="qStackWrap">
+      <div class="quiz-stack-cards" id="qStackCards">
+        <div class="quiz-card c3" id="qCard3"></div>
+        <div class="quiz-card c2" id="qCard2"></div>
+        <div class="quiz-card top" id="qCard1">
+          <div class="quiz-ghost quiz-ghost-ok" id="qGhostOk">Got it</div>
+          <div class="quiz-ghost quiz-ghost-no" id="qGhostNo">Nope</div>
+          <div class="quiz-card-label" id="qLabel"></div>
+          <div id="qBody"></div>
         </div>
+      </div>
+      <div class="quiz-dir-row" id="qDirRow" style="display:none;">
+        <span class="quiz-dir-lbl">← swipe left</span>
+        <span class="quiz-dir-lbl">swipe right →</span>
+      </div>
     </div>
   </div>
 
+  <!-- ── FINISH SCREEN ── -->
   <div class="finish-screen" id="finishScreen">
     <div class="finish-emoji" id="finishEmoji">🎉</div>
     <div class="finish-title">Round complete!</div>
     <div class="finish-subtitle" id="finishSubtitle"></div>
     <div class="finish-stats">
       <div class="finish-stat ok"><b id="fCorrect">0</b><span>Learned</span></div>
-      <div class="finish-stat"> <b id="fSkip">0</b> <span>Skipped</span></div>
-      <div class="finish-stat"> <b id="fTotal">0</b> <span>Total</span></div>
+      <div class="finish-stat">   <b id="fSkip">0</b>   <span>Skipped</span></div>
+      <div class="finish-stat">   <b id="fTotal">0</b>  <span>Total</span></div>
     </div>
-    <div class="finish-actions" style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px;">
-      <button class="restart-btn" onclick="startQuiz()" id="startQuizBtn" style="background: var(--text); color: var(--bg);">Take Final Quiz 📝</button>
-      <button class="restart-btn" id="restartBtn" style="background: transparent; border: 2px solid var(--progress-bg); color: var(--text);">Shuffle &amp; Restart</button>
+    <div class="finish-actions">
+      <button class="restart-btn" onclick="startQuiz()" style="background:var(--text);color:var(--bg);">Take Final Quiz 📝</button>
+      <button class="restart-btn" id="restartBtn" style="background:transparent;border:2px solid var(--progress-bg);color:var(--text);">Shuffle &amp; Restart</button>
     </div>
   </div>
 
+  <!-- ── DETAIL MODAL ── -->
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="modal-handle"></div>
@@ -108,7 +123,6 @@
       </div>
       <div class="modal-section-label">Present Tense Example</div>
       <div id="modalSentencePres" class="modal-sentence"></div>
-
       <div class="modal-section-label">Past Tense Example</div>
       <div id="modalSentencePast" class="modal-sentence"></div>
       <div class="modal-section-label"></div>
