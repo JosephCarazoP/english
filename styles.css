@@ -528,6 +528,34 @@ header {
   border-color: var(--text);
 }
 
+.modal-meaning {
+  border-left: 4px solid var(--text);
+}
+
+.modal-audio {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.speak-btn {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1.5px solid var(--progress-bg);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.speak-btn:hover {
+  border-color: var(--text);
+}
+
 .modal-gif {
   border-radius: 16px;
   overflow: hidden;
@@ -656,6 +684,24 @@ header {
   border-color: color-mix(in srgb, var(--quiz-accent) 25%, var(--progress-bg));
 }
 
+.quiz-card.quiz-enter {
+  animation: quizCardIn .28s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.quiz-card.quiz-leave {
+  animation: quizCardOut .24s cubic-bezier(.4,0,.2,1) both;
+}
+
+@keyframes quizCardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes quizCardOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-16px) scale(0.985); }
+}
+
 .quiz-card-label {
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -777,6 +823,17 @@ header {
   align-items: center;
   gap: 10px;
   width: 100%;
+}
+
+.quiz-stack-cards.results-mode #qCard2,
+.quiz-stack-cards.results-mode #qCard3 {
+  opacity: 0;
+  transform: translateY(16px) scale(.88);
+  pointer-events: none;
+}
+
+.quiz-stack-cards.results-mode #qCard1 {
+  box-shadow: 0 16px 36px rgba(12, 20, 36, 0.12);
 }
 
 .qtype-tip {
@@ -957,12 +1014,12 @@ header {
   .card-scene    { height: 230px; }
   .modal         { padding: 20px 20px 36px; }
   .act-btn       { padding: 12px 20px; }
-  .quiz-stage       { justify-content: center; padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: 30px; }
+  .quiz-stage       { justify-content: center; padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: 40px; }
   .quiz-stack-wrap  { max-width: 94vw; }
   .quiz-stack-cards { height: 360px; }
   .quiz-card        { padding: 26px 18px; }
   .qtype-wrap input { width: min(100%, 280px); }
-  .quiz-stack-wrap  { transform: translateY(12px); }
+  .quiz-stack-wrap  { transform: translateY(22px); }
 }
 
 /* ── FOOTER ── */

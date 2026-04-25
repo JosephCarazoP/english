@@ -371,6 +371,23 @@ let quizOk        = 0;
 let quizNo        = 0;
 let quizLocked    = false;
 
+function setQuizResultMode(isResult) {
+  const stack = document.getElementById("qStackCards");
+  if (!stack) return;
+  stack.classList.toggle("results-mode", isResult);
+}
+
+function animateToNextQuestion(delay = 760) {
+  setTimeout(() => {
+    const c1 = document.getElementById("qCard1");
+    c1.classList.add("quiz-leave");
+    setTimeout(() => {
+      quizIdx++;
+      renderQuizQuestion(true);
+    }, 260);
+  }, delay);
+}
+
 /* ── Get one distractor from the pool ── */
 function getDistractor(correctPast, pool) {
   const others = shuffle(pool.filter(v => v.past !== correctPast));
@@ -461,17 +478,19 @@ function updateQuizHeader() {
 }
 
 /* ── Render current quiz question ── */
-function renderQuizQuestion() {
+function renderQuizQuestion(animateIn = true) {
   if (quizIdx >= quizQuestions.length) { showQuizResults(); return; }
 
   quizLocked = false;
   const q    = quizQuestions[quizIdx];
   const c1   = document.getElementById("qCard1");
+  setQuizResultMode(false);
 
   // Reset card position
   c1.style.cssText = "";
   c1.className     = "quiz-card top";
   if (q.mech === "choice") c1.classList.add("no-drag");
+  if (animateIn) c1.classList.add("quiz-enter");
 
   hideSwipeGhosts();
   document.getElementById("qLabel").textContent     = q.label;
@@ -517,7 +536,7 @@ function renderQuizQuestion() {
       quizLocked      = true;
       if (isOk) quizOk++; else quizNo++;
       updateQuizHeader();
-      setTimeout(() => { quizIdx++; renderQuizQuestion(); }, 950);
+      animateToNextQuestion(840);
     });
     setTimeout(() => { try { inp.focus(); } catch (e) {} }, 80);
 
@@ -570,7 +589,7 @@ function handleChoiceAnswer(btn, correct) {
   });
   if (isOk) quizOk++; else quizNo++;
   updateQuizHeader();
-  setTimeout(() => { quizIdx++; renderQuizQuestion(); }, 1000);
+  animateToNextQuestion(760);
 }
 
 /* ── Advance swipe card ── */
@@ -675,6 +694,7 @@ function showQuizResults() {
   document.getElementById("qLabel").textContent = "";
   document.getElementById("qDirRow").style.display = "none";
   hideSwipeGhosts();
+  setQuizResultMode(true);
 
   const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
   const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
