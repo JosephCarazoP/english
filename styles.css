@@ -528,6 +528,34 @@ header {
   border-color: var(--text);
 }
 
+.modal-meaning {
+  border-left: 4px solid var(--text);
+}
+
+.modal-audio {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.speak-btn {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1.5px solid var(--progress-bg);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.speak-btn:hover {
+  border-color: var(--text);
+}
+
 .modal-gif {
   border-radius: 16px;
   overflow: hidden;
