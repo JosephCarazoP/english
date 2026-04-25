@@ -76,75 +76,19 @@ const ALL_VERBS = [
 
 const GIPHY_KEY = window.GIPHY_KEY || "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
 const VERB_MEANINGS_ES = {
-  bear: "soportar",
-  buy: "comprar",
-  drive: "conducir",
-  eat: "comer",
-  find: "encontrar",
-  grow: "crecer",
-  have: "tener",
-  know: "saber / conocer",
-  lose: "perder",
-  meet: "conocer / reunirse",
-  read: "leer",
-  speak: "hablar",
-  swim: "nadar",
-  take: "tomar / llevar",
-  write: "escribir",
-  visit: "visitar",
-  paint: "pintar",
-  cook: "cocinar",
-  talk: "hablar",
-  walk: "caminar",
-  work: "trabajar",
-  watch: "mirar / ver",
-  laugh: "reír",
-  listen: "escuchar",
-  play: "jugar / tocar",
-  call: "llamar",
-  arise: "surgir",
-  awake: "despertar",
-  be: "ser / estar",
-  beat: "golpear / vencer",
-  become: "convertirse",
-  begin: "empezar",
-  bend: "doblar",
-  bet: "apostar",
-  bite: "morder",
-  blow: "soplar",
-  break: "romper",
-  bring: "traer",
-  choose: "elegir",
-  come: "venir",
-  cut: "cortar",
-  do: "hacer",
-  drink: "beber",
-  fall: "caer",
-  forget: "olvidar",
-  get: "obtener / conseguir",
-  give: "dar",
-  go: "ir",
-  make: "hacer",
-  see: "ver",
-  sing: "cantar",
-  sleep: "dormir",
-  think: "pensar",
-  win: "ganar",
-  accept: "aceptar",
-  count: "contar",
-  need: "necesitar",
-  start: "empezar / iniciar",
-  want: "querer",
-  ask: "preguntar",
-  dance: "bailar",
-  finish: "terminar",
-  help: "ayudar",
-  look: "mirar",
-  answer: "responder",
-  clean: "limpiar",
-  love: "amar",
-  open: "abrir",
-  stay: "quedarse",
+  bear:"soportar",buy:"comprar",drive:"conducir",eat:"comer",find:"encontrar",
+  grow:"crecer",have:"tener",know:"saber / conocer",lose:"perder",meet:"conocer / reunirse",
+  read:"leer",speak:"hablar",swim:"nadar",take:"tomar / llevar",write:"escribir",
+  visit:"visitar",paint:"pintar",cook:"cocinar",talk:"hablar",walk:"caminar",
+  work:"trabajar",watch:"mirar / ver",laugh:"reír",listen:"escuchar",play:"jugar / tocar",
+  call:"llamar",arise:"surgir",awake:"despertar",be:"ser / estar",beat:"golpear / vencer",
+  become:"convertirse",begin:"empezar",bend:"doblar",bet:"apostar",bite:"morder",
+  blow:"soplar",break:"romper",bring:"traer",choose:"elegir",come:"venir",cut:"cortar",
+  do:"hacer",drink:"beber",fall:"caer",forget:"olvidar",get:"obtener / conseguir",
+  give:"dar",go:"ir",make:"hacer",see:"ver",sing:"cantar",sleep:"dormir",think:"pensar",
+  win:"ganar",accept:"aceptar",count:"contar",need:"necesitar",start:"empezar / iniciar",
+  want:"querer",ask:"preguntar",dance:"bailar",finish:"terminar",help:"ayudar",look:"mirar",
+  answer:"responder",clean:"limpiar",love:"amar",open:"abrir",stay:"quedarse",
 };
 
 /* ── FLASHCARD STATE ── */
@@ -165,16 +109,12 @@ function shuffle(arr) {
   return a;
 }
 
-function colorIdx(verb) {
-  return ALL_VERBS.indexOf(verb) % 10;
-}
+function colorIdx(verb) { return ALL_VERBS.indexOf(verb) % 10; }
 
 function speakVerb(text) {
   if (!("speechSynthesis" in window)) return;
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-US";
-  utter.rate = 0.92;
-  utter.pitch = 1;
+  utter.lang = "en-US"; utter.rate = 0.92; utter.pitch = 1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
 }
@@ -182,14 +122,8 @@ function speakVerb(text) {
 function hideSwipeGhosts() {
   const ok = document.getElementById("qGhostOk");
   const no = document.getElementById("qGhostNo");
-  if (ok) {
-    ok.style.opacity = "0";
-    ok.textContent = "";
-  }
-  if (no) {
-    no.style.opacity = "0";
-    no.textContent = "";
-  }
+  if (ok) { ok.style.opacity = "0"; ok.textContent = ""; }
+  if (no) { no.style.opacity = "0"; no.textContent = ""; }
 }
 
 /* ── DECK CON PROGRESIÓN DIARIA ── */
@@ -206,17 +140,13 @@ function buildDeck() {
   const base = currentFilter === "all"
     ? deck
     : deck.filter(v => v.type === currentFilter);
-  deck      = shuffle(base);
-  cursor    = 0;
-  correct   = 0;
-  skipped   = 0;
-  isFlipped = false;
+  deck    = shuffle(base);
+  cursor  = 0; correct = 0; skipped = 0; isFlipped = false;
 }
 
 /* ── RENDER CARD ── */
 function renderCard(animate = true) {
   const verb = deck[cursor];
-
   document.getElementById("stage").style.display = "flex";
   document.getElementById("finishScreen").classList.remove("show");
 
@@ -247,14 +177,11 @@ function renderCard(animate = true) {
 /* ── FLIP ── */
 function toggleFlip() {
   const scene = document.getElementById("cardScene");
-  isFlipped   = !isFlipped;
-
+  isFlipped = !isFlipped;
   if (isFlipped) {
     scene.classList.add("flipped");
     document.getElementById("sideHint").textContent = "Past tense";
-    setTimeout(() => {
-      document.getElementById("actions").classList.add("visible");
-    }, 350);
+    setTimeout(() => { document.getElementById("actions").classList.add("visible"); }, 350);
   } else {
     scene.classList.remove("flipped");
     document.getElementById("sideHint").textContent = "Present tense";
@@ -278,7 +205,6 @@ function next() {
   document.getElementById("actions").classList.remove("visible");
   document.getElementById("sideHint").textContent = "Present tense";
   backText.textContent = "";
-
   cursor++;
 
   if (cursor >= deck.length) {
@@ -301,9 +227,7 @@ function showFinish() {
   document.getElementById("fSkip").textContent          = skipped;
   document.getElementById("fTotal").textContent         = deck.length;
   document.getElementById("finishSubtitle").textContent =
-    pct >= 80 ? "Excellent work! 🔥"
-    : pct >= 50 ? "Good progress, keep going!"
-    : "Keep practicing, you'll get there!";
+    pct >= 80 ? "Excellent work! 🔥" : pct >= 50 ? "Good progress, keep going!" : "Keep practicing, you'll get there!";
   document.getElementById("finishEmoji").textContent =
     pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
   document.getElementById("progressFill").style.width  = "100%";
@@ -313,7 +237,6 @@ function showFinish() {
 /* ── DETAIL MODAL ── */
 async function openDetail() {
   const verb = deck[cursor];
-
   const soundHTML = verb.sound ? `<span class="sound-tag">${verb.sound}</span>` : "";
   document.getElementById("modalPresent").innerHTML  = `${verb.present} ${soundHTML}`;
   document.getElementById("modalPast").textContent   = verb.past;
@@ -321,10 +244,7 @@ async function openDetail() {
   document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
   document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
   document.getElementById("speakPresent").onclick = () => speakVerb(verb.present);
-  document.getElementById("speakPast").onclick = () => {
-    const normalizedPast = verb.past.split("/")[0].trim();
-    speakVerb(normalizedPast);
-  };
+  document.getElementById("speakPast").onclick    = () => speakVerb(verb.past.split("/")[0].trim());
 
   const badge            = document.getElementById("modalBadge");
   badge.textContent      = verb.type === "irregular" ? "Irregular" : "Regular";
@@ -371,70 +291,34 @@ let quizOk        = 0;
 let quizNo        = 0;
 let quizLocked    = false;
 
-function setQuizResultMode(isResult) {
-  const stack = document.getElementById("qStackCards");
-  if (!stack) return;
-  stack.classList.toggle("results-mode", isResult);
-}
-
-function animateToNextQuestion(delay = 760) {
-  setTimeout(() => {
-    const c1 = document.getElementById("qCard1");
-    c1.classList.add("quiz-leave");
-    setTimeout(() => {
-      quizIdx++;
-      renderQuizQuestion(true);
-    }, 260);
-  }, delay);
-}
-
-/* ── Get one distractor from the pool ── */
+/* ── Get distractors ── */
 function getDistractor(correctPast, pool) {
-  const others = shuffle(pool.filter(v => v.past !== correctPast));
-  return others[0].past;
+  return shuffle(pool.filter(v => v.past !== correctPast))[0].past;
 }
-
-/* ── Get three distractors ── */
 function getDistractors(correctPast, pool) {
   return shuffle(pool.filter(v => v.past !== correctPast)).slice(0, 3).map(v => v.past);
 }
 
-/* ── Build question for one verb ── */
+/* ── Build question ── */
 function buildQuestion(verb, pool) {
   const roll = Math.random();
-
   if (roll < 0.40) {
-    // SWIPE: two options side by side, correct side is random
     const distractor     = getDistractor(verb.past, pool);
     const correctOnRight = Math.random() > 0.5;
     return {
-      mech:          "swipe",
-      label:         "Swipe to the past tense",
-      verb,
-      leftOpt:       correctOnRight ? distractor : verb.past,
-      rightOpt:      correctOnRight ? verb.past  : distractor,
-      correctSide:   correctOnRight ? "right"    : "left",
+      mech: "swipe", label: "Swipe to the past tense", verb,
+      leftOpt:     correctOnRight ? distractor : verb.past,
+      rightOpt:    correctOnRight ? verb.past  : distractor,
+      correctSide: correctOnRight ? "right"    : "left",
     };
   }
-
   if (roll < 0.70) {
-    // TYPE: write the past tense
     return { mech: "type", label: "Type the past tense", verb };
   }
-
-  // CHOICE: 4 options
   const opts = shuffle([verb.past, ...getDistractors(verb.past, pool)]);
-  return {
-    mech:     "choice",
-    label:    "Choose the past tense",
-    question: `What is the past tense of "${verb.present}"?`,
-    opts,
-    correct:  verb.past,
-    verb,
-  };
+  return { mech: "choice", label: "Choose the past tense", question: `What is the past tense of "${verb.present}"?`, opts, correct: verb.past, verb };
 }
 
-/* ── Build full quiz question list ── */
 function buildQuiz(verbPool) {
   return shuffle(verbPool).map(v => buildQuestion(v, verbPool));
 }
@@ -447,10 +331,7 @@ function startQuiz() {
     : ALL_VERBS.slice(0, deck.length).filter(v => v.type === currentFilter);
 
   quizQuestions = buildQuiz(base);
-  quizIdx       = 0;
-  quizOk        = 0;
-  quizNo        = 0;
-  quizLocked    = false;
+  quizIdx = 0; quizOk = 0; quizNo = 0; quizLocked = false;
 
   document.querySelector(".score-correct .score-lbl").textContent = "Correct";
   document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
@@ -459,6 +340,14 @@ function startQuiz() {
 
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display = "none";
+
+  // Ocultar pantalla de resultados del quiz si estaba visible
+  const qResultScreen = document.getElementById("quizResultScreen");
+  if (qResultScreen) qResultScreen.classList.remove("show");
+
+  // Mostrar el stack de cards
+  const qStackCards = document.getElementById("qStackCards");
+  if (qStackCards) qStackCards.classList.remove("results-mode");
 
   setTimeout(() => {
     const qs = document.getElementById("quizScreen");
@@ -477,29 +366,84 @@ function updateQuizHeader() {
   document.getElementById("scoreSkip").textContent     = quizNo;
 }
 
+/* ── Avanzar a la siguiente pregunta con animación de salida ── */
+function animateToNextQuestion(flyDirection, delay) {
+  const c1   = document.getElementById("qCard1");
+  const wait = delay !== undefined ? delay : 700;
+
+  setTimeout(() => {
+    // Lanzar la card con la animación de vuelo correcta
+    c1.style.transition = "none"; // Limpiar transiciones inline
+    const flyClass = flyDirection === "right" ? "fly-right"
+                   : flyDirection === "left"  ? "fly-left"
+                   : "fly-up";
+
+    // Quitar clase top para que no interfiera con la transición
+    c1.classList.remove("top");
+    c1.classList.add(flyClass);
+
+    // Mientras vuela, promover las de atrás
+    promoteBackCards();
+
+    setTimeout(() => {
+      quizIdx++;
+      renderQuizQuestion(true);
+    }, 280);
+  }, wait);
+}
+
+/* ── Promover c2 → top y c3 → c2 con animación suave ── */
+function promoteBackCards() {
+  const c2 = document.getElementById("qCard2");
+  const c3 = document.getElementById("qCard3");
+
+  if (c2) {
+    // c2 sube a posición top (sin pointer events aún, los aplica renderQuizQuestion)
+    c2.style.transform = "translateY(0) scale(1)";
+    c2.style.opacity   = "1";
+  }
+  if (c3) {
+    c3.style.transform = "translateY(7px) scale(0.96)";
+    c3.style.opacity   = "1";
+  }
+}
+
 /* ── Render current quiz question ── */
-function renderQuizQuestion(animateIn = true) {
+function renderQuizQuestion(animateIn = false) {
   if (quizIdx >= quizQuestions.length) { showQuizResults(); return; }
 
   quizLocked = false;
   const q    = quizQuestions[quizIdx];
   const c1   = document.getElementById("qCard1");
-  setQuizResultMode(false);
 
-  // Reset card position
+  // Quitar el stack de resultados si estaba
+  const qStackCards = document.getElementById("qStackCards");
+  qStackCards.classList.remove("results-mode");
+
+  // Reset completo de la card
   c1.style.cssText = "";
   c1.className     = "quiz-card top";
   if (q.mech === "choice") c1.classList.add("no-drag");
-  if (animateIn) c1.classList.add("quiz-enter");
+  if (animateIn) {
+    // Forzar reflow para reiniciar la animación
+    void c1.offsetWidth;
+    c1.classList.add("quiz-enter");
+    c1.addEventListener("animationend", () => c1.classList.remove("quiz-enter"), { once: true });
+  }
+
+  // Resetear cards de fondo a posiciones correctas (sin animación)
+  const c2 = document.getElementById("qCard2");
+  const c3 = document.getElementById("qCard3");
+  if (c2) { c2.style.cssText = ""; c2.className = "quiz-card c2"; }
+  if (c3) { c3.style.cssText = ""; c3.className = "quiz-card c3"; }
 
   hideSwipeGhosts();
-  document.getElementById("qLabel").textContent     = q.label;
 
   const dirRow = document.getElementById("qDirRow");
   const body   = document.getElementById("qBody");
+  document.getElementById("qLabel").textContent = q.label;
 
   if (q.mech === "swipe") {
-    c1.style.cursor = "grab";
     dirRow.style.display = "flex";
     body.innerHTML =
       `<div class="qsw-verb">${q.verb.present}</div>` +
@@ -511,7 +455,6 @@ function renderQuizQuestion(animateIn = true) {
       `</div>`;
 
   } else if (q.mech === "type") {
-    c1.style.cursor = "default";
     dirRow.style.display = "none";
     body.innerHTML =
       `<div class="qtype-verb">${q.verb.present}</div>` +
@@ -520,8 +463,9 @@ function renderQuizQuestion(animateIn = true) {
         `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="past tense…" />` +
         `<div class="qtype-fb" id="qTypeFb"></div>` +
       `</div>`;
+
     const inp = document.getElementById("qTypeInput");
-    inp.addEventListener("keydown", function (e) {
+    inp.addEventListener("keydown", function(e) {
       if (e.key !== "Enter") return;
       e.preventDefault();
       if (quizLocked) return;
@@ -530,19 +474,18 @@ function renderQuizQuestion(animateIn = true) {
       const isOk    = targets.includes(val);
       this.className = isOk ? "right" : "wrong";
       const fb = document.getElementById("qTypeFb");
-      fb.textContent  = isOk ? "Correct!" : "Answer: " + q.verb.past;
-      fb.style.color  = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
-      this.disabled   = true;
-      quizLocked      = true;
+      fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.verb.past;
+      fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
+      this.disabled  = true;
+      quizLocked     = true;
       if (isOk) quizOk++; else quizNo++;
       updateQuizHeader();
-      animateToNextQuestion(840);
+      animateToNextQuestion("up", 820);
     });
-    setTimeout(() => { try { inp.focus(); } catch (e) {} }, 80);
+    setTimeout(() => { try { inp.focus(); } catch(e) {} }, 80);
 
   } else {
     // choice
-    c1.style.cursor = "default";
     dirRow.style.display = "none";
     body.innerHTML =
       `<div class="qch-q">${q.question}</div>` +
@@ -571,8 +514,8 @@ function renderQuizQuestion(animateIn = true) {
   // Peek cards
   const p1 = quizQuestions[quizIdx + 1];
   const p2 = quizQuestions[quizIdx + 2];
-  document.getElementById("qCard2").innerHTML = p1 ? `<div class="quiz-card-label-peek">${p1.label}</div>` : "";
-  document.getElementById("qCard3").innerHTML = p2 ? `<div class="quiz-card-label-peek">${p2.label}</div>` : "";
+  if (c2) c2.innerHTML = p1 ? `<div class="quiz-card-label-peek">${p1.label}</div>` : "";
+  if (c3) c3.innerHTML = p2 ? `<div class="quiz-card-label-peek">${p2.label}</div>` : "";
 
   updateQuizHeader();
 }
@@ -585,21 +528,21 @@ function handleChoiceAnswer(btn, correct) {
   document.querySelectorAll(".qch-opt").forEach(b => {
     b.disabled = true;
     if (b.dataset.val === correct) b.classList.add(isOk ? "qch-ok" : "qch-reveal");
-    else if (b === btn && !isOk)  b.classList.add("qch-no");
+    else if (b === btn && !isOk)   b.classList.add("qch-no");
   });
   if (isOk) quizOk++; else quizNo++;
   updateQuizHeader();
-  animateToNextQuestion(760);
+  animateToNextQuestion("up", 740);
 }
 
-/* ── Advance swipe card ── */
-function quizAdvance(swiped) {
+/* ── Advance swipe card (called after successful swipe gesture) ── */
+function quizAdvanceSwipe(swiped) {
   if (quizLocked) return;
   quizLocked    = true;
   const q       = quizQuestions[quizIdx];
   const isOk    = swiped === q.correctSide;
 
-  // Flash the option tiles
+  // Flash los tiles
   const optL = document.getElementById("qOptL");
   const optR = document.getElementById("qOptR");
   if (optL && optR) {
@@ -614,42 +557,60 @@ function quizAdvance(swiped) {
 
   if (isOk) quizOk++; else quizNo++;
   updateQuizHeader();
+  hideSwipeGhosts();
+
+  // La card ya está siendo arrastrada con transform inline.
+  // Completar el lanzamiento y luego avanzar.
+  const c1 = document.getElementById("qCard1");
+  const tx = swiped === "right" ? 160 : -160;
+  const rot = swiped === "right" ? 18 : -18;
+  c1.style.transition = "transform 0.28s cubic-bezier(0.4,0,0.6,1), opacity 0.28s";
+  c1.style.transform  = `translateX(${tx}%) rotate(${rot}deg)`;
+  c1.style.opacity    = "0";
+
+  promoteBackCards();
 
   setTimeout(() => {
-    const c1 = document.getElementById("qCard1");
-    c1.style.transition = "transform .30s cubic-bezier(.4,0,.2,1), opacity .30s";
-    c1.style.transform  = swiped === "right" ? "translateX(150%) rotate(14deg)" : "translateX(-150%) rotate(-14deg)";
-    c1.style.opacity    = "0";
-    hideSwipeGhosts();
-    setTimeout(() => { quizIdx++; renderQuizQuestion(); }, 320);
-  }, 280);
+    quizIdx++;
+    renderQuizQuestion(true);
+  }, 300);
 }
 
-/* ── Swipe gesture ── */
-let qDrag = false, qSx = 0, qCx = 0;
+/* ════════════════════════════════════════════════════════
+   S W I P E   G E S T U R E
+   ════════════════════════════════════════════════════════ */
+
+let qDrag = false, qSx = 0, qSy = 0, qCx = 0, qCy = 0;
 
 function qDragStart(e) {
   if (!quizQuestions[quizIdx] || quizQuestions[quizIdx].mech !== "swipe" || quizLocked) return;
   qDrag = true;
-  qSx   = e.touches ? e.touches[0].clientX : e.clientX;
-  qCx   = 0;
-  document.getElementById("qCard1").style.transition = "none";
+  const pt = e.touches ? e.touches[0] : e;
+  qSx = pt.clientX; qSy = pt.clientY;
+  qCx = 0; qCy = 0;
+  const c1 = document.getElementById("qCard1");
+  c1.classList.add("dragging");
 }
+
 function qDragMove(e) {
   if (!qDrag) return;
-  const x = (e.touches ? e.touches[0].clientX : e.clientX) - qSx;
-  qCx = x;
-  const c1 = document.getElementById("qCard1");
-  c1.style.transform = `translateX(${x}px) rotate(${x * 0.04}deg)`;
+  const pt = e.touches ? e.touches[0] : e;
+  qCx = pt.clientX - qSx;
+  qCy = pt.clientY - qSy;
 
+  const c1 = document.getElementById("qCard1");
+  const rot = qCx * 0.05; // ligera rotación natural
+  c1.style.transform = `translateX(${qCx}px) translateY(${qCy * 0.3}px) rotate(${rot}deg)`;
+
+  // Highlight de opciones
   const t    = 40;
   const optL = document.getElementById("qOptL");
   const optR = document.getElementById("qOptR");
   if (optL && optR) {
-    if (x < -t) {
+    if (qCx < -t) {
       optL.style.background = "var(--quiz-hover)"; optL.style.color = "var(--quiz-hover-text)";
       optR.style.background = "";                  optR.style.color = "";
-    } else if (x > t) {
+    } else if (qCx > t) {
       optR.style.background = "var(--quiz-hover)"; optR.style.color = "var(--quiz-hover-text)";
       optL.style.background = "";                  optL.style.color = "";
     } else {
@@ -657,16 +618,22 @@ function qDragMove(e) {
       optR.style.background = ""; optR.style.color = "";
     }
   }
-  hideSwipeGhosts();
 }
+
 function qDragEnd() {
   if (!qDrag) return;
   qDrag = false;
-  if (qCx > 80)       quizAdvance("right");
-  else if (qCx < -80) quizAdvance("left");
-  else {
-    const c1 = document.getElementById("qCard1");
-    c1.style.transition = "transform .28s cubic-bezier(.34,1.56,.64,1)";
+  const c1 = document.getElementById("qCard1");
+  c1.classList.remove("dragging");
+
+  const THRESHOLD = 80;
+  if (qCx > THRESHOLD) {
+    quizAdvanceSwipe("right");
+  } else if (qCx < -THRESHOLD) {
+    quizAdvanceSwipe("left");
+  } else {
+    // Regresar suavemente al centro
+    c1.style.transition = "transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1)";
     c1.style.transform  = "";
     const optL = document.getElementById("qOptL");
     const optR = document.getElementById("qOptR");
@@ -676,26 +643,28 @@ function qDragEnd() {
   }
 }
 
-/* ── Quiz results ── */
+/* ════════════════════════════════════════════════════════
+   Q U I Z   R E S U L T S
+   ════════════════════════════════════════════════════════ */
+
 function showQuizResults() {
   const total = quizQuestions.length;
   const pct   = Math.round((quizOk / total) * 100);
 
   document.getElementById("progressFill").style.width  = "100%";
   document.getElementById("progressLabel").textContent = `${total} / ${total}`;
+  document.getElementById("scoreCorrect").textContent  = quizOk;
+  document.getElementById("scoreSkip").textContent     = quizNo;
 
-  const body = document.getElementById("qBody");
-  const c1   = document.getElementById("qCard1");
-  c1.style.cssText = "";
-  c1.className     = "quiz-card top no-drag";
-  c1.style.cursor  = "default";
-  document.getElementById("qCard2").innerHTML = "";
-  document.getElementById("qCard3").innerHTML = "";
-  document.getElementById("qLabel").textContent = "";
+  // Ocultar el stack de cards
+  const qStackCards = document.getElementById("qStackCards");
+  qStackCards.classList.add("results-mode");
+
+  // Ocultar la fila de dirección
   document.getElementById("qDirRow").style.display = "none";
-  hideSwipeGhosts();
-  setQuizResultMode(true);
 
+  // Mostrar la pantalla de resultados separada
+  const qResultScreen = document.getElementById("quizResultScreen");
   const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
   const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
   const message = pct >= 90 ? "You nailed every conjugation."
@@ -703,28 +672,29 @@ function showQuizResults() {
     : pct >= 50 ? "Practice a bit more and you'll get it."
     : "Repetition is the key. Don't stop now.";
 
-  body.innerHTML = `
-    <div class="qresult">
-      <div class="qresult-emoji">${emoji}</div>
-      <div class="qresult-title">${title}</div>
-      <p class="qresult-msg">${message}</p>
-      <div class="qresult-stats">
-        <div class="qrs ok"><b>${quizOk}</b><span>Correct</span></div>
-        <div class="qrs no"><b>${quizNo}</b><span>Wrong</span></div>
-        <div class="qrs"><b>${pct}%</b><span>Score</span></div>
-      </div>
-      <div class="qresult-btns">
-        <button class="restart-btn" onclick="startQuiz()">Retry Quiz 🔄</button>
-        <button class="restart-btn quiz-back-btn" onclick="backToCards()">Back to Cards</button>
-      </div>
+  qResultScreen.innerHTML = `
+    <div class="qresult-emoji">${emoji}</div>
+    <div class="qresult-title">${title}</div>
+    <p class="qresult-msg">${message}</p>
+    <div class="qresult-stats">
+      <div class="qrs ok"><b>${quizOk}</b><span>Correct</span></div>
+      <div class="qrs no"><b>${quizNo}</b><span>Wrong</span></div>
+      <div class="qrs score"><b>${pct}%</b><span>Score</span></div>
+    </div>
+    <div class="qresult-btns">
+      <button class="restart-btn" onclick="startQuiz()">Retry Quiz 🔄</button>
+      <button class="restart-btn quiz-back-btn" onclick="backToCards()">Back to Cards</button>
     </div>
   `;
+  qResultScreen.classList.add("show");
 }
 
 /* ── Back to cards ── */
 function backToCards() {
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
+  const qResultScreen = document.getElementById("quizResultScreen");
+  if (qResultScreen) qResultScreen.classList.remove("show");
   document.getElementById("quizScreen").style.display = "none";
   buildDeck();
   document.getElementById("stage").style.display = "flex";
@@ -743,18 +713,15 @@ function applyTheme() {
    E V E N T   L I S T E N E R S
    ════════════════════════════════════════════════════════ */
 
-// Card click → toggle flip
 document.getElementById("cardScene").addEventListener("click", (e) => {
   if (e.target.closest("#actions")) return;
   toggleFlip();
 });
 
-// Flashcard action buttons
 document.getElementById("btnCorrect").addEventListener("click", (e) => { e.stopPropagation(); correct++; next(); });
 document.getElementById("btnSkip").addEventListener("click",    (e) => { e.stopPropagation(); skipped++;  next(); });
 document.getElementById("btnDetail").addEventListener("click",  (e) => { e.stopPropagation(); openDetail(); });
 
-// Restart from finish screen
 document.getElementById("restartBtn").addEventListener("click", () => {
   buildDeck();
   document.getElementById("finishScreen").classList.remove("show");
@@ -762,13 +729,11 @@ document.getElementById("restartBtn").addEventListener("click", () => {
   renderCard(true);
 });
 
-// Modal
 document.getElementById("modalClose").addEventListener("click", closeModal);
 document.getElementById("overlay").addEventListener("click", (e) => {
   if (e.target === document.getElementById("overlay")) closeModal();
 });
 
-// Filter buttons
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -784,7 +749,6 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   });
 });
 
-// Shuffle
 document.getElementById("shuffleBtn").addEventListener("click", () => {
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
@@ -795,7 +759,6 @@ document.getElementById("shuffleBtn").addEventListener("click", () => {
   renderCard(true);
 });
 
-// Theme toggle
 document.getElementById("themeToggle").addEventListener("click", () => { dark = !dark; applyTheme(); });
 
 // Quiz swipe listeners
@@ -807,13 +770,12 @@ document.addEventListener("touchmove",  qDragMove, { passive: true });
 document.addEventListener("mouseup",    qDragEnd);
 document.addEventListener("touchend",   qDragEnd);
 
-// Keyboard shortcuts (flashcards only)
+// Keyboard shortcuts
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeModal(); return; }
   if (document.getElementById("overlay").classList.contains("open")) return;
   if (document.getElementById("finishScreen").classList.contains("show")) return;
   if (document.getElementById("quizScreen").style.display !== "none") return;
-
   if ((e.key === " " || e.key === "ArrowUp") && !isFlipped) { e.preventDefault(); toggleFlip(); }
   if (e.key === "ArrowRight" && isFlipped) { correct++; next(); }
   if (e.key === "ArrowLeft"  && isFlipped) { skipped++;  next(); }
