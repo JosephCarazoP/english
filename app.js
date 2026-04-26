@@ -870,6 +870,47 @@ function initBubbles(opts, correct) {
   });
 }
 /* ════════════════════════════════════════════════════════
+   S W I P E   A D V A N C E
+   ════════════════════════════════════════════════════════ */
+
+function quizAdvanceSwipe(swiped) {
+  if (quizLocked) return;
+  quizLocked = true;
+  const q    = quizQuestions[quizIdx];
+  const isOk = swiped === q.correctSide;
+
+  const optL = document.getElementById("qOptL");
+  const optR = document.getElementById("qOptR");
+  if (optL && optR) {
+    if (swiped === "left") {
+      optL.classList.add(isOk ? "qsw-flash-ok" : "qsw-flash-no");
+      if (!isOk) optR.classList.add("qsw-flash-ok");
+    } else {
+      optR.classList.add(isOk ? "qsw-flash-ok" : "qsw-flash-no");
+      if (!isOk) optL.classList.add("qsw-flash-ok");
+    }
+  }
+
+  if (isOk) quizOk++; else quizNo++;
+  updateQuizHeader();
+  hideSwipeGhosts();
+
+  const c1  = document.getElementById("qCard1");
+  const tx  = swiped === "right" ? 160 : -160;
+  const rot = swiped === "right" ? 18  : -18;
+  c1.style.transition = "transform 0.28s cubic-bezier(0.4,0,0.6,1), opacity 0.28s";
+  c1.style.transform  = `translateX(${tx}%) rotate(${rot}deg)`;
+  c1.style.opacity    = "0";
+
+  promoteBackCards();
+
+  setTimeout(() => {
+    quizIdx++;
+    renderQuizQuestion(true);
+  }, 300);
+}
+
+/* ════════════════════════════════════════════════════════
    S W I P E   G E S T U R E
    ════════════════════════════════════════════════════════ */
 
