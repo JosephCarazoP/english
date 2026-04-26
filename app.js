@@ -316,7 +316,7 @@ function buildQuestion(verb, pool) {
     return { mech: "type", label: "Type the past tense", verb };
   }
   const opts = shuffle([verb.past, ...getDistractors(verb.past, pool)]);
-  return { mech: "choice", label: "Choose the past tense", question: `What is the past tense of "${verb.present}"?`, opts, correct: verb.past, verb };
+  return { mech: "choice", label: "Pop the correct bubble", opts, correct: verb.past, verb };
 }
 
 function buildQuiz(verbPool) {
@@ -325,6 +325,7 @@ function buildQuiz(verbPool) {
 
 /* ── Start quiz ── */
 function startQuiz() {
+  if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
   updateDeck();
   const base = currentFilter === "all"
     ? ALL_VERBS.slice(0, deck.length)
@@ -485,48 +486,15 @@ function renderQuizQuestion(animateIn = false) {
     setTimeout(() => { try { inp.focus(); } catch(e) {} }, 80);
 
   } else {
-    // choice — blur active element first so iOS doesn't carry over tap state
-    if (document.activeElement && document.activeElement !== document.body) {
-      document.activeElement.blur();
-    }
+    // bubble mechanic — canvas-based, zero DOM buttons, no iOS focus issues
     dirRow.style.display = "none";
-    // Clear body completely and force a reflow before inserting new buttons
-    // This prevents iOS from inheriting :active/:focus state on same-position elements
-    body.innerHTML = "";
-    void body.offsetHeight;
     body.innerHTML =
-      `<div class="qch-q">${q.question}</div>` +
-      `<div class="qch-grid" id="qOptGrid">` +
-        q.opts.map(o => `<button class="qch-opt" type="button" data-val="${o}">${o}</button>`).join("") +
+      `<div class="qbubble-wrap">` +
+        `<div class="qbubble-verb">${q.verb.present}</div>` +
+        `<div class="qbubble-hint">Pop the correct past tense</div>` +
+        `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
       `</div>`;
-
-    // On next frame, mark grid as settled — iOS needs this tick to clear tap state
-    const grid = document.getElementById("qOptGrid");
-    if (grid) {
-      grid.style.opacity = "0";
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (grid) grid.style.opacity = "";
-        });
-      });
-    }
-
-    document.querySelectorAll(".qch-opt").forEach(btn => {
-      let used = false;
-      btn.addEventListener("touchstart", e => {
-        e.preventDefault();
-        if (quizLocked || used) return;
-        used = true;
-        handleChoiceAnswer(btn, q.correct);
-      }, { passive: false });
-      btn.addEventListener("mousedown", e => {
-        e.preventDefault();
-        if (quizLocked || used) return;
-        used = true;
-        handleChoiceAnswer(btn, q.correct);
-      });
-      btn.addEventListener("click", e => e.preventDefault());
-    });
+    initBubbles(q.opts, q.correct);
   }
 
   // Peek cards
@@ -538,19 +506,209 @@ function renderQuizQuestion(animateIn = false) {
   updateQuizHeader();
 }
 
-/* ── Handle choice answer ── */
-function handleChoiceAnswer(btn, correct) {
-  if (quizLocked) return;
-  quizLocked = true;
-  const isOk = btn.dataset.val === correct;
-  document.querySelectorAll(".qch-opt").forEach(b => {
-    b.disabled = true;
-    if (b.dataset.val === correct) b.classList.add(isOk ? "qch-ok" : "qch-reveal");
-    else if (b === btn && !isOk)   b.classList.add("qch-no");
+/* ════════════════════════════════════════════════════════
+   B U B B L E   M E C H A N I C
+   ════════════════════════════════════════════════════════ */
+
+let bubbleRAF = null;
+let bubbles   = [];
+
+function initBubbles(opts, correct) {
+  const canvas = document.getElementById("qBubbleCanvas");
+  if (!canvas) return;
+
+  // Stop any previous animation
+  if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
+
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth;
+  const H   = canvas.offsetHeight;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  // Read CSS vars for theming
+  const st      = getComputedStyle(document.documentElement);
+  const isDark  = document.documentElement.getAttribute("data-theme") === "dark";
+
+  // Bubble palette — use card gradient colors, 4 distinct ones
+  const PALETTES = [
+    { fill: "#ff6b3522", stroke: "#ff6b35", text: "#c84a10" },
+    { fill: "#7c5cfc22", stroke: "#7c5cfc", text: "#5b3dd4" },
+    { fill: "#0dbfa022", stroke: "#0dbfa0", text: "#0a8a74" },
+    { fill: "#f43f5e22", stroke: "#f43f5e", text: "#c01a3c" },
+  ];
+  if (isDark) {
+    PALETTES[0] = { fill: "#ff6b3530", stroke: "#ff9a5c", text: "#ffb380" };
+    PALETTES[1] = { fill: "#7c5cfc30", stroke: "#a78bfa", text: "#c4b5fd" };
+    PALETTES[2] = { fill: "#0dbfa030", stroke: "#34d9be", text: "#6ee7d8" };
+    PALETTES[3] = { fill: "#f43f5e30", stroke: "#fb7185", text: "#fda4af" };
+  }
+
+  const shuffledPalettes = [...PALETTES].sort(() => Math.random() - 0.5);
+  const R = Math.min(W, H) * 0.19; // bubble radius ~19% of smaller dim
+
+  // Place 4 bubbles without overlapping — simple grid + jitter
+  const positions = [
+    { x: W * 0.25, y: H * 0.32 },
+    { x: W * 0.75, y: H * 0.32 },
+    { x: W * 0.25, y: H * 0.72 },
+    { x: W * 0.75, y: H * 0.72 },
+  ];
+
+  bubbles = opts.map((opt, i) => ({
+    x:    positions[i].x + (Math.random() - 0.5) * 12,
+    y:    positions[i].y + (Math.random() - 0.5) * 12,
+    r:    R + (Math.random() - 0.5) * 8,
+    vx:   (Math.random() - 0.5) * 0.5,
+    vy:   (Math.random() - 0.5) * 0.5,
+    phase: Math.random() * Math.PI * 2, // for bobbing
+    text: opt,
+    correct: opt === correct,
+    pal:  shuffledPalettes[i],
+    // pop animation
+    popping: false,
+    popT:    0,
+    popped:  false,
+    isOk:    false,
+  }));
+
+  let done = false;
+
+  function drawBubble(b, t) {
+    if (b.popped) return;
+
+    ctx.save();
+    let scale = 1;
+
+    if (b.popping) {
+      // Pop animation: quick scale up then fade
+      b.popT += 0.07;
+      if (b.isOk) {
+        // correct: expand + fade
+        scale = 1 + b.popT * 0.5;
+        ctx.globalAlpha = Math.max(0, 1 - b.popT * 1.4);
+      } else {
+        // wrong: shrink + shake
+        scale = Math.max(0, 1 - b.popT * 1.2);
+        ctx.globalAlpha = Math.max(0, 1 - b.popT * 1.4);
+      }
+      if (b.popT >= 1) { b.popped = true; ctx.restore(); return; }
+    }
+
+    const bob = Math.sin(t * 0.8 + b.phase) * 3;
+    ctx.translate(b.x, b.y + bob);
+    ctx.scale(scale, scale);
+
+    // Bubble fill
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.fillStyle = b.pal.fill;
+    ctx.fill();
+
+    // Bubble stroke
+    ctx.beginPath();
+    ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+    ctx.strokeStyle = b.pal.stroke;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Shine highlight
+    ctx.beginPath();
+    ctx.ellipse(-b.r * 0.28, -b.r * 0.32, b.r * 0.22, b.r * 0.12, -0.5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.fill();
+
+    // Text — auto-size to fit
+    const fontSize = Math.min(16, (b.r * 1.5) / (b.text.length * 0.55));
+    ctx.font = `700 ${fontSize}px "DM Sans", sans-serif`;
+    ctx.fillStyle = b.pal.text;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(b.text, 0, 0);
+
+    ctx.restore();
+  }
+
+  let t = 0;
+  function animate() {
+    if (!document.getElementById("qBubbleCanvas")) {
+      cancelAnimationFrame(bubbleRAF);
+      return;
+    }
+    ctx.clearRect(0, 0, W, H);
+    t += 0.016;
+
+    let allPopped = bubbles.filter(b => b.popping).every(b => b.popped);
+    if (allPopped && bubbles.some(b => b.popping)) {
+      // All pop animations done — advance
+      if (!done) { done = true; }
+    }
+
+    // Physics: gentle float + wall bounce
+    for (const b of bubbles) {
+      if (b.popping) { drawBubble(b, t); continue; }
+      b.x  += b.vx;
+      b.y  += b.vy;
+      b.vx += (Math.random() - 0.5) * 0.04;
+      b.vy += (Math.random() - 0.5) * 0.04;
+      // Clamp velocity
+      const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+      if (spd > 0.7) { b.vx = b.vx / spd * 0.7; b.vy = b.vy / spd * 0.7; }
+      // Wall bounce
+      if (b.x - b.r < 0)  { b.x = b.r;     b.vx = Math.abs(b.vx); }
+      if (b.x + b.r > W)  { b.x = W - b.r; b.vx = -Math.abs(b.vx); }
+      if (b.y - b.r < 0)  { b.y = b.r;     b.vy = Math.abs(b.vy); }
+      if (b.y + b.r > H)  { b.y = H - b.r; b.vy = -Math.abs(b.vy); }
+      drawBubble(b, t);
+    }
+
+    bubbleRAF = requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // ── Hit detection via coordinates — no DOM buttons ──
+  function handleTap(clientX, clientY) {
+    if (quizLocked) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx   = clientX - rect.left;
+    const my   = clientY - rect.top;
+
+    for (const b of bubbles) {
+      if (b.popping || b.popped) continue;
+      const bob = Math.sin(performance.now() * 0.0008 + b.phase) * 3;
+      const dx  = mx - b.x;
+      const dy  = my - (b.y + bob);
+      if (Math.sqrt(dx * dx + dy * dy) <= b.r) {
+        // Hit!
+        quizLocked = true;
+        b.popping = true;
+        b.isOk    = b.correct;
+
+        // Also pop wrong bubbles (shrink away)
+        for (const ob of bubbles) {
+          if (ob !== b) { ob.popping = true; ob.isOk = false; }
+        }
+
+        if (b.correct) quizOk++; else quizNo++;
+        updateQuizHeader();
+        animateToNextQuestion("up", 900);
+        break;
+      }
+    }
+  }
+
+  canvas.addEventListener("touchstart", e => {
+    e.preventDefault();
+    const t = e.changedTouches[0];
+    handleTap(t.clientX, t.clientY);
+  }, { passive: false });
+
+  canvas.addEventListener("mousedown", e => {
+    handleTap(e.clientX, e.clientY);
   });
-  if (isOk) quizOk++; else quizNo++;
-  updateQuizHeader();
-  animateToNextQuestion("up", 740);
 }
 
 /* ── Advance swipe card (called after successful swipe gesture) ── */
@@ -709,6 +867,7 @@ function showQuizResults() {
 
 /* ── Back to cards ── */
 function backToCards() {
+  if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
   const qResultScreen = document.getElementById("quizResultScreen");
