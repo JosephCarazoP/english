@@ -794,15 +794,14 @@ header {
   user-select: none;
   -webkit-user-select: none;
 }
-.qch-opt:hover:not(:disabled) {
+.qch-opt:hover:not(:disabled):not(.qch-ok):not(.qch-no):not(.qch-reveal) {
   background: var(--quiz-hover); color: var(--quiz-hover-text);
   border-color: var(--quiz-accent); transform: translateY(-1px);
 }
-/* Nuclear option: kill every focus state Safari might apply */
+/* Kill every focus/active state — especially iOS Safari persistent tap highlight */
 .qch-opt:focus,
 .qch-opt:focus-visible,
 .qch-opt:focus-within,
-.qch-opt:active,
 .qch-opt:focus:not(:focus-visible) {
   outline: none !important;
   outline-offset: 0 !important;
@@ -810,10 +809,14 @@ header {
   border-color: var(--border) !important;
   -webkit-focus-ring-color: transparent !important;
 }
-/* Exception: keep border changes when a result class is applied */
-.qch-opt.qch-ok:focus  { border-color: var(--quiz-ok) !important; }
-.qch-opt.qch-no:focus  { border-color: var(--quiz-no) !important; }
-.qch-opt.qch-reveal:focus { border-color: var(--quiz-ok) !important; }
+/* :active must NOT change border — this is what iOS was showing */
+.qch-opt:active:not(.qch-ok):not(.qch-no):not(.qch-reveal) {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--border) !important;
+  /* Subtle scale instead of border change so there is tactile feedback */
+  transform: scale(0.97);
+}
 .qch-opt:disabled { cursor: default; }
 .qch-ok     { background: var(--quiz-ok-bg) !important; color: var(--quiz-ok) !important; border-color: var(--quiz-ok) !important; }
 .qch-no     { background: var(--quiz-no-bg) !important; color: var(--quiz-no) !important; border-color: var(--quiz-no) !important; }
