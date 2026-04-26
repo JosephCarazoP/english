@@ -2714,7 +2714,7 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
 
 
 /* ════════════════════════════════════════════════════════════════
-   ONBOARDING — primera visita
+   ONBOARDING — primera visita (diseño mejorado)
    ════════════════════════════════════════════════════════════════ */
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
@@ -2724,27 +2724,59 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   if (!overlay) return;
 
   overlay.style.display = "flex";
-  overlay.style.opacity = "0";
-  requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+  requestAnimationFrame(() => {
+    overlay.style.transition = "opacity .4s ease";
+    overlay.style.opacity    = "1";
+  });
+
+  const SLIDE_CONFIG = [
+    { icon: "📚", showNums: true  },
+    { icon: "🎮", showNums: false },
+    { icon: "📝", showNums: false },
+  ];
 
   let current = 0;
-  const slides  = overlay.querySelectorAll(".onboarding-slide");
-  const dots    = overlay.querySelectorAll(".ob-dot");
-  const btnBack  = document.getElementById("obBack");
-  const btnNext  = document.getElementById("obNext");
-  const btnStart = document.getElementById("obStart");
+  const slides     = overlay.querySelectorAll(".onboarding-slide");
+  const dots       = overlay.querySelectorAll(".ob-dot");
+  const btnBack    = document.getElementById("obBack");
+  const btnNext    = document.getElementById("obNext");
+  const btnStart   = document.getElementById("obStart");
+  const heroIcon   = document.getElementById("obHeroIcon");
+  const heroNums   = document.getElementById("obHeroNums");
+  const progressFill = document.getElementById("obProgressFill");
 
   function goTo(n) {
+    // Salida del slide actual
     slides[current].classList.remove("active");
     dots[current].classList.remove("active");
     dots[current].setAttribute("aria-selected","false");
+
     current = n;
+
+    // Entrada del nuevo slide
     slides[current].classList.add("active");
     dots[current].classList.add("active");
     dots[current].setAttribute("aria-selected","true");
-    btnBack.style.visibility  = current === 0 ? "hidden" : "visible";
-    btnNext.style.display     = current < slides.length - 1 ? "inline-flex" : "none";
-    btnStart.style.display    = current === slides.length - 1 ? "inline-flex" : "none";
+
+    // Actualizar hero
+    const cfg = SLIDE_CONFIG[current];
+    if (heroIcon) {
+      heroIcon.style.animation = "none";
+      void heroIcon.offsetWidth;
+      heroIcon.style.animation = "";
+      heroIcon.textContent = cfg.icon;
+    }
+    if (heroNums) heroNums.style.opacity = cfg.showNums ? "1" : "0";
+
+    // Barra de progreso
+    if (progressFill) {
+      progressFill.style.width = `${Math.round(((current + 1) / slides.length) * 100)}%`;
+    }
+
+    // Botones
+    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnNext.style.display    = current < slides.length - 1 ? "inline-flex" : "none";
+    btnStart.style.display   = current === slides.length - 1 ? "inline-flex" : "none";
   }
 
   btnNext.addEventListener("click",  () => { if (current < slides.length-1) goTo(current+1); });
@@ -2752,10 +2784,21 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   btnStart.addEventListener("click", closeOnboarding);
   dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
 
+  // Swipe para mobile
+  let touchStartX = 0;
+  overlay.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  overlay.addEventListener("touchend",   e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && current < slides.length - 1) goTo(current + 1);
+      if (diff < 0 && current > 0) goTo(current - 1);
+    }
+  });
+
   function closeOnboarding() {
     localStorage.setItem(ONBOARDING_KEY, "1");
     overlay.style.opacity = "0";
-    setTimeout(() => { overlay.style.display = "none"; }, 350);
+    setTimeout(() => { overlay.style.display = "none"; }, 400);
   }
 })();
 
@@ -2884,26 +2927,70 @@ function applyVFCSettings(s) {
    ════════════════════════════════════════════════════════════════ */
 (function initPWA() {
   let deferredPrompt = null;
-  const pwaSection = document.getElementById("pwaSection");
-  const pwaBtn     = document.getElementById("pwaInstallBtn");
 
-  window.addEventListener("beforeinstallprompt", e => {
-    e.preventDefault();
-    deferredPrompt = e;
+  // Elementos: sección en Settings + banner flotante
+  const pwaSection       = document.getElementById("pwaSection");
+  const pwaBtnSettings   = document.getElementById("pwaInstallBtn");
+  const pwaBanner        = document.getElementById("pwaBanner");
+  const pwaBannerInstall = document.getElementById("pwaBannerInstall");
+  const pwaBannerDismiss = document.getElementById("pwaBannerDismiss");
+
+  // Bandera para no mostrar el banner si ya fue descartado en esta sesión
+  let bannerDismissed = false;
+
+  function showPWAUI() {
+    // Mostrar en Settings
     if (pwaSection) pwaSection.style.display = "";
-  });
+    // Mostrar banner (con delay para no interrumpir el onboarding)
+    if (pwaBanner && !bannerDismissed) {
+      setTimeout(() => {
+        pwaBanner.style.display = "flex";
+        requestAnimationFrame(() => pwaBanner.classList.add("is-visible"));
+      }, 3000);
+    }
+  }
 
-  pwaBtn?.addEventListener("click", async () => {
+  function hidePWAUI() {
+    if (pwaSection) pwaSection.style.display = "none";
+    if (pwaBanner)  {
+      pwaBanner.classList.remove("is-visible");
+      setTimeout(() => { pwaBanner.style.display = "none"; }, 350);
+    }
+  }
+
+  async function triggerInstall() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null;
     if (outcome === "accepted") {
-      if (pwaSection) pwaSection.style.display = "none";
+      hidePWAUI();
       if (typeof showShareToast === "function") showShareToast("¡App instalada! 📲");
     }
+  }
+
+  window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showPWAUI();
   });
 
+  // Ya está instalada
+  window.addEventListener("appinstalled", () => hidePWAUI());
+
+  // Botón en Settings
+  pwaBtnSettings?.addEventListener("click", triggerInstall);
+
+  // Botón en el banner
+  pwaBannerInstall?.addEventListener("click", triggerInstall);
+
+  // Cerrar banner
+  pwaBannerDismiss?.addEventListener("click", () => {
+    bannerDismissed = true;
+    hidePWAUI();
+  });
+
+  // Service Worker
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   }

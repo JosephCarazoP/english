@@ -272,64 +272,102 @@
 
 
   <!-- ── ONBOARDING OVERLAY ── -->
-  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none;">
+  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none; opacity:0;">
     <div class="onboarding-card">
+
+      <!-- Barra de progreso superior -->
+      <div class="ob-progress-bar">
+        <div class="ob-progress-fill" id="obProgressFill" style="width:33.3%"></div>
+      </div>
+
+      <!-- Hero visual (cambia por slide) -->
+      <div class="ob-hero" id="obHero">
+        <div class="ob-hero-bg"></div>
+        <div class="ob-hero-nums" id="obHeroNums">
+          <span>1</span><span>2</span><span>3</span><span>4</span>
+        </div>
+        <div class="ob-hero-icon" id="obHeroIcon">📚</div>
+      </div>
+
+      <!-- Slides -->
       <div class="onboarding-slides">
 
+        <!-- Slide 1: Flujo -->
         <div class="onboarding-slide active" data-slide="0">
-          <div class="onboarding-icon">📚</div>
           <h2 class="onboarding-title">¿Cómo funciona?</h2>
           <ul class="onboarding-steps">
             <li><span class="ob-num">1</span> Verás el verbo en <b>presente</b></li>
             <li><span class="ob-num">2</span> Toca la tarjeta para ver su forma en <b>pasado</b></li>
-            <li><span class="ob-num">3</span> Decide si lo sabes o no</li>
-            <li><span class="ob-num">4</span> Al final verás tu <b>resultado</b></li>
+            <li><span class="ob-num">3</span> Decidí si lo sabés o no</li>
+            <li><span class="ob-num">4</span> Al final ves tu <b>resultado</b></li>
           </ul>
         </div>
 
+        <!-- Slide 2: Acciones -->
         <div class="onboarding-slide" data-slide="1">
-          <div class="onboarding-icon">🎮</div>
           <h2 class="onboarding-title">Las acciones</h2>
           <div class="onboarding-actions-list">
-            <div class="ob-action">
+            <div class="ob-action ob-action-know">
               <span class="ob-action-icon">✔️</span>
-              <div><b>I know it</b><span>Ya dominas ese verbo</span></div>
+              <div>
+                <b>I know it</b>
+                <span>Ya dominás ese verbo — se cuenta como aprendido</span>
+              </div>
             </div>
-            <div class="ob-action">
+            <div class="ob-action ob-action-skip">
               <span class="ob-action-icon">❌</span>
-              <div><b>I don't know</b><span>Aún lo estás aprendiendo</span></div>
+              <div>
+                <b>I don't know</b>
+                <span>Todavía lo estás aprendiendo — vuelve al final</span>
+              </div>
             </div>
-            <div class="ob-action">
+            <div class="ob-action ob-action-detail">
               <span class="ob-action-icon">✦</span>
-              <div><b>Ver detalles</b><span>Ejemplos, IPA y pronunciación</span></div>
+              <div>
+                <b>Ver detalles</b>
+                <span>Ejemplos, pronunciación IPA y audio</span>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Slide 3: Quizzes -->
         <div class="onboarding-slide" data-slide="2">
-          <div class="onboarding-icon">📝</div>
           <h2 class="onboarding-title">Los quizzes</h2>
-          <p class="onboarding-desc">Después de practicar, pon a prueba tu conocimiento.</p>
+          <p class="onboarding-desc">Después de practicar, poné a prueba tu conocimiento.</p>
           <div class="onboarding-quiz-features">
-            <div class="ob-quiz-feat"><span>✏️</span><span>Escribe la respuesta</span></div>
-            <div class="ob-quiz-feat"><span>🔘</span><span>Selecciona la opción correcta</span></div>
-            <div class="ob-quiz-feat"><span>🧠</span><span>Aprender + practicar = recordar mejor</span></div>
+            <div class="ob-quiz-feat">
+              <span class="ob-feat-emoji">✏️</span>
+              <span>Escribí la respuesta correcta</span>
+            </div>
+            <div class="ob-quiz-feat">
+              <span class="ob-feat-emoji">🔘</span>
+              <span>Seleccioná entre varias opciones</span>
+            </div>
+            <div class="ob-quiz-feat">
+              <span class="ob-feat-emoji">🧠</span>
+              <span>Aprender + practicar = recordar mejor</span>
+            </div>
           </div>
-          <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa los verbos del round actual.</p>
+          <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa solo los verbos del round que acabás de practicar.</p>
+        </div>
+
+      </div>
+
+      <!-- Footer: dots + navegación -->
+      <div class="onboarding-footer">
+        <div class="onboarding-dots" role="tablist">
+          <button class="ob-dot active" data-target="0" role="tab" aria-selected="true"  aria-label="Slide 1"></button>
+          <button class="ob-dot"        data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
+          <button class="ob-dot"        data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
+        </div>
+        <div class="onboarding-nav">
+          <button class="ob-btn ob-btn-back"  id="obBack"  type="button" style="visibility:hidden;">← Atrás</button>
+          <button class="ob-btn ob-btn-next"  id="obNext"  type="button">Siguiente →</button>
+          <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
         </div>
       </div>
 
-      <div class="onboarding-dots" role="tablist">
-        <button class="ob-dot active" data-target="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
-        <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
-        <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
-      </div>
-
-      <div class="onboarding-nav">
-        <button class="ob-btn ob-btn-back" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
-        <button class="ob-btn ob-btn-next" id="obNext" type="button">Siguiente →</button>
-        <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
-      </div>
     </div>
   </div>
 
@@ -414,6 +452,22 @@
     </div>
   </div>
 
+
+  <!-- ── PWA INSTALL BANNER ── -->
+  <div class="pwa-banner" id="pwaBanner" role="banner" style="display:none;">
+    <div class="pwa-banner-left">
+      <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg"
+           alt="VerbCards icon" class="pwa-banner-icon" width="40" height="40" />
+      <div class="pwa-banner-text">
+        <span class="pwa-banner-title">Verb Flashcards</span>
+        <span class="pwa-banner-sub">Instalá la app — funciona sin internet</span>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button class="pwa-banner-dismiss" id="pwaBannerDismiss" type="button" aria-label="Cerrar">✕</button>
+      <button class="pwa-banner-install" id="pwaBannerInstall" type="button">Instalar</button>
+    </div>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
