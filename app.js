@@ -126,6 +126,10 @@ function hideSwipeGhosts() {
   if (no) { no.style.opacity = "0"; no.textContent = ""; }
 }
 
+function hideActions() {
+  document.getElementById("actions").classList.remove("visible");
+}
+
 /* ── DECK CON PROGRESIÓN DIARIA ── */
 function updateDeck() {
   const today    = new Date();
@@ -1095,22 +1099,26 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     currentFilter = btn.dataset.filter;
     document.querySelector(".score-correct .score-lbl").textContent = "Learned";
     document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
+    isFlipped = false;
     buildDeck();
     document.getElementById("finishScreen").classList.remove("show");
     document.getElementById("quizScreen").style.display = "none";
     document.getElementById("stage").style.display = "flex";
     renderCard(true);
+    hideActions();
   });
 });
 
 document.getElementById("shuffleBtn").addEventListener("click", () => {
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
+  isFlipped = false;
   buildDeck();
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("quizScreen").style.display = "none";
   document.getElementById("stage").style.display = "flex";
   renderCard(true);
+  hideActions();
 });
 
 document.getElementById("themeToggle").addEventListener("click", () => { dark = !dark; applyTheme(); });
