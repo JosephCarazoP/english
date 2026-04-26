@@ -302,7 +302,7 @@ function getDistractors(correctPast, pool) {
 /* ── Build question ── */
 function buildQuestion(verb, pool) {
   const roll = Math.random();
-  if (roll < 0.40) {
+  if (roll < 0.333) {
     const distractor     = getDistractor(verb.past, pool);
     const correctOnRight = Math.random() > 0.5;
     return {
@@ -312,7 +312,7 @@ function buildQuestion(verb, pool) {
       correctSide: correctOnRight ? "right"    : "left",
     };
   }
-  if (roll < 0.70) {
+  if (roll < 0.666) {
     return { mech: "type", label: "Type the past tense", verb };
   }
   const opts = shuffle([verb.past, ...getDistractors(verb.past, pool)]);
@@ -372,11 +372,10 @@ function animateToNextQuestion(flyDirection, delay) {
 
   setTimeout(() => {
     c1.style.transition = "none";
-    const flyClass = flyDirection === "right" ? "fly-right"
-                   : flyDirection === "left"  ? "fly-left"
-                   : "fly-up";
+    const flyClass = flyDirection === "right" ? "anim-exit-right"
+                   : flyDirection === "left"  ? "anim-exit-left"
+                   : "anim-exit-up";
 
-    c1.classList.remove("top");
     c1.classList.add(flyClass);
 
     promoteBackCards();
@@ -419,8 +418,8 @@ function renderQuizQuestion(animateIn = false) {
   if (q.mech === "choice") c1.classList.add("no-drag");
   if (animateIn) {
     void c1.offsetWidth;
-    c1.classList.add("quiz-enter");
-    c1.addEventListener("animationend", () => c1.classList.remove("quiz-enter"), { once: true });
+    c1.classList.add("anim-enter");
+    c1.addEventListener("animationend", () => c1.classList.remove("anim-enter"), { once: true });
   }
 
   const c2 = document.getElementById("qCard2");
@@ -483,7 +482,7 @@ function renderQuizQuestion(animateIn = false) {
         `<div class="qbubble-hint">Pop the correct past tense</div>` +
         `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
       `</div>`;
-    initBubbles(q.opts, q.correct);
+    setTimeout(() => initBubbles(q.opts, q.correct), 40);
   }
 
   const p1 = quizQuestions[quizIdx + 1];
@@ -671,69 +670,66 @@ function initBubbles(opts, correct) {
       if (b.popT >= 1) b.state = 'dead';
 
     } else {
-      /* ── Alive: deformación (squish) suave al acercarse a los bordes ── */
-      const bob = Math.sin(t * 1.1 + b.phase) * 3;
-
-      /* Cuánto margen queda entre el borde de la burbuja y cada pared */
-      const marginL = b.x - b.r;
-      const marginR = W - b.x - b.r;
-      const marginT = b.y - b.r;
-      const marginB = H - b.y - b.r;
-      const squishZone = b.r * 0.9; /* zona donde empieza a deformarse */
-
+      const bob = Math.sin(t * 1.1 + b.phase) * 2.5;
+      const marginL = b.x - b.r, marginR = W - b.x - b.r;
+      const marginT = b.y - b.r, marginB = H - b.y - b.r;
+      const squishZone = b.r * 0.9;
       let scaleX = 1, scaleY = 1;
-
-      /* Squish horizontal */
-      if (marginL < squishZone && marginL >= 0) {
-        const ratio = 1 - marginL / squishZone;
-        scaleX = 1 - ratio * 0.25;
-        scaleY = 1 + ratio * 0.20;
-      } else if (marginR < squishZone && marginR >= 0) {
-        const ratio = 1 - marginR / squishZone;
-        scaleX = 1 - ratio * 0.25;
-        scaleY = 1 + ratio * 0.20;
-      }
-
-      /* Squish vertical (multiplicativo para combinar con el horizontal) */
-      if (marginT < squishZone && marginT >= 0) {
-        const ratio = 1 - marginT / squishZone;
-        scaleY *= 1 - ratio * 0.25;
-        scaleX *= 1 + ratio * 0.20;
-      } else if (marginB < squishZone && marginB >= 0) {
-        const ratio = 1 - marginB / squishZone;
-        scaleY *= 1 - ratio * 0.25;
-        scaleX *= 1 + ratio * 0.20;
-      }
-
+      if (marginL < squishZone && marginL >= 0) { const r = 1 - marginL/squishZone; scaleX = 1 - r*0.22; scaleY = 1 + r*0.18; }
+      else if (marginR < squishZone && marginR >= 0) { const r = 1 - marginR/squishZone; scaleX = 1 - r*0.22; scaleY = 1 + r*0.18; }
+      if (marginT < squishZone && marginT >= 0) { const r = 1 - marginT/squishZone; scaleY *= 1 - r*0.22; scaleX *= 1 + r*0.18; }
+      else if (marginB < squishZone && marginB >= 0) { const r = 1 - marginB/squishZone; scaleY *= 1 - r*0.22; scaleX *= 1 + r*0.18; }
+    
       ctx.translate(b.x, b.y + bob);
       ctx.scale(scaleX, scaleY);
-
-      /* Fill */
+    
+      /* Sombra suave debajo */
+      ctx.shadowColor = b.pal.stroke + "55";
+      ctx.shadowBlur  = 14;
+      ctx.shadowOffsetY = 4;
+    
+      /* Fill con gradiente radial */
+      const grd = ctx.createRadialGradient(-b.r*0.25, -b.r*0.25, b.r*0.05, 0, 0, b.r);
+      grd.addColorStop(0, b.pal.stroke + "55");
+      grd.addColorStop(1, b.pal.fill);
       ctx.beginPath();
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
-      ctx.fillStyle = b.pal.fill;
+      ctx.fillStyle = grd;
       ctx.fill();
-
+    
+      /* Reset sombra antes del stroke */
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur  = 0;
+      ctx.shadowOffsetY = 0;
+    
       /* Stroke */
       ctx.beginPath();
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.strokeStyle = b.pal.stroke;
-      ctx.lineWidth = 2;
+      ctx.lineWidth   = 2.5;
       ctx.stroke();
-
-      /* Shine */
+    
+      /* Shine grande */
       ctx.beginPath();
-      ctx.ellipse(-b.r*0.26, -b.r*0.30, b.r*0.20, b.r*0.11, -0.5, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(255,255,255,0.50)';
+      ctx.ellipse(-b.r*0.28, -b.r*0.32, b.r*0.24, b.r*0.13, -0.45, 0, Math.PI*2);
+      ctx.fillStyle = "rgba(255,255,255,0.60)";
       ctx.fill();
-
-      /* Label */
-      const fs = Math.min(17, (b.r*1.55) / (Math.max(b.text.length, 2) * 0.58));
-      ctx.font = `700 ${fs}px "DM Sans",sans-serif`;
+    
+      /* Mini shine */
+      ctx.beginPath();
+      ctx.ellipse(-b.r*0.12, -b.r*0.50, b.r*0.08, b.r*0.05, -0.3, 0, Math.PI*2);
+      ctx.fillStyle = "rgba(255,255,255,0.40)";
+      ctx.fill();
+    
+      /* Texto */
+      const maxW  = b.r * 1.65;
+      const chars = Math.max(b.text.length, 2);
+      const fs    = Math.min(18, maxW / (chars * 0.56));
+      ctx.font      = `800 ${fs}px "DM Sans", sans-serif`;
       ctx.fillStyle = b.pal.text;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(b.text, 0, 0);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(b.text, 0, 1);
     }
 
     ctx.restore();
