@@ -402,6 +402,28 @@ function promoteBackCards() {
   }
 }
 
+/* ── Quiz label configs ── */
+const QUIZ_LABELS = {
+  swipe: {
+    icon: "👈👉",
+    text: "Swipe to the correct past tense",
+    color: "var(--accent-2)",
+    bg: "var(--accent-2-soft)",
+  },
+  type: {
+    icon: "⌨️",
+    text: "Type the past tense &amp; press Enter",
+    color: "var(--accent-3)",
+    bg: "var(--accent-3-soft)",
+  },
+  choice: {
+    icon: "🫧",
+    text: "Pop the correct bubble!",
+    color: "var(--accent)",
+    bg: "var(--accent-soft)",
+  },
+};
+
 /* ── Render current quiz question ── */
 function renderQuizQuestion(animateIn = false) {
   if (quizIdx >= quizQuestions.length) { showQuizResults(); return; }
@@ -431,7 +453,14 @@ function renderQuizQuestion(animateIn = false) {
 
   const dirRow = document.getElementById("qDirRow");
   const body   = document.getElementById("qBody");
-  document.getElementById("qLabel").textContent = q.label;
+
+  /* ── Render the label pill ── */
+  const lbl = QUIZ_LABELS[q.mech];
+  document.getElementById("qLabel").innerHTML =
+    `<span class="qlabel-pill" style="background:${lbl.bg};color:${lbl.color};">` +
+      `<span class="qlabel-icon">${lbl.icon}</span>` +
+      `<span class="qlabel-text">${lbl.text}</span>` +
+    `</span>`;
 
   if (q.mech === "swipe") {
     dirRow.style.display = "flex";
@@ -479,7 +508,6 @@ function renderQuizQuestion(animateIn = false) {
     body.innerHTML =
       `<div class="qbubble-wrap">` +
         `<div class="qbubble-verb">${q.verb.present}</div>` +
-        `<div class="qbubble-hint">Pop the correct past tense</div>` +
         `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
       `</div>`;
     setTimeout(() => initBubbles(q.opts, q.correct), 40);
@@ -529,10 +557,8 @@ function initBubbles(opts, correct) {
 
   const palOrder = [0,1,2,3].sort(() => Math.random()-0.5);
 
-  /* ── Radio más grande aprovechando el canvas más alto ── */
   const R = Math.min(W * 0.18, H * 0.20, 62);
 
-  /* ── Cuadrantes bien distribuidos ── */
   const quadCenters = [
     { x: W*0.27, y: H*0.28 },
     { x: W*0.73, y: H*0.28 },
@@ -670,25 +696,21 @@ function initBubbles(opts, correct) {
       if (b.popT >= 1) b.state = 'dead';
 
     } else {
+      /* ── ALIVE state: bob animation only, NO squish ── */
+      /* Squish was removed because applying scaleX/Y after ctx.translate
+         distorted the radius used for hit-detection and caused visual
+         size glitches on wall contact. Pure bob + velocity damping near
+         walls gives a clean, stable look. */
       const bob = Math.sin(t * 1.1 + b.phase) * 2.5;
-      const marginL = b.x - b.r, marginR = W - b.x - b.r;
-      const marginT = b.y - b.r, marginB = H - b.y - b.r;
-      const squishZone = b.r * 0.9;
-      let scaleX = 1, scaleY = 1;
-      if (marginL < squishZone && marginL >= 0) { const r = 1 - marginL/squishZone; scaleX = 1 - r*0.22; scaleY = 1 + r*0.18; }
-      else if (marginR < squishZone && marginR >= 0) { const r = 1 - marginR/squishZone; scaleX = 1 - r*0.22; scaleY = 1 + r*0.18; }
-      if (marginT < squishZone && marginT >= 0) { const r = 1 - marginT/squishZone; scaleY *= 1 - r*0.22; scaleX *= 1 + r*0.18; }
-      else if (marginB < squishZone && marginB >= 0) { const r = 1 - marginB/squishZone; scaleY *= 1 - r*0.22; scaleX *= 1 + r*0.18; }
-    
+
       ctx.translate(b.x, b.y + bob);
-      ctx.scale(scaleX, scaleY);
-    
-      /* Sombra suave debajo */
-      ctx.shadowColor = b.pal.stroke + "55";
-      ctx.shadowBlur  = 14;
+
+      /* Soft shadow */
+      ctx.shadowColor   = b.pal.stroke + "55";
+      ctx.shadowBlur    = 14;
       ctx.shadowOffsetY = 4;
-    
-      /* Fill con gradiente radial */
+
+      /* Radial gradient fill */
       const grd = ctx.createRadialGradient(-b.r*0.25, -b.r*0.25, b.r*0.05, 0, 0, b.r);
       grd.addColorStop(0, b.pal.stroke + "55");
       grd.addColorStop(1, b.pal.fill);
@@ -696,32 +718,32 @@ function initBubbles(opts, correct) {
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.fillStyle = grd;
       ctx.fill();
-    
-      /* Reset sombra antes del stroke */
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur  = 0;
+
+      /* Reset shadow before stroke so it doesn't double */
+      ctx.shadowColor   = "transparent";
+      ctx.shadowBlur    = 0;
       ctx.shadowOffsetY = 0;
-    
+
       /* Stroke */
       ctx.beginPath();
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.strokeStyle = b.pal.stroke;
       ctx.lineWidth   = 2.5;
       ctx.stroke();
-    
-      /* Shine grande */
+
+      /* Large shine */
       ctx.beginPath();
       ctx.ellipse(-b.r*0.28, -b.r*0.32, b.r*0.24, b.r*0.13, -0.45, 0, Math.PI*2);
       ctx.fillStyle = "rgba(255,255,255,0.60)";
       ctx.fill();
-    
+
       /* Mini shine */
       ctx.beginPath();
       ctx.ellipse(-b.r*0.12, -b.r*0.50, b.r*0.08, b.r*0.05, -0.3, 0, Math.PI*2);
       ctx.fillStyle = "rgba(255,255,255,0.40)";
       ctx.fill();
-    
-      /* Texto */
+
+      /* Text */
       const maxW  = b.r * 1.65;
       const chars = Math.max(b.text.length, 2);
       const fs    = Math.min(18, maxW / (chars * 0.56));
@@ -767,16 +789,21 @@ function initBubbles(opts, correct) {
       b.y  += b.vy;
       b.vx += (Math.random()-0.5)*0.04;
       b.vy += (Math.random()-0.5)*0.04;
+
+      /* Cap speed */
       const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
       if (spd > 0.65) { b.vx = b.vx/spd*0.65; b.vy = b.vy/spd*0.65; }
-      /* Rebote suave en paredes — la burbuja puede tocar el borde sin cortarse */
-      if (b.x-b.r < 0)  { b.x = b.r;     b.vx =  Math.abs(b.vx); }
-      if (b.x+b.r > W)  { b.x = W-b.r;   b.vx = -Math.abs(b.vx); }
-      if (b.y-b.r < 0)  { b.y = b.r;     b.vy =  Math.abs(b.vy); }
-      if (b.y+b.r > H)  { b.y = H-b.r;   b.vy = -Math.abs(b.vy); }
+
+      /* ── Wall bounce: hard clamp + velocity flip, no squish ── */
+      /* Previously the bubble used scaleX/Y near walls, which caused
+         visible size changes. Now we just bounce and damp velocity. */
+      if (b.x - b.r < 0)  { b.x = b.r;     b.vx =  Math.abs(b.vx) * 0.85; }
+      if (b.x + b.r > W)  { b.x = W - b.r; b.vx = -Math.abs(b.vx) * 0.85; }
+      if (b.y - b.r < 0)  { b.y = b.r;     b.vy =  Math.abs(b.vy) * 0.85; }
+      if (b.y + b.r > H)  { b.y = H - b.r; b.vy = -Math.abs(b.vy) * 0.85; }
     }
 
-    /* Colisión elástica entre burbujas */
+    /* Elastic collision between bubbles */
     for (let a = 0; a < alive.length; a++) {
       for (let i = a+1; i < alive.length; i++) {
         const ba = alive[a], bb = alive[i];
@@ -812,7 +839,7 @@ function initBubbles(opts, correct) {
 
   animate();
 
-  /* ── Hit detection: coordenadas puras, cero DOM ── */
+  /* ── Hit detection ── */
   function handleTap(clientX, clientY) {
     if (quizLocked) return;
     const rect = canvas.getBoundingClientRect();
