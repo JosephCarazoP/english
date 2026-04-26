@@ -2719,7 +2719,9 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
 (function initOnboarding() {
-  if (localStorage.getItem(ONBOARDING_KEY)) return;
+  // ?preview=1 fuerza el onboarding siempre (modo debug)
+  const _forceOnboarding = new URLSearchParams(location.search).has('preview');
+  if (!_forceOnboarding && localStorage.getItem(ONBOARDING_KEY)) return;
   const overlay = document.getElementById("onboardingOverlay");
   if (!overlay) return;
 
@@ -2857,6 +2859,19 @@ function applyVFCSettings(s) {
     });
   });
 
+  // Volver a ver intro
+  document.getElementById("settingResetOnboarding")?.addEventListener("click", () => {
+    localStorage.removeItem(ONBOARDING_KEY);
+    const overlay = document.getElementById("onboardingOverlay");
+    if (!overlay) return;
+    // Cerrar settings primero
+    closeSettings();
+    setTimeout(() => {
+      overlay.style.display = "flex";
+      requestAnimationFrame(() => overlay.classList.add("visible"));
+    }, 320);
+  });
+
   // Reset racha
   document.getElementById("settingResetStreak")?.addEventListener("click", () => {
     if (!confirm("¿Resetear tu racha diaria?")) return;
@@ -2948,6 +2963,16 @@ function applyVFCSettings(s) {
     deferredPrompt = e;
     showPWAUI();
   });
+
+  // modo debug: ?preview=1 muestra el banner aunque no haya prompt
+  if (new URLSearchParams(location.search).has('preview')) {
+    setTimeout(() => {
+      if (pwaBanner) {
+        pwaBanner.style.display = "flex";
+        requestAnimationFrame(() => pwaBanner.classList.add("is-visible"));
+      }
+    }, 4000);
+  }
 
   // Ya está instalada
   window.addEventListener("appinstalled", () => hidePWAUI());
