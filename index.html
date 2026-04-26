@@ -12,7 +12,7 @@
 <body>
 
   <header>
-    <div class="logo">
+    <div class="header-left">
       <img
         src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg"
         alt="Logo"
@@ -20,14 +20,19 @@
         onclick="location.reload()"
         title="Restart"
       >
+      <button class="streak-badge" id="streakBadge" aria-label="Streak diaria" type="button">
+        <span class="streak-flame" aria-hidden="true">🔥</span>
+        <span class="streak-num" id="streakNum">0</span>
+      </button>
     </div>
     <div class="header-right">
-      <div class="streak-badge" id="streakBadge" aria-label="Streak"></div>
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="irregular">Irregular</button>
-      <button class="filter-btn" data-filter="regular">Regular</button>
-      <button class="icon-btn" id="shuffleBtn" title="Shuffle">⇄</button>
-      <button class="icon-btn" id="themeToggle" title="Toggle theme">☀︎</button>
+      <div class="filter-group" role="tablist" aria-label="Verb filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="irregular">Irregular</button>
+        <button class="filter-btn" data-filter="regular">Regular</button>
+      </div>
+      <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-label="Shuffle">⇄</button>
+      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">☀︎</button>
     </div>
   </header>
 
@@ -191,6 +196,23 @@
       <div class="modal-gif" id="modalGif">
         <span class="gif-msg">Loading…</span>
       </div>
+    </div>
+  </div>
+
+  <!-- ── STREAK CELEBRATION OVERLAY ── -->
+  <div class="streak-celebrate" id="streakCelebrate" role="dialog" aria-modal="true" aria-label="Racha desbloqueada">
+    <div class="streak-celebrate-bg"></div>
+    <div class="streak-celebrate-card">
+      <div class="streak-confetti" id="streakConfetti"></div>
+      <div class="streak-rings"><span></span><span></span><span></span></div>
+      <div class="streak-big-flame">🔥</div>
+      <h2 class="streak-celebrate-title" id="streakCelebrateTitle">¡Racha desbloqueada!</h2>
+      <p class="streak-celebrate-msg" id="streakCelebrateMsg">Empezaste tu camino diario</p>
+      <div class="streak-celebrate-counter">
+        <span class="streak-counter-num" id="streakCounterNum">1</span>
+        <span class="streak-counter-lbl" id="streakCounterLbl">día</span>
+      </div>
+      <button class="streak-celebrate-btn" id="streakCelebrateClose" type="button">¡Vamos!</button>
     </div>
   </div>
 
