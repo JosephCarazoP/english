@@ -675,12 +675,31 @@ header {
 .quiz-card.anim-exit-right { animation: quizExitRight 0.32s cubic-bezier(0.4, 0, 0.6, 1)   forwards; pointer-events: none; }
 .quiz-card.anim-exit-left  { animation: quizExitLeft  0.32s cubic-bezier(0.4, 0, 0.6, 1)   forwards; pointer-events: none; }
 
-/* Labels */
+/* ── Quiz label pill ── */
 .quiz-card-label {
-  font-family: "DM Mono", monospace;
-  font-size: 9.5px; font-weight: 500;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--quiz-accent); margin-bottom: 16px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.qlabel-pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 16px 7px 12px;
+  border-radius: 999px;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: transform 0.15s;
+}
+
+.qlabel-icon {
+  font-size: 16px; line-height: 1;
+  display: inline-flex; align-items: center;
+}
+
+.qlabel-text {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .quiz-card-label-peek {
@@ -779,17 +798,12 @@ header {
 .qbubble-verb {
   font-size: 26px; font-weight: 800;
   letter-spacing: -0.04em; color: var(--text);
-  margin-bottom: 0px;
-}
-.qbubble-hint {
-  font-family: "DM Mono", monospace;
-  font-size: 10px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--subtext);
   margin-bottom: 4px;
 }
+/* .qbubble-hint removed — replaced by the label pill */
 .qbubble-canvas {
   width: 100%;
-  height: 360px;
+  height: 370px;
   display: block;
   cursor: pointer;
   touch-action: none;
