@@ -653,44 +653,202 @@ function _streakDaysBetween(a, b) {
   return Math.round((da2 - da1) / (1000*60*60*24));
 }
 
+/**
+ * Calcula y persiste la racha. Devuelve { streak, prev, kind }
+ *   kind: "unlocked" | "incremented" | "kept" | "reset"
+ */
 function updateStreak() {
-  let streak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
-  const last = localStorage.getItem(STREAK_DATE_KEY);
+  const prev  = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+  const last  = localStorage.getItem(STREAK_DATE_KEY);
   const today = _streakToday();
 
-  if (!last) {
+  let streak = prev;
+  let kind   = "kept";
+
+  if (!last || prev === 0) {
+    // Primera vez en este dispositivo → desbloquea
     streak = 1;
+    kind   = (prev === 0) ? "unlocked" : "incremented";
   } else if (last === today) {
-    if (streak < 1) streak = 1;
+    if (streak < 1) { streak = 1; kind = "unlocked"; }
+    else            { kind = "kept"; }
   } else {
     const diff = _streakDaysBetween(last, today);
     if (diff === 1) {
-      streak = streak + 1;
+      streak = prev + 1;
+      kind   = "incremented";
     } else if (diff > 1) {
       streak = 1;
+      kind   = "reset";
     } else {
-      // diff <= 0 (reloj cambió hacia atrás): mantenemos racha actual
-      if (streak < 1) streak = 1;
+      if (streak < 1) { streak = 1; kind = "unlocked"; }
+      else            { kind = "kept"; }
     }
   }
 
   localStorage.setItem(STREAK_KEY, String(streak));
   localStorage.setItem(STREAK_DATE_KEY, today);
-  return streak;
+  return { streak, prev, kind };
+}
+
+function _setStreakNumText(n) {
+  const el = document.getElementById("streakNum");
+  if (el) el.textContent = String(n);
+  const badge = document.getElementById("streakBadge");
+  if (badge) {
+    const lbl = n === 1 ? "1 día seguido" : `${n} días seguidos`;
+    badge.title = `Llevas ${lbl} practicando`;
+    badge.setAttribute("aria-label", lbl);
+  }
 }
 
 function renderStreakBadge() {
   try {
-    const n = updateStreak();
-    const el = document.getElementById("streakBadge");
-    if (!el) return;
-    const txt = n === 1 ? "1 día" : `${n} días seguidos`;
-    el.innerHTML = `<span class="streak-flame">🔥</span><span class="streak-text">${txt}</span>`;
-    el.title = `Llevas ${txt} practicando`;
-    el.classList.add("show");
+    const { streak, prev, kind } = updateStreak();
+    const badge = document.getElementById("streakBadge");
+    if (!badge) return;
+    badge.classList.add("show");
+    _setStreakNumText(streak);
+
+    if (kind === "unlocked") {
+      // Pequeño retraso para que el resto de la UI esté lista
+      setTimeout(() => celebrateStreak(streak, true), 380);
+    } else if (kind === "incremented") {
+      // Animación de incremento estilo Duolingo
+      setTimeout(() => animateStreakIncrement(prev, streak), 320);
+    } else if (kind === "reset" && prev > 0) {
+      // Sutil indicador de reinicio (no celebración)
+      badge.classList.add("streak-reset-flash");
+      setTimeout(() => badge.classList.remove("streak-reset-flash"), 900);
+    }
   } catch (err) {
-    // localStorage no disponible (modo privado, etc.) → ignorar silenciosamente
+    // localStorage no disponible
   }
+}
+
+/* ── Celebración: nueva racha desbloqueada ── */
+function celebrateStreak(n, isUnlock) {
+  const overlay = document.getElementById("streakCelebrate");
+  if (!overlay) return;
+
+  document.getElementById("streakCounterNum").textContent = String(n);
+  document.getElementById("streakCounterLbl").textContent = (n === 1 ? "día" : "días seguidos");
+
+  const titleEl = document.getElementById("streakCelebrateTitle");
+  const msgEl   = document.getElementById("streakCelebrateMsg");
+  if (isUnlock) {
+    titleEl.textContent = "¡Racha desbloqueada!";
+    msgEl.textContent   = "Empezaste tu camino diario. Vuelve mañana para sumar otro día.";
+  } else {
+    titleEl.textContent = "¡Racha en marcha!";
+    msgEl.textContent   = `Llevas ${n} ${n === 1 ? "día" : "días seguidos"} practicando.`;
+  }
+
+  // Generar confetti dinámico
+  spawnStreakConfetti();
+
+  overlay.classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  // Pulse del badge en sincronía
+  const badge = document.getElementById("streakBadge");
+  if (badge) {
+    badge.classList.add("streak-bump");
+    setTimeout(() => badge.classList.remove("streak-bump"), 900);
+  }
+}
+
+function closeStreakCelebrate() {
+  const overlay = document.getElementById("streakCelebrate");
+  if (!overlay) return;
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
+  const cf = document.getElementById("streakConfetti");
+  if (cf) cf.innerHTML = "";
+}
+
+function spawnStreakConfetti() {
+  const cf = document.getElementById("streakConfetti");
+  if (!cf) return;
+  cf.innerHTML = "";
+  const colors = ["#ff6b35", "#ffb35a", "#ffd86b", "#7c5cfc", "#0dbfa0", "#f43f5e", "#fff"];
+  const N = 32;
+  for (let i = 0; i < N; i++) {
+    const piece = document.createElement("span");
+    piece.className = "streak-confetti-piece";
+    const angle = (i / N) * 360 + (Math.random() - 0.5) * 14;
+    const dist  = 130 + Math.random() * 90;
+    const dx    = Math.cos(angle * Math.PI / 180) * dist;
+    const dy    = Math.sin(angle * Math.PI / 180) * dist;
+    const rot   = (Math.random() - 0.5) * 720;
+    const dur   = 0.9 + Math.random() * 0.7;
+    const delay = Math.random() * 0.15;
+    const size  = 6 + Math.random() * 6;
+    piece.style.setProperty("--dx", dx + "px");
+    piece.style.setProperty("--dy", dy + "px");
+    piece.style.setProperty("--rot", rot + "deg");
+    piece.style.animationDuration = dur + "s";
+    piece.style.animationDelay    = delay + "s";
+    piece.style.background        = colors[i % colors.length];
+    piece.style.width             = size + "px";
+    piece.style.height            = (size * (0.55 + Math.random() * 0.5)) + "px";
+    cf.appendChild(piece);
+  }
+}
+
+/* ── Animación de incremento de racha (estilo Duolingo) ── */
+function animateStreakIncrement(prev, next) {
+  const badge = document.getElementById("streakBadge");
+  const numEl = document.getElementById("streakNum");
+  if (!badge || !numEl) return;
+
+  // Mostrar primero el número anterior
+  numEl.textContent = String(prev);
+  badge.classList.add("streak-fill-anim");
+
+  // Burst de partículas alrededor del badge
+  spawnStreakBurst(badge);
+
+  // A mitad de animación, swap del número con flip
+  setTimeout(() => {
+    numEl.classList.add("streak-num-flip");
+    setTimeout(() => {
+      numEl.textContent = String(next);
+    }, 180);
+    setTimeout(() => {
+      numEl.classList.remove("streak-num-flip");
+    }, 420);
+  }, 380);
+
+  setTimeout(() => {
+    badge.classList.remove("streak-fill-anim");
+  }, 1500);
+}
+
+function spawnStreakBurst(anchorEl) {
+  if (!anchorEl) return;
+  const rect = anchorEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top  + rect.height / 2;
+  const layer = document.createElement("div");
+  layer.className = "streak-burst-layer";
+  document.body.appendChild(layer);
+  const colors = ["#ff6b35", "#ffb35a", "#ffd86b", "#fff"];
+  const N = 16;
+  for (let i = 0; i < N; i++) {
+    const p = document.createElement("span");
+    p.className = "streak-burst-particle";
+    const angle = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    const dist  = 50 + Math.random() * 40;
+    p.style.left = cx + "px";
+    p.style.top  = cy + "px";
+    p.style.setProperty("--bx", Math.cos(angle) * dist + "px");
+    p.style.setProperty("--by", Math.sin(angle) * dist + "px");
+    p.style.background = colors[i % colors.length];
+    p.style.animationDelay = (Math.random() * 0.08) + "s";
+    layer.appendChild(p);
+  }
+  setTimeout(() => layer.remove(), 1400);
 }
 
 /* ── FLASHCARD STATE ── */
@@ -887,7 +1045,7 @@ function renderCard(animate = true) {
   document.getElementById("progressFill").style.width  = pct + "%";
   document.getElementById("progressLabel").textContent = `${cursor + 1} / ${deck.length}`;
   document.getElementById("scoreCorrect").textContent  = correct;
-  document.getElementById("scoreSkip").textContent     = practiceMode ? skippedDeck.length : skipped;
+  document.getElementById("scoreSkip").textContent     = skipped;
 
   if (animate) {
     scene.classList.remove("animate");
@@ -955,7 +1113,6 @@ function startPracticeRound() {
   isFlipped    = false;
   // Mostrar pill de modo práctica
   showPracticePill(true);
-  document.getElementById("scoreSkip").textContent = skippedDeck.length;
   renderCard(true);
 }
 
@@ -965,14 +1122,30 @@ function showPracticePill(show) {
     if (!pill) {
       pill = document.createElement("div");
       pill.id = "practicePill";
-      pill.className = "practice-pill";
-      pill.innerHTML = '<span class="practice-pill-icon">🎯</span> Practicando errores · <b id="practiceCount">0</b> por dominar';
+      pill.className = "practice-banner practice-banner-round";
+      pill.innerHTML = (
+        '<span class="practice-banner-icon">🎯</span>' +
+        '<div class="practice-banner-body">' +
+          '<div class="practice-banner-title">Practicando errores</div>' +
+          '<div class="practice-banner-sub">Domina cada verbo para terminar la ronda</div>' +
+        '</div>' +
+        '<div class="practice-banner-count"><b id="practiceCount">0</b><span>por dominar</span></div>'
+      );
       const wrap = document.querySelector(".progress-wrap");
       wrap.parentNode.insertBefore(pill, wrap);
     }
     pill.classList.add("show");
     const cnt = document.getElementById("practiceCount");
-    if (cnt) cnt.textContent = skippedDeck.length;
+    if (cnt) {
+      const oldVal = parseInt(cnt.textContent || "0", 10);
+      const newVal = skippedDeck.length;
+      cnt.textContent = newVal;
+      if (oldVal !== newVal) {
+        cnt.classList.remove("count-bump");
+        void cnt.offsetWidth;
+        cnt.classList.add("count-bump");
+      }
+    }
   } else if (pill) {
     pill.classList.remove("show");
   }
@@ -1887,14 +2060,30 @@ function showQuizPracticePill(show) {
     if (!pill) {
       pill = document.createElement("div");
       pill.id = "quizPracticePill";
-      pill.className = "practice-pill quiz-practice-pill";
-      pill.innerHTML = '<span class="practice-pill-icon">🔁</span> Repasando fallados · <b id="quizPracticeCount">0</b> por dominar';
+      pill.className = "practice-banner practice-banner-quiz";
+      pill.innerHTML = (
+        '<span class="practice-banner-icon">🔁</span>' +
+        '<div class="practice-banner-body">' +
+          '<div class="practice-banner-title">Repasando fallados</div>' +
+          '<div class="practice-banner-sub">Acierta cada uno para terminar el quiz</div>' +
+        '</div>' +
+        '<div class="practice-banner-count"><b id="quizPracticeCount">0</b><span>por dominar</span></div>'
+      );
       const wrap = document.querySelector(".progress-wrap");
       wrap.parentNode.insertBefore(pill, wrap);
     }
     pill.classList.add("show");
     const cnt = document.getElementById("quizPracticeCount");
-    if (cnt) cnt.textContent = quizFailedSet.size;
+    if (cnt) {
+      const oldVal = parseInt(cnt.textContent || "0", 10);
+      const newVal = quizFailedSet.size;
+      cnt.textContent = newVal;
+      if (oldVal !== newVal) {
+        cnt.classList.remove("count-bump");
+        void cnt.offsetWidth;
+        cnt.classList.add("count-bump");
+      }
+    }
   } else if (pill) {
     pill.classList.remove("show");
   }
@@ -1977,11 +2166,11 @@ document.getElementById("cardScene").addEventListener("click", (e) => {
 document.getElementById("btnCorrect").addEventListener("click", (e) => {
   e.stopPropagation();
   if (practiceMode) {
-    // En modo práctica: el verbo desaparece del set de errores
+    // En modo práctica: el verbo se domina y sale del set,
+    // pero NO se le quita del contador "skipped" del resumen
     const v = deck[cursor];
     skippedDeck = skippedDeck.filter(x => x !== v);
     correct++;
-    if (skipped > 0) skipped--;  // el contador refleja el set restante
   } else {
     correct++;
   }
@@ -2087,3 +2276,21 @@ document.addEventListener("keydown", (e) => {
 buildDeck();
 renderCard(false);
 renderStreakBadge();
+
+/* Wire streak celebration close + tap badge to peek */
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "streakCelebrateClose") closeStreakCelebrate();
+});
+document.addEventListener("click", (e) => {
+  const ov = document.getElementById("streakCelebrate");
+  if (ov && ov.classList.contains("show") && e.target && e.target.classList.contains("streak-celebrate-bg")) {
+    closeStreakCelebrate();
+  }
+});
+const streakBadgeEl = document.getElementById("streakBadge");
+if (streakBadgeEl) {
+  streakBadgeEl.addEventListener("click", () => {
+    const n = parseInt(localStorage.getItem(STREAK_KEY) || "1", 10);
+    celebrateStreak(n, false);
+  });
+}
