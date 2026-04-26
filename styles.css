@@ -624,7 +624,6 @@ header {
   user-select: none; -webkit-user-select: none;
   touch-action: none;
   box-shadow: var(--shadow-lg);
-  /* las transiciones las controla JS, no CSS */
 }
 
 .quiz-card.c2 {
@@ -790,7 +789,7 @@ header {
 }
 .qbubble-canvas {
   width: 100%;
-  height: 320px;
+  height: 360px;
   display: block;
   cursor: pointer;
   touch-action: none;
@@ -860,6 +859,7 @@ header {
   .quiz-stack-cards { height: 580px; }
   .quiz-card        { padding: 24px 16px; }
   .qtype-wrap input { width: min(100%, 280px); }
+  .qbubble-canvas   { height: 400px; }
 }
 
 /* ── FOOTER ── */
