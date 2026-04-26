@@ -542,7 +542,7 @@ function initBubbles(opts, correct) {
   ];
 
   const palOrder = [0,1,2,3].sort(() => Math.random()-0.5);
-  const R = Math.min(W * 0.21, H * 0.34, 68); // radius
+  const R = Math.min(W * 0.22, H * 0.28, 82); // radius
 
   // Place 4 bubbles in quadrants with random jitter, ensure no initial overlap
   const quadCenters = [
@@ -695,31 +695,64 @@ function initBubbles(opts, correct) {
       if (b.popT >= 1) b.state = 'dead';
 
     } else {
-      // Alive: gentle float
-      const bob  = Math.sin(t*1.1 + b.phase)*3;
+      // Alive: gentle float + wall squish
+      const bob = Math.sin(t * 1.1 + b.phase) * 3;
+    
+      // Squish: how close to each wall?
+      const marginL = b.x - b.r;
+      const marginR = W - b.x - b.r;
+      const marginT = b.y - b.r;
+      const marginB = H - b.y - b.r;
+      const squishZone = b.r * 0.6;
+    
+      let scaleX = 1, scaleY = 1;
+    
+      // Horizontal squish
+      if (marginL < squishZone && marginL >= 0) {
+        const t2 = 1 - marginL / squishZone;
+        scaleX = 1 - t2 * 0.22;
+        scaleY = 1 + t2 * 0.18;
+      } else if (marginR < squishZone && marginR >= 0) {
+        const t2 = 1 - marginR / squishZone;
+        scaleX = 1 - t2 * 0.22;
+        scaleY = 1 + t2 * 0.18;
+      }
+    
+      // Vertical squish
+      if (marginT < squishZone && marginT >= 0) {
+        const t2 = 1 - marginT / squishZone;
+        scaleY = 1 - t2 * 0.22;
+        scaleX *= 1 + t2 * 0.18;
+      } else if (marginB < squishZone && marginB >= 0) {
+        const t2 = 1 - marginB / squishZone;
+        scaleY = 1 - t2 * 0.22;
+        scaleX *= 1 + t2 * 0.18;
+      }
+    
       ctx.translate(b.x, b.y + bob);
-
+      ctx.scale(scaleX, scaleY);
+    
       // Fill
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.fillStyle = b.pal.fill;
       ctx.fill();
-
+    
       // Stroke
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.strokeStyle = b.pal.stroke;
       ctx.lineWidth = 2;
       ctx.stroke();
-
+    
       // Shine
       ctx.beginPath();
-      ctx.ellipse(-b.r*0.26, -b.r*0.30, b.r*0.20, b.r*0.11, -0.5, 0, Math.PI*2);
+      ctx.ellipse(-b.r * 0.26, -b.r * 0.30, b.r * 0.20, b.r * 0.11, -0.5, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.50)';
       ctx.fill();
-
+    
       // Label
-      const fs = Math.min(17, (b.r*1.55)/(Math.max(b.text.length,2)*0.58));
+      const fs = Math.min(17, (b.r * 1.55) / (Math.max(b.text.length, 2) * 0.58));
       ctx.font = `700 ${fs}px "DM Sans",sans-serif`;
       ctx.fillStyle = b.pal.text;
       ctx.textAlign = 'center';
