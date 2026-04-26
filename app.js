@@ -342,11 +342,9 @@ function startQuiz() {
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display = "none";
 
-  // Ocultar pantalla de resultados del quiz si estaba visible
   const qResultScreen = document.getElementById("quizResultScreen");
   if (qResultScreen) qResultScreen.classList.remove("show");
 
-  // Mostrar el stack de cards
   const qStackCards = document.getElementById("qStackCards");
   if (qStackCards) qStackCards.classList.remove("results-mode");
 
@@ -373,17 +371,14 @@ function animateToNextQuestion(flyDirection, delay) {
   const wait = delay !== undefined ? delay : 700;
 
   setTimeout(() => {
-    // Lanzar la card con la animación de vuelo correcta
-    c1.style.transition = "none"; // Limpiar transiciones inline
+    c1.style.transition = "none";
     const flyClass = flyDirection === "right" ? "fly-right"
                    : flyDirection === "left"  ? "fly-left"
                    : "fly-up";
 
-    // Quitar clase top para que no interfiera con la transición
     c1.classList.remove("top");
     c1.classList.add(flyClass);
 
-    // Mientras vuela, promover las de atrás
     promoteBackCards();
 
     setTimeout(() => {
@@ -399,7 +394,6 @@ function promoteBackCards() {
   const c3 = document.getElementById("qCard3");
 
   if (c2) {
-    // c2 sube a posición top (sin pointer events aún, los aplica renderQuizQuestion)
     c2.style.transform = "translateY(0) scale(1)";
     c2.style.opacity   = "1";
   }
@@ -417,22 +411,18 @@ function renderQuizQuestion(animateIn = false) {
   const q    = quizQuestions[quizIdx];
   const c1   = document.getElementById("qCard1");
 
-  // Quitar el stack de resultados si estaba
   const qStackCards = document.getElementById("qStackCards");
   qStackCards.classList.remove("results-mode");
 
-  // Reset completo de la card
   c1.style.cssText = "";
   c1.className     = "quiz-card top";
   if (q.mech === "choice") c1.classList.add("no-drag");
   if (animateIn) {
-    // Forzar reflow para reiniciar la animación
     void c1.offsetWidth;
     c1.classList.add("quiz-enter");
     c1.addEventListener("animationend", () => c1.classList.remove("quiz-enter"), { once: true });
   }
 
-  // Resetear cards de fondo a posiciones correctas (sin animación)
   const c2 = document.getElementById("qCard2");
   const c3 = document.getElementById("qCard3");
   if (c2) { c2.style.cssText = ""; c2.className = "quiz-card c2"; }
@@ -486,7 +476,6 @@ function renderQuizQuestion(animateIn = false) {
     setTimeout(() => { try { inp.focus(); } catch(e) {} }, 80);
 
   } else {
-    // bubble mechanic — canvas-based, zero DOM buttons, no iOS focus issues
     dirRow.style.display = "none";
     body.innerHTML =
       `<div class="qbubble-wrap">` +
@@ -497,7 +486,6 @@ function renderQuizQuestion(animateIn = false) {
     initBubbles(q.opts, q.correct);
   }
 
-  // Peek cards
   const p1 = quizQuestions[quizIdx + 1];
   const p2 = quizQuestions[quizIdx + 2];
   if (c2) c2.innerHTML = p1 ? `<div class="quiz-card-label-peek">${p1.label}</div>` : "";
@@ -528,7 +516,6 @@ function initBubbles(opts, correct) {
 
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
 
-  // 4 distinct color palettes per bubble
   const PALETTES = isDark ? [
     { fill: "#ff6b3528", stroke: "#ff9a5c", text: "#ffb380" },
     { fill: "#7c5cfc28", stroke: "#a78bfa", text: "#c4b5fd" },
@@ -542,12 +529,14 @@ function initBubbles(opts, correct) {
   ];
 
   const palOrder = [0,1,2,3].sort(() => Math.random()-0.5);
-  const R = Math.min(W * 0.22, H * 0.28, 82); // radius
 
-  // Place 4 bubbles in quadrants with random jitter, ensure no initial overlap
+  /* ── Radio más grande aprovechando el canvas más alto ── */
+  const R = Math.min(W * 0.22, H * 0.28, 82);
+
+  /* ── Cuadrantes bien distribuidos ── */
   const quadCenters = [
-    { x: W*0.27, y: H*0.30 },
-    { x: W*0.73, y: H*0.30 },
+    { x: W*0.27, y: H*0.28 },
+    { x: W*0.73, y: H*0.28 },
     { x: W*0.27, y: H*0.72 },
     { x: W*0.73, y: H*0.72 },
   ];
@@ -564,18 +553,13 @@ function initBubbles(opts, correct) {
       text:  opt,
       correct: opt === correct,
       pal:  PALETTES[palOrder[i]],
-      // pop state
-      state:  'alive', // 'alive' | 'popping-ok' | 'popping-no' | 'dead'
+      state:  'alive',
       popT:   0,
-      // shake state (wrong answer)
-      shakeT: 0,
-      shaking: false,
-      // particle burst (correct answer)
       particles: [],
     };
   });
 
-  // Separate overlapping bubbles at init
+  /* Separar solapamientos iniciales */
   for (let iter = 0; iter < 40; iter++) {
     for (let a = 0; a < bubbles.length; a++) {
       for (let b2 = a+1; b2 < bubbles.length; b2++) {
@@ -593,7 +577,6 @@ function initBubbles(opts, correct) {
     }
   }
 
-  // Clamp to canvas after separation
   for (const b of bubbles) {
     b.x = Math.max(b.r, Math.min(W-b.r, b.x));
     b.y = Math.max(b.r, Math.min(H-b.r, b.y));
@@ -624,7 +607,6 @@ function initBubbles(opts, correct) {
     ctx.save();
 
     if (b.state === 'popping-ok') {
-      // Correct: expand ring burst + fade
       b.popT += 0.055;
       const eased = 1 - Math.pow(1-Math.min(b.popT,1), 3);
       const scale = 1 + eased * 0.7;
@@ -632,14 +614,12 @@ function initBubbles(opts, correct) {
       ctx.translate(b.x, b.y);
       ctx.scale(scale, scale);
 
-      // Green glow ring
       ctx.beginPath();
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.strokeStyle = '#10b981';
       ctx.lineWidth   = 4 * (1/scale);
       ctx.stroke();
 
-      // Checkmark
       ctx.strokeStyle = '#10b981';
       ctx.lineWidth   = 3 * (1/scale);
       ctx.lineCap     = 'round';
@@ -653,7 +633,6 @@ function initBubbles(opts, correct) {
       if (b.popT >= 1) b.state = 'dead';
 
     } else if (b.state === 'popping-no') {
-      // Wrong: shake left-right then shrink-fade
       b.popT += 0.055;
       const shakeAmp = Math.max(0, 1-b.popT)*10;
       const shakeX   = Math.sin(b.popT * 38) * shakeAmp;
@@ -662,7 +641,6 @@ function initBubbles(opts, correct) {
       ctx.translate(b.x + shakeX, b.y);
       ctx.scale(scale, scale);
 
-      // Red tinted bubble
       ctx.beginPath();
       ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.fillStyle = isDark ? '#2d0a1255' : '#fef2f2';
@@ -673,7 +651,6 @@ function initBubbles(opts, correct) {
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // X mark
       ctx.strokeStyle = '#f43f5e';
       ctx.lineWidth   = 3;
       ctx.lineCap     = 'round';
@@ -684,7 +661,6 @@ function initBubbles(opts, correct) {
       ctx.lineTo(-b.r*0.25,  b.r*0.25);
       ctx.stroke();
 
-      // Label (stays readable during shake)
       ctx.font = `700 ${Math.min(16,(b.r*1.3)/(b.text.length*0.6))}px "DM Sans",sans-serif`;
       ctx.fillStyle = '#f43f5e';
       ctx.textAlign = 'center';
@@ -695,64 +671,64 @@ function initBubbles(opts, correct) {
       if (b.popT >= 1) b.state = 'dead';
 
     } else {
-      // Alive: gentle float + wall squish
+      /* ── Alive: deformación (squish) suave al acercarse a los bordes ── */
       const bob = Math.sin(t * 1.1 + b.phase) * 3;
-    
-      // Squish: how close to each wall?
+
+      /* Cuánto margen queda entre el borde de la burbuja y cada pared */
       const marginL = b.x - b.r;
       const marginR = W - b.x - b.r;
       const marginT = b.y - b.r;
       const marginB = H - b.y - b.r;
-      const squishZone = b.r * 0.6;
-    
+      const squishZone = b.r * 0.9; /* zona donde empieza a deformarse */
+
       let scaleX = 1, scaleY = 1;
-    
-      // Horizontal squish
+
+      /* Squish horizontal */
       if (marginL < squishZone && marginL >= 0) {
-        const t2 = 1 - marginL / squishZone;
-        scaleX = 1 - t2 * 0.22;
-        scaleY = 1 + t2 * 0.18;
+        const ratio = 1 - marginL / squishZone;
+        scaleX = 1 - ratio * 0.25;
+        scaleY = 1 + ratio * 0.20;
       } else if (marginR < squishZone && marginR >= 0) {
-        const t2 = 1 - marginR / squishZone;
-        scaleX = 1 - t2 * 0.22;
-        scaleY = 1 + t2 * 0.18;
+        const ratio = 1 - marginR / squishZone;
+        scaleX = 1 - ratio * 0.25;
+        scaleY = 1 + ratio * 0.20;
       }
-    
-      // Vertical squish
+
+      /* Squish vertical (multiplicativo para combinar con el horizontal) */
       if (marginT < squishZone && marginT >= 0) {
-        const t2 = 1 - marginT / squishZone;
-        scaleY = 1 - t2 * 0.22;
-        scaleX *= 1 + t2 * 0.18;
+        const ratio = 1 - marginT / squishZone;
+        scaleY *= 1 - ratio * 0.25;
+        scaleX *= 1 + ratio * 0.20;
       } else if (marginB < squishZone && marginB >= 0) {
-        const t2 = 1 - marginB / squishZone;
-        scaleY = 1 - t2 * 0.22;
-        scaleX *= 1 + t2 * 0.18;
+        const ratio = 1 - marginB / squishZone;
+        scaleY *= 1 - ratio * 0.25;
+        scaleX *= 1 + ratio * 0.20;
       }
-    
+
       ctx.translate(b.x, b.y + bob);
       ctx.scale(scaleX, scaleY);
-    
-      // Fill
+
+      /* Fill */
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+      ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.fillStyle = b.pal.fill;
       ctx.fill();
-    
-      // Stroke
+
+      /* Stroke */
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+      ctx.arc(0, 0, b.r, 0, Math.PI*2);
       ctx.strokeStyle = b.pal.stroke;
       ctx.lineWidth = 2;
       ctx.stroke();
-    
-      // Shine
+
+      /* Shine */
       ctx.beginPath();
-      ctx.ellipse(-b.r * 0.26, -b.r * 0.30, b.r * 0.20, b.r * 0.11, -0.5, 0, Math.PI * 2);
+      ctx.ellipse(-b.r*0.26, -b.r*0.30, b.r*0.20, b.r*0.11, -0.5, 0, Math.PI*2);
       ctx.fillStyle = 'rgba(255,255,255,0.50)';
       ctx.fill();
-    
-      // Label
-      const fs = Math.min(17, (b.r * 1.55) / (Math.max(b.text.length, 2) * 0.58));
+
+      /* Label */
+      const fs = Math.min(17, (b.r*1.55) / (Math.max(b.text.length, 2) * 0.58));
       ctx.font = `700 ${fs}px "DM Sans",sans-serif`;
       ctx.fillStyle = b.pal.text;
       ctx.textAlign = 'center';
@@ -767,7 +743,7 @@ function initBubbles(opts, correct) {
     for (const p of b.particles) {
       p.x   += p.vx;
       p.y   += p.vy;
-      p.vy  += 0.12; // gravity
+      p.vy  += 0.12;
       p.life -= 0.035;
       if (p.life <= 0) continue;
       ctx.save();
@@ -789,25 +765,22 @@ function initBubbles(opts, correct) {
     ctx.clearRect(0, 0, W, H);
     t += 0.016;
 
-    // Physics only for alive bubbles
     const alive = bubbles.filter(b => b.state === 'alive');
     for (const b of alive) {
       b.x  += b.vx;
       b.y  += b.vy;
-      // Random drift
       b.vx += (Math.random()-0.5)*0.04;
       b.vy += (Math.random()-0.5)*0.04;
-      // Speed clamp
       const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
       if (spd > 0.65) { b.vx = b.vx/spd*0.65; b.vy = b.vy/spd*0.65; }
-      // Wall bounce
+      /* Rebote suave en paredes — la burbuja puede tocar el borde sin cortarse */
       if (b.x-b.r < 0)  { b.x = b.r;     b.vx =  Math.abs(b.vx); }
       if (b.x+b.r > W)  { b.x = W-b.r;   b.vx = -Math.abs(b.vx); }
       if (b.y-b.r < 0)  { b.y = b.r;     b.vy =  Math.abs(b.vy); }
       if (b.y+b.r > H)  { b.y = H-b.r;   b.vy = -Math.abs(b.vy); }
     }
 
-    // Bubble-bubble collision (elastic)
+    /* Colisión elástica entre burbujas */
     for (let a = 0; a < alive.length; a++) {
       for (let i = a+1; i < alive.length; i++) {
         const ba = alive[a], bb = alive[i];
@@ -816,16 +789,14 @@ function initBubbles(opts, correct) {
         const dist = Math.sqrt(dx*dx + dy*dy);
         const minD = ba.r + bb.r;
         if (dist < minD && dist > 0.01) {
-          // Separate
           const overlap = (minD - dist) / 2;
           const nx = dx/dist, ny = dy/dist;
           ba.x -= nx*overlap; ba.y -= ny*overlap;
           bb.x += nx*overlap; bb.y += ny*overlap;
-          // Exchange velocity components along collision normal
           const dvx = ba.vx - bb.vx;
           const dvy = ba.vy - bb.vy;
           const dot = dvx*nx + dvy*ny;
-          if (dot > 0) { // only if approaching
+          if (dot > 0) {
             ba.vx -= dot*nx * 0.9;
             ba.vy -= dot*ny * 0.9;
             bb.vx += dot*nx * 0.9;
@@ -835,7 +806,6 @@ function initBubbles(opts, correct) {
       }
     }
 
-    // Draw all
     for (const b of bubbles) {
       drawParticles(b);
       drawBubble(b);
@@ -846,7 +816,7 @@ function initBubbles(opts, correct) {
 
   animate();
 
-  // ── Hit detection: pure coordinate math, zero DOM elements ──
+  /* ── Hit detection: coordenadas puras, cero DOM ── */
   function handleTap(clientX, clientY) {
     if (quizLocked) return;
     const rect = canvas.getBoundingClientRect();
@@ -856,24 +826,21 @@ function initBubbles(opts, correct) {
     for (const b of bubbles) {
       if (b.state !== 'alive') continue;
       const dx = mx - b.x;
-      const dy = my - b.y; // use raw y (bob offset is visual only)
+      const dy = my - b.y;
       if (Math.sqrt(dx*dx + dy*dy) > b.r) continue;
 
-      // Hit!
       quizLocked = true;
 
       if (b.correct) {
         b.state = 'popping-ok';
         spawnParticles(b);
-        // Other bubbles shrink away cleanly
         for (const ob of bubbles) {
-          if (ob !== b) { ob.state = 'popping-no'; ob.popT = 0.38; } // skip shake, just shrink
+          if (ob !== b) { ob.state = 'popping-no'; ob.popT = 0.38; }
         }
         quizOk++;
       } else {
-        b.state = 'popping-no'; // shake + red X
+        b.state = 'popping-no';
         b.popT  = 0;
-        // Reveal correct bubble with green glow
         for (const ob of bubbles) {
           if (ob.correct) {
             ob.state = 'popping-ok';
@@ -902,6 +869,7 @@ function initBubbles(opts, correct) {
     handleTap(e.clientX, e.clientY);
   });
 }
+
 /* ════════════════════════════════════════════════════════
    S W I P E   A D V A N C E
    ════════════════════════════════════════════════════════ */
@@ -966,10 +934,9 @@ function qDragMove(e) {
   qCy = pt.clientY - qSy;
 
   const c1 = document.getElementById("qCard1");
-  const rot = qCx * 0.05; // ligera rotación natural
+  const rot = qCx * 0.05;
   c1.style.transform = `translateX(${qCx}px) translateY(${qCy * 0.3}px) rotate(${rot}deg)`;
 
-  // Highlight de opciones
   const t    = 40;
   const optL = document.getElementById("qOptL");
   const optR = document.getElementById("qOptR");
@@ -999,7 +966,6 @@ function qDragEnd() {
   } else if (qCx < -THRESHOLD) {
     quizAdvanceSwipe("left");
   } else {
-    // Regresar suavemente al centro
     c1.style.transition = "transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1)";
     c1.style.transform  = "";
     const optL = document.getElementById("qOptL");
@@ -1023,14 +989,11 @@ function showQuizResults() {
   document.getElementById("scoreCorrect").textContent  = quizOk;
   document.getElementById("scoreSkip").textContent     = quizNo;
 
-  // Ocultar el stack de cards
   const qStackCards = document.getElementById("qStackCards");
   qStackCards.classList.add("results-mode");
 
-  // Ocultar la fila de dirección
   document.getElementById("qDirRow").style.display = "none";
 
-  // Mostrar la pantalla de resultados separada
   const qResultScreen = document.getElementById("quizResultScreen");
   const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
   const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
@@ -1129,7 +1092,7 @@ document.getElementById("shuffleBtn").addEventListener("click", () => {
 
 document.getElementById("themeToggle").addEventListener("click", () => { dark = !dark; applyTheme(); });
 
-// Quiz swipe listeners
+/* Quiz swipe listeners */
 const qStackEl = document.getElementById("qStackCards");
 qStackEl.addEventListener("mousedown",  qDragStart);
 qStackEl.addEventListener("touchstart", qDragStart, { passive: true });
@@ -1138,7 +1101,7 @@ document.addEventListener("touchmove",  qDragMove, { passive: true });
 document.addEventListener("mouseup",    qDragEnd);
 document.addEventListener("touchend",   qDragEnd);
 
-// Keyboard shortcuts
+/* Keyboard shortcuts */
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") { closeModal(); return; }
   if (document.getElementById("overlay").classList.contains("open")) return;
