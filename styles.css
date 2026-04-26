@@ -608,7 +608,7 @@ header {
 }
 
 .quiz-stack-cards {
-  position: relative; width: 100%; height: 320px; margin-bottom: 8px;
+  position: relative; width: 100%; height: 400px; margin-bottom: 8px;
 }
 .quiz-stack-cards.results-mode { display: none; }
 
@@ -775,12 +775,12 @@ header {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 6px;
+  gap: 2px;
 }
 .qbubble-verb {
-  font-size: 30px; font-weight: 800;
+  font-size: 26px; font-weight: 800;
   letter-spacing: -0.04em; color: var(--text);
-  margin-bottom: 2px;
+  margin-bottom: 0px;
 }
 .qbubble-hint {
   font-family: "DM Mono", monospace;
@@ -790,7 +790,7 @@ header {
 }
 .qbubble-canvas {
   width: 100%;
-  height: 180px;
+  height: 240px;
   display: block;
   cursor: pointer;
   touch-action: none;
@@ -857,7 +857,7 @@ header {
   .act-btn       { padding: 12px 20px; }
   .quiz-stage    { justify-content: center; padding: 8px 18px 24px; }
   .quiz-stack-wrap  { max-width: 95vw; }
-  .quiz-stack-cards { height: 340px; }
+  .quiz-stack-cards { height: 420px; }
   .quiz-card        { padding: 24px 16px; }
   .qtype-wrap input { width: min(100%, 280px); }
 }
