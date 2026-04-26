@@ -531,7 +531,7 @@ function initBubbles(opts, correct) {
   const palOrder = [0,1,2,3].sort(() => Math.random()-0.5);
 
   /* ── Radio más grande aprovechando el canvas más alto ── */
-  const R = Math.min(W * 0.22, H * 0.28, 82);
+  const R = Math.min(W * 0.18, H * 0.20, 62);
 
   /* ── Cuadrantes bien distribuidos ── */
   const quadCenters = [
