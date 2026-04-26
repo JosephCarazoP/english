@@ -691,15 +691,52 @@ function updateStreak() {
   return { streak, prev, kind };
 }
 
+/* ── Streak milestones (used for the progressbar) ── */
+const STREAK_MILESTONES = [3, 7, 14, 30, 60, 100, 200, 365];
+
+function _streakMilestoneInfo(n) {
+  // Returns { prevMs, nextMs, pct }
+  let prevMs = 0;
+  let nextMs = STREAK_MILESTONES[0];
+  for (let i = 0; i < STREAK_MILESTONES.length; i++) {
+    if (n < STREAK_MILESTONES[i]) {
+      nextMs = STREAK_MILESTONES[i];
+      prevMs = i === 0 ? 0 : STREAK_MILESTONES[i - 1];
+      break;
+    }
+    if (i === STREAK_MILESTONES.length - 1 && n >= STREAK_MILESTONES[i]) {
+      // capped at the top
+      prevMs = STREAK_MILESTONES[i - 1] || 0;
+      nextMs = STREAK_MILESTONES[i];
+    }
+  }
+  const span = Math.max(1, nextMs - prevMs);
+  const into = Math.max(0, n - prevMs);
+  const pct  = Math.min(100, Math.round((into / span) * 100));
+  return { prevMs, nextMs, pct };
+}
+
 function _setStreakNumText(n) {
   const el = document.getElementById("streakNum");
   if (el) el.textContent = String(n);
   const badge = document.getElementById("streakBadge");
   if (badge) {
     const lbl = n === 1 ? "1 día seguido" : `${n} días seguidos`;
-    badge.title = `Llevas ${lbl} practicando`;
+    badge.title = `Llevas ${lbl} · Próxima meta: ${_streakMilestoneInfo(n).nextMs} días`;
     badge.setAttribute("aria-label", lbl);
   }
+  // Update target text + progress bar
+  const info = _streakMilestoneInfo(n);
+  const tgt = document.getElementById("streakTarget");
+  if (tgt) {
+    if (n >= STREAK_MILESTONES[STREAK_MILESTONES.length - 1]) {
+      tgt.textContent = "🏆 Leyenda";
+    } else {
+      tgt.textContent = `→ ${info.nextMs}`;
+    }
+  }
+  const fill = document.getElementById("streakProgressFill");
+  if (fill) fill.style.width = info.pct + "%";
 }
 
 function renderStreakBadge() {
@@ -720,6 +757,11 @@ function renderStreakBadge() {
       // Sutil indicador de reinicio (no celebración)
       badge.classList.add("streak-reset-flash");
       setTimeout(() => badge.classList.remove("streak-reset-flash"), 900);
+    }
+
+    // Notify the goals system that the streak might have changed
+    if (typeof checkGoals === "function") {
+      try { checkGoals({ silent: kind === "kept" }); } catch (e) {}
     }
   } catch (err) {
     // localStorage no disponible
@@ -800,20 +842,35 @@ function spawnStreakConfetti() {
 function animateStreakIncrement(prev, next) {
   const badge = document.getElementById("streakBadge");
   const numEl = document.getElementById("streakNum");
+  const fill  = document.getElementById("streakProgressFill");
+  const tgt   = document.getElementById("streakTarget");
   if (!badge || !numEl) return;
 
-  // Mostrar primero el número anterior
+  // Mostrar primero el número anterior y la barra al estado anterior
   numEl.textContent = String(prev);
+  const prevInfo = _streakMilestoneInfo(prev);
+  if (fill) fill.style.width = prevInfo.pct + "%";
+  if (tgt)  tgt.textContent  = `→ ${prevInfo.nextMs}`;
+
   badge.classList.add("streak-fill-anim");
 
   // Burst de partículas alrededor del badge
   spawnStreakBurst(badge);
 
-  // A mitad de animación, swap del número con flip
+  // A mitad de animación, swap del número con flip + animar la barra al nuevo estado
   setTimeout(() => {
     numEl.classList.add("streak-num-flip");
     setTimeout(() => {
       numEl.textContent = String(next);
+      const newInfo = _streakMilestoneInfo(next);
+      if (fill) fill.style.width = newInfo.pct + "%";
+      if (tgt) {
+        if (next >= STREAK_MILESTONES[STREAK_MILESTONES.length - 1]) {
+          tgt.textContent = "🏆 Leyenda";
+        } else {
+          tgt.textContent = `→ ${newInfo.nextMs}`;
+        }
+      }
     }, 180);
     setTimeout(() => {
       numEl.classList.remove("streak-num-flip");
@@ -1156,6 +1213,10 @@ function showFinish() {
   document.getElementById("stage").style.display = "none";
   document.getElementById("quizScreen").style.display = "none";
   document.getElementById("finishScreen").classList.add("show");
+  // Goals: count this finished round, and check no-skip rounds
+  if (typeof goalsOnRoundFinished === "function") {
+    goalsOnRoundFinished({ skipped: skipped, correct: correct, total: (originalDeckLen || deck.length) });
+  }
 
   const total = originalDeckLen || deck.length;
   const pct = Math.round((correct / Math.max(1, total)) * 100);
@@ -1189,16 +1250,18 @@ async function openDetail() {
   document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
   document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
 
-  // Pronunciation buttons (Normal + Slow on each card)
+  // Pronunciation: a single "Escuchar" button per card. Rate is taken from currentSpeed.
   const presWord = verb.present;
   const pastWord = verb.past.split("/")[0].trim();
   document.querySelectorAll(".pron-btn").forEach(btn => {
     const form = btn.dataset.form;
-    const rate = btn.dataset.rate;
     btn.onclick = (e) => {
       e.stopPropagation();
       const text = form === "pres" ? presWord : pastWord;
-      speakVerb(text, { rate });
+      // Visual feedback while playing
+      btn.classList.add("is-playing");
+      setTimeout(() => btn.classList.remove("is-playing"), 800);
+      speakVerb(text);
     };
   });
 
@@ -1259,22 +1322,30 @@ function closeModal() {
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 }
 
-/* ── SPEED CONTROL ── */
+/* ── SPEED CONTROL (3 chips only: 0.7 / 1 / 1.2) ── */
+const SPEED_KEY = "vfc_speed";
 function setSpeed(value) {
   const v = Math.min(1.4, Math.max(0.4, parseFloat(value) || 1));
   currentSpeed = v;
+  try { localStorage.setItem(SPEED_KEY, String(v)); } catch (e) {}
   syncSpeedUI();
 }
 
 function syncSpeedUI() {
-  const slider = document.getElementById("speedSlider");
-  const valEl  = document.getElementById("speedVal");
-  if (slider) slider.value = String(currentSpeed);
-  if (valEl)  valEl.textContent = currentSpeed.toFixed(2) + "×";
-  document.querySelectorAll(".speed-preset").forEach(b => {
-    b.classList.toggle("active", Math.abs(parseFloat(b.dataset.speed) - currentSpeed) < 0.01);
+  document.querySelectorAll(".speed-chip, .speed-preset").forEach(b => {
+    const matches = Math.abs(parseFloat(b.dataset.speed) - currentSpeed) < 0.01;
+    b.classList.toggle("active", matches);
+    b.setAttribute("aria-checked", matches ? "true" : "false");
   });
 }
+
+/* Restore persisted speed (if any) on load */
+(function restoreSpeed() {
+  try {
+    const saved = parseFloat(localStorage.getItem(SPEED_KEY));
+    if (!isNaN(saved) && saved > 0) currentSpeed = Math.min(1.4, Math.max(0.4, saved));
+  } catch (e) {}
+})();
 
 /* ════════════════════════════════════════════════════════
    Q U I Z   S Y S T E M
@@ -2094,6 +2165,10 @@ function showQuizResults() {
   const pct   = Math.round((quizOk / Math.max(1, total)) * 100);
   quizPracticeMode = false;
   showQuizPracticePill(false);
+  // Goals: count quizzes finished + perfect quizzes
+  if (typeof goalsOnQuizFinished === "function") {
+    goalsOnQuizFinished({ correct: quizOk, wrong: quizNo, total: total });
+  }
 
   document.getElementById("progressFill").style.width  = "100%";
   document.getElementById("progressLabel").textContent = `${total} / ${total}`;
@@ -2171,9 +2246,11 @@ document.getElementById("btnCorrect").addEventListener("click", (e) => {
     const v = deck[cursor];
     skippedDeck = skippedDeck.filter(x => x !== v);
     correct++;
+    if (typeof goalsBumpRecoveredSkip === "function") goalsBumpRecoveredSkip();
   } else {
     correct++;
   }
+  if (typeof goalsBumpLearned === "function") goalsBumpLearned();
   next();
 });
 document.getElementById("btnSkip").addEventListener("click",    (e) => {
@@ -2207,19 +2284,15 @@ document.getElementById("overlay").addEventListener("click", (e) => {
   if (e.target === document.getElementById("overlay")) closeModal();
 });
 
-// Speed slider
-const speedSliderEl = document.getElementById("speedSlider");
-if (speedSliderEl) {
-  speedSliderEl.addEventListener("input",  (e) => setSpeed(e.target.value));
-  speedSliderEl.addEventListener("change", (e) => setSpeed(e.target.value));
-}
-// Speed preset chips
-document.querySelectorAll(".speed-preset").forEach(btn => {
+// Speed selector chips (3 options: lento / normal / rápido)
+document.querySelectorAll(".speed-chip, .speed-preset").forEach(btn => {
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
     setSpeed(btn.dataset.speed);
   });
 });
+// Apply persisted speed to UI right now
+syncSpeedUI();
 
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -2294,3 +2367,246 @@ if (streakBadgeEl) {
     celebrateStreak(n, false);
   });
 }
+
+
+/* ════════════════════════════════════════════════════════
+   G O A L S   /   O B J E C T I V E S   S Y S T E M
+   ════════════════════════════════════════════════════════ */
+const GOALS_KEY      = "vfc_goals_done";        // JSON array of completed goal ids
+const GOALS_STATS    = "vfc_goals_stats";       // JSON object with counters
+
+function _gReadStats() {
+  try {
+    const raw = localStorage.getItem(GOALS_STATS);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+function _gWriteStats(s) {
+  try { localStorage.setItem(GOALS_STATS, JSON.stringify(s)); } catch (e) {}
+}
+function _gReadDone() {
+  try {
+    const raw = localStorage.getItem(GOALS_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch (e) { return new Set(); }
+}
+function _gWriteDone(set) {
+  try { localStorage.setItem(GOALS_KEY, JSON.stringify([...set])); } catch (e) {}
+}
+
+/* Goal definitions. Each goal has:
+   id, icon, name, desc, tier, target, getProgress(stats, streak) -> number */
+const GOALS = [
+  // --- Aprendizaje ---
+  { id: "first_step",   icon: "🌱", name: "Primer paso",       desc: "Aprende tu primer verbo.",                   tier: "Inicio",  target: 1,
+    getProgress: s => s.learned || 0 },
+  { id: "studious_10",  icon: "📘", name: "Estudioso",         desc: "Domina 10 verbos en total.",                  tier: "Bronce", target: 10,
+    getProgress: s => s.learned || 0 },
+  { id: "veteran_50",   icon: "🎓", name: "Veterano",          desc: "Domina 50 verbos en total.",                  tier: "Plata",  target: 50,
+    getProgress: s => s.learned || 0 },
+  { id: "master_100",   icon: "🏅", name: "Maestro",           desc: "Domina 100 verbos en total.",                 tier: "Oro",    target: 100,
+    getProgress: s => s.learned || 0 },
+
+  // --- Quizzes ---
+  { id: "first_quiz",   icon: "📝", name: "Primer quiz",       desc: "Termina tu primer quiz.",                     tier: "Inicio", target: 1,
+    getProgress: s => s.quizzes_done || 0 },
+  { id: "clean_quiz",   icon: "✨", name: "Quiz limpio",       desc: "Termina un quiz sin errores.",                tier: "Plata",  target: 1,
+    getProgress: s => s.perfect_quizzes || 0 },
+  { id: "perfectionist",icon: "💎", name: "Perfeccionista",    desc: "Termina 5 quizzes sin errores.",              tier: "Oro",    target: 5,
+    getProgress: s => s.perfect_quizzes || 0 },
+
+  // --- Rachas ---
+  { id: "streak_3",     icon: "🔥", name: "Constancia",        desc: "Mantén una racha de 3 días.",                 tier: "Bronce", target: 3,
+    getProgress: (s, st) => st || 0 },
+  { id: "streak_7",     icon: "🚀", name: "Semana fuerte",     desc: "Mantén una racha de 7 días.",                 tier: "Plata",  target: 7,
+    getProgress: (s, st) => st || 0 },
+  { id: "streak_30",    icon: "👑", name: "Mes legendario",    desc: "Mantén una racha de 30 días.",                tier: "Oro",    target: 30,
+    getProgress: (s, st) => st || 0 },
+
+  // --- Especiales ---
+  { id: "no_skip",      icon: "🎯", name: "Sin miedo",         desc: "Termina una ronda sin hacer skip.",           tier: "Plata",  target: 1,
+    getProgress: s => s.no_skip_rounds || 0 },
+  { id: "comeback_5",   icon: "💪", name: "Recuperación",      desc: "Domina 5 verbos saltados al practicarlos.",   tier: "Bronce", target: 5,
+    getProgress: s => s.recovered_skips || 0 },
+];
+
+/* Counter mutators (called from gameplay) */
+function goalsBumpLearned() {
+  const s = _gReadStats();
+  s.learned = (s.learned || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}
+function goalsBumpRecoveredSkip() {
+  const s = _gReadStats();
+  s.recovered_skips = (s.recovered_skips || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}
+function goalsOnRoundFinished({ skipped, correct, total }) {
+  const s = _gReadStats();
+  s.rounds_done = (s.rounds_done || 0) + 1;
+  if ((skipped || 0) === 0 && (correct || 0) > 0) {
+    s.no_skip_rounds = (s.no_skip_rounds || 0) + 1;
+  }
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}
+function goalsOnQuizFinished({ correct, wrong, total }) {
+  const s = _gReadStats();
+  s.quizzes_done = (s.quizzes_done || 0) + 1;
+  if ((wrong || 0) === 0 && (correct || 0) > 0) {
+    s.perfect_quizzes = (s.perfect_quizzes || 0) + 1;
+  }
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}
+
+/* Get current streak (read-only, no side-effects) */
+function _currentStreakReadOnly() {
+  try { return parseInt(localStorage.getItem(STREAK_KEY) || "0", 10); }
+  catch (e) { return 0; }
+}
+
+/* Evaluate all goals; trigger toasts for newly-completed ones (unless silent) */
+function checkGoals(opts) {
+  opts = opts || {};
+  const stats   = _gReadStats();
+  const streak  = _currentStreakReadOnly();
+  const done    = _gReadDone();
+  let newlyDone = [];
+
+  GOALS.forEach(g => {
+    if (done.has(g.id)) return;
+    const cur = g.getProgress(stats, streak) || 0;
+    if (cur >= g.target) {
+      done.add(g.id);
+      newlyDone.push(g);
+    }
+  });
+
+  if (newlyDone.length > 0) _gWriteDone(done);
+
+  // Update header dot indicator if any goals are pending review (newly done not yet seen)
+  _refreshGoalsDot(newlyDone.length);
+
+  // Show a toast for each newly completed (queued)
+  if (!opts.silent && newlyDone.length > 0) {
+    newlyDone.forEach((g, i) => setTimeout(() => showGoalToast(g), i * 1800));
+  }
+
+  // If goals modal is open, refresh its rendering
+  if (document.getElementById("goalsOverlay")?.classList.contains("open")) {
+    renderGoalsList();
+  }
+}
+
+function _refreshGoalsDot(forceShow) {
+  // Dot shows when there are unseen completed goals OR when checkGoals just unlocked one
+  const dot = document.getElementById("goalsBtnDot");
+  if (!dot) return;
+  const stats = _gReadStats();
+  const seen  = stats._goals_seen_count || 0;
+  const done  = _gReadDone().size;
+  if (forceShow || done > seen) {
+    dot.hidden = false;
+  }
+}
+
+function showGoalToast(goal) {
+  const toast = document.getElementById("goalToast");
+  if (!toast) return;
+  const emoji = document.getElementById("goalToastEmoji");
+  const title = document.getElementById("goalToastTitle");
+  const name  = document.getElementById("goalToastName");
+  if (emoji) emoji.textContent = goal.icon;
+  if (title) title.textContent = "¡Objetivo desbloqueado!";
+  if (name)  name.textContent  = goal.name;
+  toast.classList.add("show");
+  // restart bounce
+  if (emoji) {
+    emoji.style.animation = "none";
+    // reflow trick
+    void emoji.offsetWidth;
+    emoji.style.animation = "";
+  }
+  clearTimeout(showGoalToast._tid);
+  showGoalToast._tid = setTimeout(() => toast.classList.remove("show"), 3200);
+}
+
+/* Render full list inside the modal */
+function renderGoalsList() {
+  const list = document.getElementById("goalsList");
+  if (!list) return;
+  const stats  = _gReadStats();
+  const streak = _currentStreakReadOnly();
+  const done   = _gReadDone();
+
+  const completed = GOALS.filter(g => done.has(g.id)).length;
+  const sumEl = document.getElementById("goalsSummary");
+  if (sumEl) sumEl.textContent = `${completed} / ${GOALS.length} completados`;
+
+  list.innerHTML = GOALS.map(g => {
+    const cur = Math.min(g.target, g.getProgress(stats, streak) || 0);
+    const pct = Math.round((cur / Math.max(1, g.target)) * 100);
+    const isDone = done.has(g.id) || cur >= g.target;
+    return `
+      <div class="goal-item ${isDone ? "completed" : ""}">
+        <div class="goal-icon">${g.icon}</div>
+        <div class="goal-body">
+          <div class="goal-name">
+            <span>${g.name}</span>
+            <span class="goal-tier">${g.tier}</span>
+          </div>
+          <div class="goal-desc">${g.desc}</div>
+          <div class="goal-progress">
+            <div class="goal-bar"><div class="goal-bar-fill" style="width:${isDone ? 100 : pct}%"></div></div>
+            <span class="goal-count">${cur} / ${g.target}</span>
+          </div>
+        </div>
+        <div class="goal-check" aria-hidden="true">${isDone ? "✓" : ""}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openGoalsModal() {
+  const ov = document.getElementById("goalsOverlay");
+  if (!ov) return;
+  renderGoalsList();
+  ov.classList.add("open");
+  document.body.style.overflow = "hidden";
+  // Mark current done count as seen (clears the red dot)
+  const stats = _gReadStats();
+  stats._goals_seen_count = _gReadDone().size;
+  _gWriteStats(stats);
+  const dot = document.getElementById("goalsBtnDot");
+  if (dot) dot.hidden = true;
+}
+function closeGoalsModal() {
+  const ov = document.getElementById("goalsOverlay");
+  if (!ov) return;
+  ov.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+/* Wire goals UI */
+(function wireGoals() {
+  const btn = document.getElementById("goalsBtn");
+  if (btn) btn.addEventListener("click", (e) => { e.stopPropagation(); openGoalsModal(); });
+  const closeBtn = document.getElementById("goalsClose");
+  if (closeBtn) closeBtn.addEventListener("click", closeGoalsModal);
+  document.addEventListener("click", (e) => {
+    const ov = document.getElementById("goalsOverlay");
+    if (!ov || !ov.classList.contains("open")) return;
+    if (e.target && e.target.classList.contains("goals-bg")) closeGoalsModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const ov = document.getElementById("goalsOverlay");
+      if (ov && ov.classList.contains("open")) closeGoalsModal();
+    }
+  });
+  // Initial dot evaluation (silent so no toast)
+  try { checkGoals({ silent: true }); } catch (e) {}
+})();

@@ -11,8 +11,8 @@
 
 <body>
 
-  <header>
-    <div class="header-left">
+  <header class="app-header">
+    <div class="header-row header-row-top">
       <img
         src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg"
         alt="Logo"
@@ -20,19 +20,36 @@
         onclick="location.reload()"
         title="Restart"
       >
-      <button class="streak-badge" id="streakBadge" aria-label="Streak diaria" type="button">
+
+      <button class="streak-progress" id="streakBadge" aria-label="Tu racha diaria" type="button">
         <span class="streak-flame" aria-hidden="true">🔥</span>
-        <span class="streak-num" id="streakNum">0</span>
+        <div class="streak-progress-body">
+          <div class="streak-progress-top">
+            <span class="streak-progress-num"><b id="streakNum">0</b><span class="streak-progress-day">días</span></span>
+            <span class="streak-progress-target" id="streakTarget">→ 3</span>
+          </div>
+          <div class="streak-progress-track">
+            <div class="streak-progress-fill" id="streakProgressFill"></div>
+          </div>
+        </div>
+      </button>
+
+      <button class="icon-btn goals-btn" id="goalsBtn" title="Objetivos" aria-label="Objetivos" type="button">
+        <span class="goals-btn-icon" aria-hidden="true">🎯</span>
+        <span class="goals-btn-dot" id="goalsBtnDot" hidden></span>
       </button>
     </div>
-    <div class="header-right">
+
+    <div class="header-row header-row-bottom">
       <div class="filter-group" role="tablist" aria-label="Verb filter">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="irregular">Irregular</button>
         <button class="filter-btn" data-filter="regular">Regular</button>
       </div>
-      <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-label="Shuffle">⇄</button>
-      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">☀︎</button>
+      <div class="header-tools">
+        <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-label="Shuffle">⇄</button>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">☀︎</button>
+      </div>
     </div>
   </header>
 
@@ -135,11 +152,8 @@
           <div class="pron-word" id="modalPresent"></div>
           <div class="pron-ipa" id="modalIpaPres"></div>
           <div class="pron-actions">
-            <button class="pron-btn" data-form="pres" data-rate="normal" type="button" aria-label="Play present at normal speed">
-              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Normal</span>
-            </button>
-            <button class="pron-btn pron-btn-slow" data-form="pres" data-rate="slow" type="button" aria-label="Play present slowly">
-              <span class="pron-btn-icon">🐢</span><span class="pron-btn-lbl">Slow</span>
+            <button class="pron-btn pron-btn-single" data-form="pres" type="button" aria-label="Reproducir verbo en presente">
+              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
         </article>
@@ -151,28 +165,28 @@
           <div class="pron-word" id="modalPast"></div>
           <div class="pron-ipa" id="modalIpaPast"></div>
           <div class="pron-actions">
-            <button class="pron-btn" data-form="past" data-rate="normal" type="button" aria-label="Play past at normal speed">
-              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Normal</span>
-            </button>
-            <button class="pron-btn pron-btn-slow" data-form="past" data-rate="slow" type="button" aria-label="Play past slowly">
-              <span class="pron-btn-icon">🐢</span><span class="pron-btn-lbl">Slow</span>
+            <button class="pron-btn pron-btn-single" data-form="past" type="button" aria-label="Reproducir verbo en pasado">
+              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
         </article>
       </div>
 
-      <!-- Speed slider -->
-      <div class="speed-row">
-        <span class="speed-lbl">Speed</span>
-        <div class="speed-presets" id="speedPresets">
-          <button type="button" class="speed-preset" data-speed="0.5">0.5×</button>
-          <button type="button" class="speed-preset" data-speed="0.75">0.75×</button>
-          <button type="button" class="speed-preset active" data-speed="1">1×</button>
-          <button type="button" class="speed-preset" data-speed="1.25">1.25×</button>
+      <!-- Velocidad de audio (3 chips, una sola configuración para verbos y oraciones) -->
+      <div class="speed-bar" role="radiogroup" aria-label="Velocidad del audio">
+        <span class="speed-bar-lbl">Velocidad</span>
+        <div class="speed-chips" id="speedPresets">
+          <button type="button" class="speed-chip" role="radio" aria-checked="false" data-speed="0.7">
+            <span class="speed-chip-emoji">🐢</span><span class="speed-chip-lbl">Lento</span>
+          </button>
+          <button type="button" class="speed-chip active" role="radio" aria-checked="true" data-speed="1">
+            <span class="speed-chip-emoji">🚶</span><span class="speed-chip-lbl">Normal</span>
+          </button>
+          <button type="button" class="speed-chip" role="radio" aria-checked="false" data-speed="1.2">
+            <span class="speed-chip-emoji">🐇</span><span class="speed-chip-lbl">Rápido</span>
+          </button>
         </div>
-        <span class="speed-val" id="speedVal">1.00×</span>
       </div>
-      <input type="range" min="0.4" max="1.4" step="0.05" value="1" class="speed-slider" id="speedSlider" aria-label="Playback speed">
 
       <!-- Examples -->
       <div class="ex-block">
@@ -213,6 +227,30 @@
         <span class="streak-counter-lbl" id="streakCounterLbl">día</span>
       </div>
       <button class="streak-celebrate-btn" id="streakCelebrateClose" type="button">¡Vamos!</button>
+    </div>
+  </div>
+
+  <!-- ── GOALS / OBJECTIVES MODAL ── -->
+  <div class="goals-overlay" id="goalsOverlay" role="dialog" aria-modal="true" aria-label="Objetivos">
+    <div class="goals-bg"></div>
+    <div class="goals-card">
+      <button class="goals-close" id="goalsClose" type="button" aria-label="Cerrar">✕</button>
+      <div class="goals-head">
+        <span class="goals-head-emoji" aria-hidden="true">🏆</span>
+        <h2 class="goals-title">Objetivos</h2>
+        <p class="goals-sub">Cumple metas usando la app: aprende verbos, mantén tu racha y supera quizzes.</p>
+        <div class="goals-summary" id="goalsSummary">0 / 0 completados</div>
+      </div>
+      <div class="goals-list" id="goalsList"></div>
+    </div>
+  </div>
+
+  <!-- ── GOAL UNLOCKED TOAST ── -->
+  <div class="goal-toast" id="goalToast" role="status" aria-live="polite">
+    <span class="goal-toast-emoji" id="goalToastEmoji">🏆</span>
+    <div class="goal-toast-body">
+      <div class="goal-toast-title" id="goalToastTitle">¡Objetivo desbloqueado!</div>
+      <div class="goal-toast-name" id="goalToastName">—</div>
     </div>
   </div>
 
