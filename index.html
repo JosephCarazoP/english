@@ -105,6 +105,7 @@
     </div>
     <div class="finish-actions">
       <button class="restart-btn" onclick="startQuiz()" style="background:var(--text);color:var(--bg);">Take Final Quiz 📝</button>
+      <button class="restart-btn share-btn" id="shareFinishBtn" type="button">Share Results 📤</button>
       <button class="restart-btn" id="restartBtn" style="background:transparent;border:2px solid var(--progress-bg);color:var(--text);">Shuffle &amp; Restart</button>
     </div>
   </div>
@@ -136,6 +137,9 @@
       </div>
     </div>
   </div>
+
+  <!-- ── SHARE TOAST ── -->
+  <div class="share-toast" id="shareToast" role="status" aria-live="polite"></div>
 
   <footer class="site-footer">
     <p>Made by <b>Joseph Carazo</b> 🫡</p>
