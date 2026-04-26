@@ -769,58 +769,35 @@ header {
 .qtype-wrap input.wrong { border-color: var(--quiz-no); color: var(--quiz-no); box-shadow: 0 0 0 4px color-mix(in srgb, var(--quiz-no) 14%, transparent); }
 .qtype-fb { font-size: 13px; min-height: 18px; font-weight: 700; }
 
-/* ── Choice mechanic ── */
-.qch-q { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 18px; line-height: 1.4; }
-.qch-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
-.qch-opt {
-  font-family: "DM Sans", sans-serif;
-  font-size: 16px; font-weight: 700;
-  padding: 15px 8px; border-radius: 14px;
-  border: 1.5px solid var(--border);
-  background: var(--bg); color: var(--text);
-  cursor: pointer; text-align: center;
-  /* Kill ALL native focus/highlight rendering */
-  outline: none !important;
-  outline-offset: 0 !important;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-touch-callout: none;
-  /* Kill WebKit's native focus ring specifically */
-  -webkit-focus-ring-color: transparent;
-  display: block; width: 100%;
-  transition: background 0.12s, color 0.12s, border-color 0.12s, transform 0.12s;
-  /* Prevent iOS from treating this as a focusable tappable */
+/* ── Bubble mechanic ── */
+.qbubble-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 6px;
+}
+.qbubble-verb {
+  font-size: 30px; font-weight: 800;
+  letter-spacing: -0.04em; color: var(--text);
+  margin-bottom: 2px;
+}
+.qbubble-hint {
+  font-family: "DM Mono", monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--subtext);
+  margin-bottom: 4px;
+}
+.qbubble-canvas {
+  width: 100%;
+  height: 180px;
+  display: block;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
 }
-.qch-opt:hover:not(:disabled):not(.qch-ok):not(.qch-no):not(.qch-reveal) {
-  background: var(--quiz-hover); color: var(--quiz-hover-text);
-  border-color: var(--quiz-accent); transform: translateY(-1px);
-}
-/* Kill every focus/active state — especially iOS Safari persistent tap highlight */
-.qch-opt:focus,
-.qch-opt:focus-visible,
-.qch-opt:focus-within,
-.qch-opt:focus:not(:focus-visible) {
-  outline: none !important;
-  outline-offset: 0 !important;
-  box-shadow: none !important;
-  border-color: var(--border) !important;
-  -webkit-focus-ring-color: transparent !important;
-}
-/* :active must NOT change border — this is what iOS was showing */
-.qch-opt:active:not(.qch-ok):not(.qch-no):not(.qch-reveal) {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: var(--border) !important;
-  /* Subtle scale instead of border change so there is tactile feedback */
-  transform: scale(0.97);
-}
-.qch-opt:disabled { cursor: default; }
-.qch-ok     { background: var(--quiz-ok-bg) !important; color: var(--quiz-ok) !important; border-color: var(--quiz-ok) !important; }
-.qch-no     { background: var(--quiz-no-bg) !important; color: var(--quiz-no) !important; border-color: var(--quiz-no) !important; }
-.qch-reveal { background: var(--quiz-ok-bg) !important; color: var(--quiz-ok) !important; border-color: var(--quiz-ok) !important; }
 
 /* ── Quiz result screen ── */
 .quiz-result-screen {
