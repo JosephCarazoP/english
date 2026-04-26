@@ -644,8 +644,7 @@ header {
 
 .quiz-card.top {
   z-index: 10; cursor: grab;
-  border-color: color-mix(in srgb, var(--quiz-accent) 35%, var(--border));
-  border-top: 3px solid var(--quiz-accent);
+  border-color: var(--border);
 }
 .quiz-card.top.dragging { cursor: grabbing; }
 .quiz-card.no-drag { cursor: default !important; }
@@ -780,16 +779,41 @@ header {
   border: 1.5px solid var(--border);
   background: var(--bg); color: var(--text);
   cursor: pointer; text-align: center;
-  outline: none; -webkit-appearance: none; appearance: none;
+  /* Kill ALL native focus/highlight rendering */
+  outline: none !important;
+  outline-offset: 0 !important;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none;
+  /* Kill WebKit's native focus ring specifically */
+  -webkit-focus-ring-color: transparent;
   display: block; width: 100%;
   transition: background 0.12s, color 0.12s, border-color 0.12s, transform 0.12s;
-  -webkit-tap-highlight-color: transparent;
+  /* Prevent iOS from treating this as a focusable tappable */
+  user-select: none;
+  -webkit-user-select: none;
 }
 .qch-opt:hover:not(:disabled) {
   background: var(--quiz-hover); color: var(--quiz-hover-text);
   border-color: var(--quiz-accent); transform: translateY(-1px);
 }
-.qch-opt:focus, .qch-opt:focus-visible { outline: none !important; box-shadow: none !important; }
+/* Nuclear option: kill every focus state Safari might apply */
+.qch-opt:focus,
+.qch-opt:focus-visible,
+.qch-opt:focus-within,
+.qch-opt:active,
+.qch-opt:focus:not(:focus-visible) {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border-color: var(--border) !important;
+  -webkit-focus-ring-color: transparent !important;
+}
+/* Exception: keep border changes when a result class is applied */
+.qch-opt.qch-ok:focus  { border-color: var(--quiz-ok) !important; }
+.qch-opt.qch-no:focus  { border-color: var(--quiz-no) !important; }
+.qch-opt.qch-reveal:focus { border-color: var(--quiz-ok) !important; }
 .qch-opt:disabled { cursor: default; }
 .qch-ok     { background: var(--quiz-ok-bg) !important; color: var(--quiz-ok) !important; border-color: var(--quiz-ok) !important; }
 .qch-no     { background: var(--quiz-no-bg) !important; color: var(--quiz-no) !important; border-color: var(--quiz-no) !important; }
