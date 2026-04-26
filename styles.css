@@ -999,3 +999,42 @@ header {
   color: var(--subtext); font-size: 0.9rem;
 }
 .site-footer b { color: var(--text); font-weight: 700; }
+
+/* ── SHARE BUTTON ── */
+.share-btn {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent)) !important;
+  color: #fff !important;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.share-btn:hover { filter: brightness(1.05); }
+
+/* ── SHARE TOAST ── */
+.share-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text);
+  color: var(--bg);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+  max-width: calc(100% - 32px);
+  text-align: center;
+}
+.share-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
