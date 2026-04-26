@@ -2714,7 +2714,7 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
 
 
 /* ════════════════════════════════════════════════════════════════
-   ONBOARDING — primera visita (diseño mejorado)
+   ONBOARDING — primera visita (v4)
    ════════════════════════════════════════════════════════════════ */
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
@@ -2724,84 +2724,58 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   if (!overlay) return;
 
   overlay.style.display = "flex";
-  requestAnimationFrame(() => {
-    overlay.style.transition = "opacity .4s ease";
-    overlay.style.opacity    = "1";
-  });
+  requestAnimationFrame(() => overlay.classList.add("visible"));
 
-  const SLIDE_CONFIG = [
-    { icon: "📚", showNums: true  },
-    { icon: "🎮", showNums: false },
-    { icon: "📝", showNums: false },
-  ];
-
-  let current = 0;
-  const slides     = overlay.querySelectorAll(".onboarding-slide");
-  const dots       = overlay.querySelectorAll(".ob-dot");
-  const btnBack    = document.getElementById("obBack");
-  const btnNext    = document.getElementById("obNext");
-  const btnStart   = document.getElementById("obStart");
-  const heroIcon   = document.getElementById("obHeroIcon");
-  const heroNums   = document.getElementById("obHeroNums");
-  const progressFill = document.getElementById("obProgressFill");
+  let cur = 0;
+  const slides = overlay.querySelectorAll('.ob-slide');
+  const dots = overlay.querySelectorAll('.ob-dot');
+  const btnBack = document.getElementById('obBack');
+  const btnNext = document.getElementById('obNext');
+  const btnStart = document.getElementById('obStart');
+  const bgs = [document.getElementById('obBg0'), document.getElementById('obBg1'), document.getElementById('obBg2')];
+  const illus = [document.getElementById('illus0'), document.getElementById('illus1'), document.getElementById('illus2')];
 
   function goTo(n) {
-    // Salida del slide actual
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-    dots[current].setAttribute("aria-selected","false");
-
-    current = n;
-
-    // Entrada del nuevo slide
-    slides[current].classList.add("active");
-    dots[current].classList.add("active");
-    dots[current].setAttribute("aria-selected","true");
-
-    // Actualizar hero
-    const cfg = SLIDE_CONFIG[current];
-    if (heroIcon) {
-      heroIcon.style.animation = "none";
-      void heroIcon.offsetWidth;
-      heroIcon.style.animation = "";
-      heroIcon.textContent = cfg.icon;
-    }
-    if (heroNums) heroNums.style.opacity = cfg.showNums ? "1" : "0";
-
-    // Barra de progreso
-    if (progressFill) {
-      progressFill.style.width = `${Math.round(((current + 1) / slides.length) * 100)}%`;
-    }
-
-    // Botones
-    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
-    btnNext.style.display    = current < slides.length - 1 ? "inline-flex" : "none";
-    btnStart.style.display   = current === slides.length - 1 ? "inline-flex" : "none";
+    slides.forEach((s, i) => s.classList.toggle('active', i === n));
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === n);
+      d.setAttribute('aria-selected', String(i === n));
+    });
+    bgs.forEach((bg, i) => { if (bg) bg.style.opacity = i === n ? '1' : '0'; });
+    illus.forEach((el, i) => {
+      if (!el) return;
+      el.style.display = i === n ? 'flex' : 'none';
+      if (i === n) { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; }
+    });
+    cur = n;
+    btnBack.style.display = n > 0 ? 'inline-flex' : 'none';
+    btnNext.style.display = n < slides.length - 1 ? 'flex' : 'none';
+    btnStart.style.display = n === slides.length - 1 ? 'flex' : 'none';
   }
 
-  btnNext.addEventListener("click",  () => { if (current < slides.length-1) goTo(current+1); });
-  btnBack.addEventListener("click",  () => { if (current > 0) goTo(current-1); });
-  btnStart.addEventListener("click", closeOnboarding);
-  dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
+  btnNext?.addEventListener('click', () => { if (cur < slides.length - 1) goTo(cur + 1); });
+  btnBack?.addEventListener('click', () => { if (cur > 0) goTo(cur - 1); });
+  btnStart?.addEventListener('click', closeOnboarding);
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.target)));
 
-  // Swipe para mobile
   let touchStartX = 0;
-  overlay.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  overlay.addEventListener("touchend",   e => {
+  overlay.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  overlay.addEventListener('touchend', e => {
     const diff = touchStartX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0 && current < slides.length - 1) goTo(current + 1);
-      if (diff < 0 && current > 0) goTo(current - 1);
+      if (diff > 0 && cur < slides.length - 1) goTo(cur + 1);
+      if (diff < 0 && cur > 0) goTo(cur - 1);
     }
   });
 
   function closeOnboarding() {
-    localStorage.setItem(ONBOARDING_KEY, "1");
-    overlay.style.opacity = "0";
-    setTimeout(() => { overlay.style.display = "none"; }, 400);
+    localStorage.setItem(ONBOARDING_KEY, '1');
+    overlay.classList.remove('visible');
+    setTimeout(() => { overlay.style.display = 'none'; }, 400);
   }
-})();
 
+  goTo(0);
+})();
 
 /* ════════════════════════════════════════════════════════════════
    SETTINGS — configuración persistida en vfc_settings

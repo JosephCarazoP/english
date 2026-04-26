@@ -272,102 +272,105 @@
 
 
   <!-- ── ONBOARDING OVERLAY ── -->
-  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none; opacity:0;">
-    <div class="onboarding-card">
+  <div class="ob-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none; opacity:0;">
+    <div class="ob-sheet" id="obSheet">
+      <div class="ob-handle"></div>
 
-      <!-- Barra de progreso superior -->
-      <div class="ob-progress-bar">
-        <div class="ob-progress-fill" id="obProgressFill" style="width:33.3%"></div>
-      </div>
+      <div class="ob-visual" id="obVisual">
+        <div class="ob-grid"></div>
+        <div class="ob-visual-bg s0" id="obBg0"></div>
+        <div class="ob-visual-bg s1" id="obBg1" style="opacity:0"></div>
+        <div class="ob-visual-bg s2" id="obBg2" style="opacity:0"></div>
 
-      <!-- Hero visual (cambia por slide) -->
-      <div class="ob-hero" id="obHero">
-        <div class="ob-hero-bg"></div>
-        <div class="ob-hero-nums" id="obHeroNums">
-          <span>1</span><span>2</span><span>3</span><span>4</span>
-        </div>
-        <div class="ob-hero-icon" id="obHeroIcon">📚</div>
-      </div>
-
-      <!-- Slides -->
-      <div class="onboarding-slides">
-
-        <!-- Slide 1: Flujo -->
-        <div class="onboarding-slide active" data-slide="0">
-          <h2 class="onboarding-title">¿Cómo funciona?</h2>
-          <ul class="onboarding-steps">
-            <li><span class="ob-num">1</span> Verás el verbo en <b>presente</b></li>
-            <li><span class="ob-num">2</span> Toca la tarjeta para ver su forma en <b>pasado</b></li>
-            <li><span class="ob-num">3</span> Decidí si lo sabés o no</li>
-            <li><span class="ob-num">4</span> Al final ves tu <b>resultado</b></li>
-          </ul>
+        <div class="ob-illus" id="illus0">
+          <div class="ob-card-demo">
+            <div class="ob-card-word">go</div>
+            <div class="ob-card-hint">present</div>
+          </div>
+          <div class="ob-card-arrow">→</div>
+          <div class="ob-card-demo past">
+            <div class="ob-card-word">went</div>
+            <div class="ob-card-hint">past</div>
+          </div>
         </div>
 
-        <!-- Slide 2: Acciones -->
-        <div class="onboarding-slide" data-slide="1">
-          <h2 class="onboarding-title">Las acciones</h2>
-          <div class="onboarding-actions-list">
-            <div class="ob-action ob-action-know">
-              <span class="ob-action-icon">✔️</span>
-              <div>
-                <b>I know it</b>
-                <span>Ya dominás ese verbo — se cuenta como aprendido</span>
-              </div>
+        <div class="ob-illus" id="illus1" style="display:none">
+          <div class="ob-actions-demo">
+            <div class="ob-action-pill"><span class="ob-action-pill-icon">✔️</span> I know it</div>
+            <div class="ob-action-pill"><span class="ob-action-pill-icon">❌</span> I don't know</div>
+            <div class="ob-action-pill"><span class="ob-action-pill-icon">✦</span> Ver detalles</div>
+          </div>
+        </div>
+
+        <div class="ob-illus" id="illus2" style="display:none">
+          <div class="ob-quiz-demo">
+            <div class="ob-quiz-q">Past tense of <span>"write"</span> is…</div>
+            <div class="ob-quiz-opts">
+              <div class="ob-quiz-opt">writed</div>
+              <div class="ob-quiz-opt correct">✓ wrote</div>
+              <div class="ob-quiz-opt">written</div>
             </div>
-            <div class="ob-action ob-action-skip">
-              <span class="ob-action-icon">❌</span>
-              <div>
-                <b>I don't know</b>
-                <span>Todavía lo estás aprendiendo — vuelve al final</span>
-              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-content">
+        <div class="ob-slide active" data-i="0">
+          <div class="ob-slide-label">Cómo funciona</div>
+          <div class="ob-slide-title">Aprendé verbos con tarjetas</div>
+          <div class="ob-steps">
+            <div class="ob-step"><span class="ob-step-num">1</span> Ves el verbo en <b>presente</b></div>
+            <div class="ob-step"><span class="ob-step-num">2</span> Tocás la tarjeta → ves el <b>pasado</b></div>
+            <div class="ob-step"><span class="ob-step-num">3</span> Decidís si lo sabés o no</div>
+            <div class="ob-step"><span class="ob-step-num">4</span> Al final ves tu <b>resultado</b></div>
+          </div>
+        </div>
+
+        <div class="ob-slide" data-i="1">
+          <div class="ob-slide-label">Las acciones</div>
+          <div class="ob-slide-title">Tres botones, todo claro</div>
+          <div class="ob-action-rows">
+            <div class="ob-action-row know">
+              <div class="ob-action-row-icon">✔️</div>
+              <div class="ob-action-row-text"><b>I know it</b><span>Ya lo dominás — se cuenta como aprendido</span></div>
             </div>
-            <div class="ob-action ob-action-detail">
-              <span class="ob-action-icon">✦</span>
-              <div>
-                <b>Ver detalles</b>
-                <span>Ejemplos, pronunciación IPA y audio</span>
-              </div>
+            <div class="ob-action-row skip">
+              <div class="ob-action-row-icon">❌</div>
+              <div class="ob-action-row-text"><b>I don't know</b><span>Lo seguís practicando — sin penalización</span></div>
+            </div>
+            <div class="ob-action-row detail">
+              <div class="ob-action-row-icon">✦</div>
+              <div class="ob-action-row-text"><b>Ver detalles</b><span>Pronunciación IPA, audio y ejemplos</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Slide 3: Quizzes -->
-        <div class="onboarding-slide" data-slide="2">
-          <h2 class="onboarding-title">Los quizzes</h2>
-          <p class="onboarding-desc">Después de practicar, poné a prueba tu conocimiento.</p>
-          <div class="onboarding-quiz-features">
-            <div class="ob-quiz-feat">
-              <span class="ob-feat-emoji">✏️</span>
-              <span>Escribí la respuesta correcta</span>
-            </div>
-            <div class="ob-quiz-feat">
-              <span class="ob-feat-emoji">🔘</span>
-              <span>Seleccioná entre varias opciones</span>
-            </div>
-            <div class="ob-quiz-feat">
-              <span class="ob-feat-emoji">🧠</span>
-              <span>Aprender + practicar = recordar mejor</span>
-            </div>
+        <div class="ob-slide" data-i="2">
+          <div class="ob-slide-label">Los quizzes</div>
+          <div class="ob-slide-title">Poné a prueba lo que aprendiste</div>
+          <div class="ob-quiz-items">
+            <div class="ob-quiz-item"><span class="ob-quiz-item-dot"></span>Escribí la respuesta correcta</div>
+            <div class="ob-quiz-item"><span class="ob-quiz-item-dot"></span>Elegí entre varias opciones</div>
+            <div class="ob-quiz-item"><span class="ob-quiz-item-dot"></span>Practicar + repasar = recordar mejor</div>
           </div>
-          <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa solo los verbos del round que acabás de practicar.</p>
-        </div>
-
-      </div>
-
-      <!-- Footer: dots + navegación -->
-      <div class="onboarding-footer">
-        <div class="onboarding-dots" role="tablist">
-          <button class="ob-dot active" data-target="0" role="tab" aria-selected="true"  aria-label="Slide 1"></button>
-          <button class="ob-dot"        data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
-          <button class="ob-dot"        data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
-        </div>
-        <div class="onboarding-nav">
-          <button class="ob-btn ob-btn-back"  id="obBack"  type="button" style="visibility:hidden;">← Atrás</button>
-          <button class="ob-btn ob-btn-next"  id="obNext"  type="button">Siguiente →</button>
-          <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
+          <div style="margin-top:.25rem; font-size:.78rem; color:var(--muted); background:rgba(240,165,0,.07); padding:.55rem .75rem; border-radius:.65rem; border:1px solid rgba(240,165,0,.15); line-height:1.55;">
+            💡 El quiz usa solo los verbos del round que acabás de practicar
+          </div>
         </div>
       </div>
 
+      <div class="ob-footer">
+        <div class="ob-dots">
+          <button class="ob-dot active" data-target="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
+          <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
+          <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
+        </div>
+        <div class="ob-nav">
+          <button class="ob-btn-back" id="obBack" type="button" style="display:none;">← Atrás</button>
+          <button class="ob-btn-next" id="obNext" type="button">Siguiente →</button>
+          <button class="ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
+        </div>
+      </div>
     </div>
   </div>
 
