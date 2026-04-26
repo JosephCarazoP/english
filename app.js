@@ -2551,7 +2551,7 @@ function renderGoalsList() {
     const pct = Math.round((cur / Math.max(1, g.target)) * 100);
     const isDone = done.has(g.id) || cur >= g.target;
     return `
-      <div class="goal-item ${isDone ? "completed" : ""}">
+      <div class="goal-item ${isDone ? "completed" : ""}" data-goal-id="${g.id}">
         <div class="goal-icon">${g.icon}</div>
         <div class="goal-body">
           <div class="goal-name">
@@ -2609,4 +2609,333 @@ function closeGoalsModal() {
   });
   // Initial dot evaluation (silent so no toast)
   try { checkGoals({ silent: true }); } catch (e) {}
+})();
+
+
+/* ════════════════════════════════════════════════════════════════
+   NUEVOS OBJETIVOS — se inyectan en GOALS al cargar
+   ════════════════════════════════════════════════════════════════ */
+const EXTRA_GOALS = [
+  { id:"studious_5",      icon:"📗", name:"Aprendiz II",         desc:"Marca 5 verbos como 'I know it'",           tier:"Bronce", target:5,   getProgress:s=>s.learned||0 },
+  { id:"studious_25",     icon:"📘", name:"Aprendiz III",        desc:"Marca 25 verbos como 'I know it'",          tier:"Plata",  target:25,  getProgress:s=>s.learned||0 },
+  { id:"studious_75",     icon:"📙", name:"Aprendiz IV",         desc:"Marca 75 verbos como 'I know it'",          tier:"Oro",    target:75,  getProgress:s=>s.learned||0 },
+  { id:"explorer_1",      icon:"🔍", name:"Explorador I",        desc:"Abre detalles de 1 verbo (✦)",              tier:"Inicio", target:1,   getProgress:s=>s.details||0 },
+  { id:"explorer_10",     icon:"🔎", name:"Explorador II",       desc:"Explora 10 verbos con ✦",                   tier:"Bronce", target:10,  getProgress:s=>s.details||0 },
+  { id:"explorer_25",     icon:"🧭", name:"Explorador III",      desc:"Explora 25 verbos con ✦",                   tier:"Plata",  target:25,  getProgress:s=>s.details||0 },
+  { id:"humble_1",        icon:"🙋", name:"Honesto I",           desc:"Usa 'I don't know' por primera vez",        tier:"Inicio", target:1,   getProgress:s=>s.skipped_total||0 },
+  { id:"humble_10",       icon:"🙌", name:"Honesto II",          desc:"Usa 'I don't know' 10 veces",               tier:"Bronce", target:10,  getProgress:s=>s.skipped_total||0 },
+  { id:"rounds_1",        icon:"🔄", name:"Primera ronda",       desc:"Completa tu primera ronda",                 tier:"Inicio", target:1,   getProgress:s=>s.rounds_done||0 },
+  { id:"rounds_5",        icon:"🔁", name:"5 rondas",            desc:"Completa 5 rondas",                         tier:"Bronce", target:5,   getProgress:s=>s.rounds_done||0 },
+  { id:"rounds_15",       icon:"⚡", name:"15 rondas",           desc:"Completa 15 rondas",                        tier:"Plata",  target:15,  getProgress:s=>s.rounds_done||0 },
+  { id:"quiz_3",          icon:"📝", name:"Quizzer I",           desc:"Completa 3 quizzes",                        tier:"Bronce", target:3,   getProgress:s=>s.quizzes_done||0 },
+  { id:"quiz_10",         icon:"📋", name:"Quizzer II",          desc:"Completa 10 quizzes",                       tier:"Plata",  target:10,  getProgress:s=>s.quizzes_done||0 },
+  { id:"perfect_10",      icon:"💯", name:"Perfeccionista II",   desc:"Obtén 10 resultados perfectos en quiz",     tier:"Oro",    target:10,  getProgress:s=>s.perfect_quizzes||0 },
+  { id:"speed_slow",      icon:"🐢", name:"Pace lento",          desc:"Usa velocidad Lento al menos una vez",      tier:"Inicio", target:1,   getProgress:s=>s.usedSlow?1:0 },
+  { id:"speed_fast",      icon:"🐇", name:"Pace rápido",         desc:"Usa velocidad Rápido al menos una vez",     tier:"Inicio", target:1,   getProgress:s=>s.usedFast?1:0 },
+  { id:"streak_14",       icon:"🔥", name:"2 semanas",           desc:"Mantén una racha de 14 días",               tier:"Plata",  target:14,  getProgress:(s,st)=>st||0 },
+  { id:"streak_60",       icon:"🌟", name:"2 meses",             desc:"Mantén una racha de 60 días",               tier:"Oro",    target:60,  getProgress:(s,st)=>st||0 },
+  { id:"streak_100",      icon:"👑", name:"100 días",            desc:"Mantén una racha de 100 días",              tier:"Legendario", target:100, getProgress:(s,st)=>st||0 },
+];
+
+// Orden secuencial por familia para desbloqueo progresivo
+const GOAL_FAMILY_ORDER = {
+  studious:  ["first_step","studious_10","studious_5","studious_25","studious_75","veteran_50","master_100"],
+  explorer:  ["explorer_1","explorer_10","explorer_25"],
+  humble:    ["humble_1","humble_10"],
+  rounds:    ["rounds_1","rounds_5","rounds_15"],
+  quizzes:   ["first_quiz","quiz_3","quiz_10"],
+  perfect:   ["clean_quiz","perfectionist","perfect_10"],
+  speed:     ["speed_slow","speed_fast"],
+  streak:    ["streak_3","streak_7","streak_14","streak_30","streak_60","streak_100"],
+};
+
+// Inyectar extra goals en GOALS si aún no existen
+(function injectExtraGoals() {
+  if (typeof GOALS === "undefined") return;
+  const existingIds = new Set(GOALS.map(g => g.id));
+  EXTRA_GOALS.forEach(g => { if (!existingIds.has(g.id)) GOALS.push(g); });
+})();
+
+// Helper: ¿el objetivo anterior de la familia ya está completado?
+function isGoalFamilyUnlocked(id) {
+  for (const order of Object.values(GOAL_FAMILY_ORDER)) {
+    const idx = order.indexOf(id);
+    if (idx <= 0) continue;
+    const prevId = order[idx - 1];
+    const done = new Set(JSON.parse(localStorage.getItem(GOALS_KEY) || "[]"));
+    return done.has(prevId);
+  }
+  return true; // no está en ninguna familia → siempre desbloqueado
+}
+
+// Patch renderGoalsList para mostrar estado bloqueado
+const _origRenderGoalsList = typeof renderGoalsList === "function" ? renderGoalsList : null;
+if (_origRenderGoalsList) {
+  window.renderGoalsList = function() {
+    _origRenderGoalsList();
+    // Marcar los bloqueados
+    const list = document.getElementById("goalsList");
+    if (!list) return;
+    list.querySelectorAll(".goal-item").forEach(el => {
+      const id = el.dataset.goalId;
+      if (!id) return;
+      if (!isGoalFamilyUnlocked(id)) el.classList.add("is-locked");
+    });
+  };
+}
+
+// Tracking detalles ✦ — capture=true para correr antes del handler existente
+document.getElementById("btnDetail")?.addEventListener("click", () => {
+  const s = _gReadStats();
+  s.details = (s.details || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}, true);
+
+// Tracking skip total acumulado
+document.getElementById("btnSkip")?.addEventListener("click", () => {
+  const s = _gReadStats();
+  s.skipped_total = (s.skipped_total || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}, true);
+
+// Tracking velocidades usadas
+document.querySelectorAll(".speed-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const v = parseFloat(chip.dataset.speed);
+    const s = _gReadStats();
+    if (v <= 0.7) s.usedSlow = true;
+    if (v >= 1.2) s.usedFast = true;
+    _gWriteStats(s);
+    checkGoals({ silent: false });
+  });
+});
+
+
+/* ════════════════════════════════════════════════════════════════
+   ONBOARDING — primera visita
+   ════════════════════════════════════════════════════════════════ */
+const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
+
+(function initOnboarding() {
+  if (localStorage.getItem(ONBOARDING_KEY)) return;
+  const overlay = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+
+  overlay.style.display = "flex";
+  overlay.style.opacity = "0";
+  requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+
+  let current = 0;
+  const slides  = overlay.querySelectorAll(".onboarding-slide");
+  const dots    = overlay.querySelectorAll(".ob-dot");
+  const btnBack  = document.getElementById("obBack");
+  const btnNext  = document.getElementById("obNext");
+  const btnStart = document.getElementById("obStart");
+
+  function goTo(n) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+    dots[current].setAttribute("aria-selected","false");
+    current = n;
+    slides[current].classList.add("active");
+    dots[current].classList.add("active");
+    dots[current].setAttribute("aria-selected","true");
+    btnBack.style.visibility  = current === 0 ? "hidden" : "visible";
+    btnNext.style.display     = current < slides.length - 1 ? "inline-flex" : "none";
+    btnStart.style.display    = current === slides.length - 1 ? "inline-flex" : "none";
+  }
+
+  btnNext.addEventListener("click",  () => { if (current < slides.length-1) goTo(current+1); });
+  btnBack.addEventListener("click",  () => { if (current > 0) goTo(current-1); });
+  btnStart.addEventListener("click", closeOnboarding);
+  dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
+
+  function closeOnboarding() {
+    localStorage.setItem(ONBOARDING_KEY, "1");
+    overlay.style.opacity = "0";
+    setTimeout(() => { overlay.style.display = "none"; }, 350);
+  }
+})();
+
+
+/* ════════════════════════════════════════════════════════════════
+   SETTINGS — configuración persistida en vfc_settings
+   ════════════════════════════════════════════════════════════════ */
+const SETTINGS_KEY = "vfc_settings";
+const DEFAULT_SETTINGS = { theme:"auto", animations:"on", audioSpeed:"1", autoPlay:"off", roundSize:"10", quizConfirm:"on" };
+
+function loadVFCSettings() {
+  try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")); }
+  catch { return {...DEFAULT_SETTINGS}; }
+}
+function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch {} }
+
+function applyVFCSettings(s) {
+  // Tema
+  if (s.theme === "dark")  { dark = true;  applyTheme(); }
+  else if (s.theme === "light") { dark = false; applyTheme(); }
+  // Animaciones
+  if (s.animations === "off") document.documentElement.classList.add("no-animations");
+  else document.documentElement.classList.remove("no-animations");
+  // Audio speed
+  const v = parseFloat(s.audioSpeed || "1");
+  if (!isNaN(v) && v > 0) {
+    currentSpeed = v;
+    document.querySelectorAll(".speed-chip").forEach(chip => {
+      const active = Math.abs(parseFloat(chip.dataset.speed) - v) < 0.01;
+      chip.classList.toggle("active", active);
+      chip.setAttribute("aria-checked", String(active));
+    });
+  }
+}
+
+(function initSettings() {
+  const overlay  = document.getElementById("settingsOverlay");
+  const openBtn  = document.getElementById("settingsBtn");
+  const closeBtn = document.getElementById("settingsClose");
+  if (!overlay || !openBtn) return;
+
+  let s = loadVFCSettings();
+  applyVFCSettings(s);
+
+  function _syncToggle(id, isOn) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.dataset.val = isOn ? "on" : "off";
+    btn.setAttribute("aria-pressed", String(isOn));
+    btn.classList.toggle("is-on", isOn);
+  }
+
+  function syncControls() {
+    const tEl = document.getElementById("settingTheme");
+    const aEl = document.getElementById("settingAudioSpeed");
+    const rEl = document.getElementById("settingRoundSize");
+    if (tEl) tEl.value = s.theme;
+    if (aEl) aEl.value = s.audioSpeed;
+    if (rEl) rEl.value = s.roundSize;
+    _syncToggle("settingAnimations",  s.animations  === "on");
+    _syncToggle("settingAutoPlay",    s.autoPlay    === "on");
+    _syncToggle("settingQuizConfirm", s.quizConfirm === "on");
+  }
+
+  // Selects
+  [["settingTheme","theme"],["settingAudioSpeed","audioSpeed"],["settingRoundSize","roundSize"]].forEach(([id,key]) => {
+    document.getElementById(id)?.addEventListener("change", e => {
+      s[key] = e.target.value;
+      saveVFCSettings(s);
+      applyVFCSettings(s);
+    });
+  });
+
+  // Toggles
+  [["settingAnimations","animations"],["settingAutoPlay","autoPlay"],["settingQuizConfirm","quizConfirm"]].forEach(([id,key]) => {
+    document.getElementById(id)?.addEventListener("click", () => {
+      const isOn = document.getElementById(id).dataset.val !== "on";
+      s[key] = isOn ? "on" : "off";
+      saveVFCSettings(s);
+      _syncToggle(id, isOn);
+      applyVFCSettings(s);
+    });
+  });
+
+  // Reset racha
+  document.getElementById("settingResetStreak")?.addEventListener("click", () => {
+    if (!confirm("¿Resetear tu racha diaria?")) return;
+    try { localStorage.removeItem(STREAK_KEY); localStorage.removeItem(STREAK_DATE_KEY); } catch {}
+    _setStreakNumText(0);
+    if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
+  });
+
+  // Borrar todo
+  document.getElementById("settingResetAll")?.addEventListener("click", () => {
+    if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
+    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY, ONBOARDING_KEY, "vfc_speed"].forEach(k => {
+      try { localStorage.removeItem(k); } catch {}
+    });
+    if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
+    setTimeout(() => location.reload(), 900);
+  });
+
+  // Abrir
+  openBtn.addEventListener("click", () => {
+    s = loadVFCSettings();
+    syncControls();
+    overlay.style.display = "flex";
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+  });
+
+  // Cerrar
+  function closeSettings() {
+    overlay.classList.remove("is-open");
+    setTimeout(() => { overlay.style.display = "none"; }, 290);
+  }
+  closeBtn.addEventListener("click", closeSettings);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeSettings(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.style.display !== "none") closeSettings();
+  });
+})();
+
+
+/* ════════════════════════════════════════════════════════════════
+   PWA — beforeinstallprompt + service worker
+   ════════════════════════════════════════════════════════════════ */
+(function initPWA() {
+  let deferredPrompt = null;
+  const pwaSection = document.getElementById("pwaSection");
+  const pwaBtn     = document.getElementById("pwaInstallBtn");
+
+  window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (pwaSection) pwaSection.style.display = "";
+  });
+
+  pwaBtn?.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === "accepted") {
+      if (pwaSection) pwaSection.style.display = "none";
+      if (typeof showShareToast === "function") showShareToast("¡App instalada! 📲");
+    }
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
+})();
+
+
+/* ════════════════════════════════════════════════════════════════
+   RETENCIÓN — mensaje en finish screen
+   ════════════════════════════════════════════════════════════════ */
+function showRetentionMessage() {
+  const retEl = document.getElementById("retentionMsg");
+  if (!retEl) return;
+  const streak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+  const nextMs = STREAK_MILESTONES.find(m => m > streak) || STREAK_MILESTONES[STREAK_MILESTONES.length - 1];
+  retEl.innerHTML = `
+    <div class="retention-wrap">
+      <p class="retention-main">📅 Volvé mañana por 10 nuevos verbos</p>
+      <div class="retention-streak">
+        <span class="retention-flame">🔥</span>
+        <span class="retention-streak-val">${streak} día${streak !== 1 ? "s" : ""} de racha</span>
+        <span class="retention-next">→ siguiente hito: ${nextMs} días</span>
+      </div>
+    </div>`;
+  retEl.style.display = "";
+}
+
+// Hook: observar cuando finishScreen se muestra
+(function hookFinishRetention() {
+  const fsEl = document.getElementById("finishScreen");
+  if (!fsEl) return;
+  const obs = new MutationObserver(() => {
+    if (fsEl.classList.contains("show")) showRetentionMessage();
+  });
+  obs.observe(fsEl, { attributes: true, attributeFilter: ["class"] });
 })();

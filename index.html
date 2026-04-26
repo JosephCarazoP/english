@@ -7,6 +7,10 @@
   <link rel="icon" type="image/png" href="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" />
   <title>Verb Flashcards - JC</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#f0a500" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 </head>
 
 <body>
@@ -37,6 +41,10 @@
       <button class="icon-btn goals-btn" id="goalsBtn" title="Objetivos" aria-label="Objetivos" type="button">
         <span class="goals-btn-icon" aria-hidden="true">🎯</span>
         <span class="goals-btn-dot" id="goalsBtnDot" hidden></span>
+      </button>
+
+      <button class="icon-btn settings-btn" id="settingsBtn" title="Configuración" aria-label="Configuración" type="button">
+        ⚙️
       </button>
     </div>
 
@@ -126,6 +134,7 @@
       <div class="finish-stat">   <b id="fSkip">0</b>   <span>Skipped</span></div>
       <div class="finish-stat">   <b id="fTotal">0</b>  <span>Total</span></div>
     </div>
+    <div id="retentionMsg" style="display:none;"></div>
     <div class="finish-actions">
       <button class="restart-btn" onclick="startQuiz()" style="background:var(--text);color:var(--bg);">Take Final Quiz 📝</button>
       <button class="restart-btn share-btn" id="shareFinishBtn" type="button">Share Results 📤</button>
@@ -260,6 +269,150 @@
   <footer class="site-footer">
     <p>Made by <b>Joseph Carazo</b> 🫡</p>
   </footer>
+
+
+  <!-- ── ONBOARDING OVERLAY ── -->
+  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none;">
+    <div class="onboarding-card">
+      <div class="onboarding-slides">
+
+        <div class="onboarding-slide active" data-slide="0">
+          <div class="onboarding-icon">📚</div>
+          <h2 class="onboarding-title">¿Cómo funciona?</h2>
+          <ul class="onboarding-steps">
+            <li><span class="ob-num">1</span> Verás el verbo en <b>presente</b></li>
+            <li><span class="ob-num">2</span> Toca la tarjeta para ver su forma en <b>pasado</b></li>
+            <li><span class="ob-num">3</span> Decide si lo sabes o no</li>
+            <li><span class="ob-num">4</span> Al final verás tu <b>resultado</b></li>
+          </ul>
+        </div>
+
+        <div class="onboarding-slide" data-slide="1">
+          <div class="onboarding-icon">🎮</div>
+          <h2 class="onboarding-title">Las acciones</h2>
+          <div class="onboarding-actions-list">
+            <div class="ob-action">
+              <span class="ob-action-icon">✔️</span>
+              <div><b>I know it</b><span>Ya dominas ese verbo</span></div>
+            </div>
+            <div class="ob-action">
+              <span class="ob-action-icon">❌</span>
+              <div><b>I don't know</b><span>Aún lo estás aprendiendo</span></div>
+            </div>
+            <div class="ob-action">
+              <span class="ob-action-icon">✦</span>
+              <div><b>Ver detalles</b><span>Ejemplos, IPA y pronunciación</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="onboarding-slide" data-slide="2">
+          <div class="onboarding-icon">📝</div>
+          <h2 class="onboarding-title">Los quizzes</h2>
+          <p class="onboarding-desc">Después de practicar, pon a prueba tu conocimiento.</p>
+          <div class="onboarding-quiz-features">
+            <div class="ob-quiz-feat"><span>✏️</span><span>Escribe la respuesta</span></div>
+            <div class="ob-quiz-feat"><span>🔘</span><span>Selecciona la opción correcta</span></div>
+            <div class="ob-quiz-feat"><span>🧠</span><span>Aprender + practicar = recordar mejor</span></div>
+          </div>
+          <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa los verbos del round actual.</p>
+        </div>
+      </div>
+
+      <div class="onboarding-dots" role="tablist">
+        <button class="ob-dot active" data-target="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
+        <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
+        <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
+      </div>
+
+      <div class="onboarding-nav">
+        <button class="ob-btn ob-btn-back" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
+        <button class="ob-btn ob-btn-next" id="obNext" type="button">Siguiente →</button>
+        <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS MODAL ── -->
+  <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración" style="display:none;">
+    <div class="settings-card">
+      <div class="settings-header">
+        <h2 class="settings-title">⚙️ Configuración</h2>
+        <button class="settings-close" id="settingsClose" type="button" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="settings-body">
+
+        <section class="settings-section">
+          <h3 class="settings-section-title">🎨 Apariencia</h3>
+          <div class="settings-row">
+            <label class="settings-label">Tema</label>
+            <select id="settingTheme" class="settings-select">
+              <option value="auto">Auto (sistema)</option>
+              <option value="dark">Oscuro</option>
+              <option value="light">Claro</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label">Animaciones</label>
+            <button class="settings-toggle" id="settingAnimations" data-val="on" type="button" aria-pressed="true"><span class="toggle-knob"></span></button>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3 class="settings-section-title">🔊 Audio</h3>
+          <div class="settings-row">
+            <label class="settings-label">Velocidad por defecto</label>
+            <select id="settingAudioSpeed" class="settings-select">
+              <option value="0.7">Lento</option>
+              <option value="1" selected>Normal</option>
+              <option value="1.2">Rápido</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label">Auto-play al abrir ✦</label>
+            <button class="settings-toggle" id="settingAutoPlay" data-val="off" type="button" aria-pressed="false"><span class="toggle-knob"></span></button>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3 class="settings-section-title">📖 Aprendizaje</h3>
+          <div class="settings-row">
+            <label class="settings-label">Verbos por round</label>
+            <select id="settingRoundSize" class="settings-select">
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label">Confirmar al salir del quiz</label>
+            <button class="settings-toggle" id="settingQuizConfirm" data-val="on" type="button" aria-pressed="true"><span class="toggle-knob"></span></button>
+          </div>
+        </section>
+
+        <section class="settings-section" id="pwaSection" style="display:none;">
+          <h3 class="settings-section-title">📲 Instalar app</h3>
+          <div class="settings-row">
+            <span class="settings-label">Agregar a la pantalla de inicio</span>
+            <button class="settings-pwa-btn" id="pwaInstallBtn" type="button">Instalar app</button>
+          </div>
+        </section>
+
+        <section class="settings-section settings-section-danger">
+          <h3 class="settings-section-title">🗂️ Datos</h3>
+          <div class="settings-row">
+            <span class="settings-label">Resetear racha</span>
+            <button class="settings-danger-btn" id="settingResetStreak" type="button">Resetear</button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Borrar todo el progreso</span>
+            <button class="settings-danger-btn settings-danger-btn-red" id="settingResetAll" type="button">Borrar todo</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
