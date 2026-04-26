@@ -3,75 +3,75 @@ const START_DATE = new Date(2026, 3, 23);
 
 /* ── DATA ── */
 const ALL_VERBS = [
-  { present: "bear",   past: "bore",        participle: "borne",        type: "irregular", sound: "",     sentencePres: "Some people cannot <b>bear</b> the cold weather.",       sentencePast: "She <b>bore</b> the pain with great courage.",            gif: "bear heavy" },
-  { present: "buy",    past: "bought",       participle: "bought",       type: "irregular", sound: "",     sentencePres: "I <b>buy</b> fresh vegetables every morning.",            sentencePast: "Yesterday, I <b>bought</b> a gift for my mother.",         gif: "buying" },
-  { present: "drive",  past: "drove",        participle: "driven",       type: "irregular", sound: "",     sentencePres: "Please <b>drive</b> slowly near the school.",             sentencePast: "He <b>drove</b> all night to get to the beach.",           gif: "driving" },
-  { present: "eat",    past: "ate",          participle: "eaten",        type: "irregular", sound: "",     sentencePres: "I always <b>eat</b> breakfast at 7:00 AM.",               sentencePast: "We <b>ate</b> a delicious pizza last night.",              gif: "eating" },
-  { present: "find",   past: "found",        participle: "found",        type: "irregular", sound: "",     sentencePres: "It is hard to <b>find</b> a parking spot here.",          sentencePast: "I <b>found</b> my lost keys under the sofa.",             gif: "find" },
-  { present: "grow",   past: "grew",         participle: "grown",        type: "irregular", sound: "",     sentencePres: "Plants <b>grow</b> faster with enough sunlight.",         sentencePast: "The city <b>grew</b> quickly in the last decade.",         gif: "growing" },
-  { present: "have",   past: "had",          participle: "had",          type: "irregular", sound: "",     sentencePres: "I <b>have</b> two brothers and one sister.",              sentencePast: "We <b>had</b> a great time at the party.",                gif: "having" },
-  { present: "know",   past: "knew",         participle: "known",        type: "irregular", sound: "",     sentencePres: "I <b>know</b> the answer to your question.",             sentencePast: "I <b>knew</b> you were going to call me.",                gif: "smart" },
-  { present: "lose",   past: "lost",         participle: "lost",         type: "irregular", sound: "",     sentencePres: "Don't <b>lose</b> your passport at the airport.",        sentencePast: "Our team <b>lost</b> the game by one goal.",              gif: "lost" },
-  { present: "meet",   past: "met",          participle: "met",          type: "irregular", sound: "",     sentencePres: "I want to <b>meet</b> your new friends.",                sentencePast: "We <b>met</b> for the first time in high school.",         gif: "meeting" },
-  { present: "read",   past: "read",         participle: "read",         type: "irregular", sound: "",     sentencePres: "You should <b>read</b> the instructions carefully.",     sentencePast: "Last night, I <b>read</b> a very long article.",           gif: "reading" },
-  { present: "speak",  past: "spoke",        participle: "spoken",       type: "irregular", sound: "",     sentencePres: "Can you <b>speak</b> more slowly, please?",              sentencePast: "He <b>spoke</b> to the manager about the problem.",        gif: "speaking" },
-  { present: "swim",   past: "swam",         participle: "swum",         type: "irregular", sound: "",     sentencePres: "I <b>swim</b> in the pool every Saturday.",              sentencePast: "We <b>swam</b> in the ocean during our vacation.",         gif: "swimming" },
-  { present: "take",   past: "took",         participle: "taken",        type: "irregular", sound: "",     sentencePres: "Remember to <b>take</b> your umbrella with you.",        sentencePast: "She <b>took</b> the bus to go to the city center.",        gif: "taking" },
-  { present: "write",  past: "wrote",        participle: "written",      type: "irregular", sound: "",     sentencePres: "I <b>write</b> in my journal every evening.",            sentencePast: "He <b>wrote</b> a beautiful poem for his wife.",           gif: "writing" },
-  { present: "visit",  past: "visited",      participle: "visited",      type: "regular",   sound: "/id/", sentencePres: "I like to <b>visit</b> museums on weekends.",           sentencePast: "They <b>visited</b> many countries last year.",            gif: "visiting" },
-  { present: "paint",  past: "painted",      participle: "painted",      type: "regular",   sound: "/id/", sentencePres: "She wants to <b>paint</b> her room blue.",              sentencePast: "He <b>painted</b> a beautiful landscape yesterday.",       gif: "painting" },
-  { present: "cook",   past: "cooked",       participle: "cooked",       type: "regular",   sound: "/t/",  sentencePres: "I often <b>cook</b> dinner for my family.",             sentencePast: "He <b>cooked</b> a special meal for her birthday.",        gif: "cooking" },
-  { present: "talk",   past: "talked",       participle: "talked",       type: "regular",   sound: "/t/",  sentencePres: "We need to <b>talk</b> about the new project.",          sentencePast: "I <b>talked</b> to the teacher after the class.",          gif: "talking" },
-  { present: "walk",   past: "walked",       participle: "walked",       type: "regular",   sound: "/t/",  sentencePres: "I <b>walk</b> to work when the weather is nice.",        sentencePast: "We <b>walked</b> for three miles in the park.",            gif: "walking" },
-  { present: "work",   past: "worked",       participle: "worked",       type: "regular",   sound: "/t/",  sentencePres: "They <b>work</b> in a very large office.",               sentencePast: "She <b>worked</b> until late last Friday night.",          gif: "working" },
-  { present: "watch",  past: "watched",      participle: "watched",      type: "regular",   sound: "/t/",  sentencePres: "Do you want to <b>watch</b> a movie tonight?",          sentencePast: "We <b>watched</b> the football game on TV.",              gif: "watching" },
-  { present: "laugh",  past: "laughed",      participle: "laughed",      type: "regular",   sound: "/t/",  sentencePres: "Funny movies make me <b>laugh</b> a lot.",               sentencePast: "She <b>laughed</b> at the joke I told her.",              gif: "laughing" },
-  { present: "listen", past: "listened",     participle: "listened",     type: "regular",   sound: "/d/",  sentencePres: "I <b>listen</b> to music while I study.",               sentencePast: "He <b>listened</b> carefully to the instructions.",        gif: "listening" },
-  { present: "play",   past: "played",       participle: "played",       type: "regular",   sound: "/d/",  sentencePres: "The children <b>play</b> in the garden every day.",     sentencePast: "We <b>played</b> soccer for two hours yesterday.",         gif: "playing" },
-  { present: "call",   past: "called",       participle: "called",       type: "regular",   sound: "/d/",  sentencePres: "I will <b>call</b> you as soon as I arrive.",           sentencePast: "She <b>called</b> her mother this morning.",              gif: "calling" },
-  { present: "arise",  past: "arose",        participle: "arisen",       type: "irregular", sound: "",     sentencePres: "New problems <b>arise</b> every single day.",            sentencePast: "A huge conflict <b>arose</b> during the meeting.",         gif: "rising" },
-  { present: "awake",  past: "awoke",        participle: "awoken",       type: "irregular", sound: "",     sentencePres: "I usually <b>awake</b> when the sun rises.",             sentencePast: "He <b>awoke</b> suddenly in the middle of the night.",    gif: "awake" },
-  { present: "be",     past: "was / were",   participle: "been",         type: "irregular", sound: "",     sentencePres: "Please <b>be</b> patient with the new students.",        sentencePast: "I <b>was</b> very happy to see you yesterday.",           gif: "being" },
-  { present: "beat",   past: "beat",         participle: "beaten",       type: "irregular", sound: "",     sentencePres: "Can you <b>beat</b> the high score in this game?",       sentencePast: "They <b>beat</b> the rival team last Saturday.",          gif: "beat" },
-  { present: "become", past: "became",       participle: "become",       type: "irregular", sound: "",     sentencePres: "It is hard to <b>become</b> a professional doctor.",     sentencePast: "He <b>became</b> a famous singer in a short time.",       gif: "transformation" },
-  { present: "begin",  past: "began",        participle: "begun",        type: "irregular", sound: "",     sentencePres: "The classes <b>begin</b> at eight in the morning.",      sentencePast: "It <b>began</b> to rain just after we left home.",        gif: "starting" },
-  { present: "bend",   past: "bent",         participle: "bent",         type: "irregular", sound: "",     sentencePres: "Be careful not to <b>bend</b> the credit card.",         sentencePast: "He <b>bent</b> the metal pipe with his hands.",           gif: "bending" },
-  { present: "bet",    past: "bet",          participle: "bet",          type: "irregular", sound: "",     sentencePres: "I <b>bet</b> you can't finish that huge burger.",        sentencePast: "He <b>bet</b> all his money and lost it all.",            gif: "betting" },
-  { present: "bite",   past: "bit",          participle: "bit / bitten", type: "irregular", sound: "",     sentencePres: "Be careful! That dog might <b>bite</b> you.",            sentencePast: "A mosquito <b>bit</b> me on the arm last night.",         gif: "bite" },
-  { present: "blow",   past: "blew",         participle: "blown",        type: "irregular", sound: "",     sentencePres: "The kids love to <b>blow</b> soap bubbles.",             sentencePast: "A strong wind <b>blew</b> the leaves away.",             gif: "blowing" },
-  { present: "break",  past: "broke",        participle: "broken",       type: "irregular", sound: "",     sentencePres: "If you <b>break</b> the rules, you will be punished.",   sentencePast: "The glass <b>broke</b> into a thousand pieces.",          gif: "broken" },
-  { present: "bring",  past: "brought",      participle: "brought",      type: "irregular", sound: "",     sentencePres: "Always <b>bring</b> your notebook to the class.",        sentencePast: "She <b>brought</b> some cookies for the party.",          gif: "carrying" },
-  { present: "choose", past: "chose",        participle: "chosen",       type: "irregular", sound: "",     sentencePres: "You must <b>choose</b> the correct answer now.",         sentencePast: "I <b>chose</b> the red shirt instead of the blue one.",  gif: "choosing" },
-  { present: "come",   past: "came",         participle: "come",         type: "irregular", sound: "",     sentencePres: "Please <b>come</b> to my house this afternoon.",         sentencePast: "They <b>came</b> back from their trip yesterday.",        gif: "coming" },
-  { present: "cut",    past: "cut",          participle: "cut",          type: "irregular", sound: "",     sentencePres: "Use these scissors to <b>cut</b> the paper.",            sentencePast: "He <b>cut</b> the cake into eight equal pieces.",         gif: "cutting" },
-  { present: "do",     past: "did",          participle: "done",         type: "irregular", sound: "",     sentencePres: "I need to <b>do</b> my homework tonight.",               sentencePast: "You <b>did</b> a very good job on the project.",          gif: "doing" },
-  { present: "drink",  past: "drank",        participle: "drunk",        type: "irregular", sound: "",     sentencePres: "You should <b>drink</b> eight glasses of water.",        sentencePast: "He <b>drank</b> a cold soda after the race.",             gif: "drinking" },
-  { present: "fall",   past: "fell",         participle: "fallen",       type: "irregular", sound: "",     sentencePres: "Be careful or you will <b>fall</b> on the ice.",         sentencePast: "The leaves <b>fell</b> from the trees in autumn.",        gif: "falling" },
-  { present: "forget", past: "forgot",       participle: "forgotten",    type: "irregular", sound: "",     sentencePres: "I often <b>forget</b> where I put my glasses.",          sentencePast: "I <b>forgot</b> to buy milk at the supermarket.",         gif: "forget" },
-  { present: "get",    past: "got",          participle: "got / gotten", type: "irregular", sound: "",     sentencePres: "I need to <b>get</b> a new pair of shoes.",              sentencePast: "She <b>got</b> a perfect score on her exam.",             gif: "getting" },
-  { present: "give",   past: "gave",         participle: "given",        type: "irregular", sound: "",     sentencePres: "Please <b>give</b> me a hand with this box.",            sentencePast: "My father <b>gave</b> me this watch for my birthday.",    gif: "giving" },
-  { present: "go",     past: "went",         participle: "gone",         type: "irregular", sound: "",     sentencePres: "I <b>go</b> to the gym four times a week.",              sentencePast: "We <b>went</b> to the cinema last Sunday.",               gif: "going" },
-  { present: "make",   past: "made",         participle: "made",         type: "irregular", sound: "",     sentencePres: "I like to <b>make</b> my own clothes.",                  sentencePast: "She <b>made</b> a delicious chocolate cake.",             gif: "making" },
-  { present: "see",    past: "saw",          participle: "seen",         type: "irregular", sound: "",     sentencePres: "I can <b>see</b> the mountains from my window.",         sentencePast: "I <b>saw</b> a famous actor at the airport.",             gif: "seeing" },
-  { present: "sing",   past: "sang",         participle: "sung",         type: "irregular", sound: "",     sentencePres: "She can <b>sing</b> very high notes beautifully.",       sentencePast: "We <b>sang</b> happy birthday to our friend.",            gif: "singing" },
-  { present: "sleep",  past: "slept",        participle: "slept",        type: "irregular", sound: "",     sentencePres: "I need to <b>sleep</b> at least seven hours.",           sentencePast: "The baby <b>slept</b> peacefully all night.",             gif: "sleeping" },
-  { present: "think",  past: "thought",      participle: "thought",      type: "irregular", sound: "",     sentencePres: "I <b>think</b> it is going to rain today.",              sentencePast: "I <b>thought</b> you were at the office.",               gif: "thinking" },
-  { present: "win",    past: "won",          participle: "won",          type: "irregular", sound: "",     sentencePres: "We want to <b>win</b> the championship this year.",      sentencePast: "They <b>won</b> the lottery two years ago.",              gif: "winning" },
-  { present: "accept", past: "accepted",     participle: "accepted",     type: "regular",   sound: "/id/", sentencePres: "Do you <b>accept</b> credit cards here?",              sentencePast: "She <b>accepted</b> the job offer immediately.",          gif: "yes" },
-  { present: "count",  past: "counted",      participle: "counted",      type: "regular",   sound: "/id/", sentencePres: "Can you <b>count</b> from one to twenty?",              sentencePast: "He <b>counted</b> the money twice to be sure.",           gif: "numbers" },
-  { present: "need",   past: "needed",       participle: "needed",       type: "regular",   sound: "/id/", sentencePres: "I <b>need</b> some help with my homework.",             sentencePast: "We <b>needed</b> a bigger car for the trip.",             gif: "need" },
-  { present: "start",  past: "started",      participle: "started",      type: "regular",   sound: "/id/", sentencePres: "The movie will <b>start</b> in five minutes.",          sentencePast: "It <b>started</b> to snow early this morning.",           gif: "start" },
-  { present: "want",   past: "wanted",       participle: "wanted",       type: "regular",   sound: "/id/", sentencePres: "I <b>want</b> to travel around the world.",             sentencePast: "He <b>wanted</b> to buy a new computer.",                 gif: "want" },
-  { present: "ask",    past: "asked",        participle: "asked",        type: "regular",   sound: "/t/",  sentencePres: "Don't be afraid to <b>ask</b> questions.",              sentencePast: "I <b>asked</b> the police for directions.",               gif: "asking" },
-  { present: "dance",  past: "danced",       participle: "danced",       type: "regular",   sound: "/t/",  sentencePres: "They <b>dance</b> salsa very well together.",            sentencePast: "We <b>danced</b> all night at the wedding.",              gif: "dancing" },
-  { present: "finish", past: "finished",     participle: "finished",     type: "regular",   sound: "/t/",  sentencePres: "I must <b>finish</b> this report by Friday.",           sentencePast: "She <b>finished</b> her dinner very quickly.",            gif: "finish" },
-  { present: "help",   past: "helped",       participle: "helped",       type: "regular",   sound: "/t/",  sentencePres: "I am happy to <b>help</b> you with that.",              sentencePast: "He <b>helped</b> me carry the heavy bags.",               gif: "help" },
-  { present: "look",   past: "looked",       participle: "looked",       type: "regular",   sound: "/t/",  sentencePres: "Please <b>look</b> at the whiteboard now.",             sentencePast: "I <b>looked</b> for my keys everywhere.",                 gif: "looking" },
-  { present: "answer", past: "answered",     participle: "answered",     type: "regular",   sound: "/d/",  sentencePres: "I always <b>answer</b> my emails promptly.",            sentencePast: "He <b>answered</b> all the questions correctly.",         gif: "answering" },
-  { present: "clean",  past: "cleaned",      participle: "cleaned",      type: "regular",   sound: "/d/",  sentencePres: "I <b>clean</b> my bedroom every Saturday.",             sentencePast: "We <b>cleaned</b> the entire house yesterday.",           gif: "cleaning" },
-  { present: "love",   past: "loved",        participle: "loved",        type: "regular",   sound: "/d/",  sentencePres: "I <b>love</b> spending time with my family.",           sentencePast: "She <b>loved</b> that movie when she was a kid.",         gif: "love" },
-  { present: "open",   past: "opened",       participle: "opened",       type: "regular",   sound: "/d/",  sentencePres: "Could you <b>open</b> the window, please?",             sentencePast: "He <b>opened</b> the door for the lady.",                 gif: "opening" },
-  { present: "stay",   past: "stayed",       participle: "stayed",       type: "regular",   sound: "/d/",  sentencePres: "I usually <b>stay</b> at home on Sundays.",             sentencePast: "They <b>stayed</b> in a very nice hotel.",               gif: "stay" },
+  { present: "bear", past: "bore", participle: "borne", type: "irregular", sound: "", sentencePres: "Some people cannot <b>bear</b> the cold weather.", sentencePast: "She <b>bore</b> the pain with great courage.", gif: "bear heavy" },
+  { present: "buy", past: "bought", participle: "bought", type: "irregular", sound: "", sentencePres: "I <b>buy</b> fresh vegetables every morning.", sentencePast: "Yesterday, I <b>bought</b> a gift for my mother.", gif: "buying" },
+  { present: "drive", past: "drove", participle: "driven", type: "irregular", sound: "", sentencePres: "Please <b>drive</b> slowly near the school.", sentencePast: "He <b>drove</b> all night to get to the beach.", gif: "driving" },
+  { present: "eat", past: "ate", participle: "eaten", type: "irregular", sound: "", sentencePres: "I always <b>eat</b> breakfast at 7:00 AM.", sentencePast: "We <b>ate</b> a delicious pizza last night.", gif: "eating" },
+  { present: "find", past: "found", participle: "found", type: "irregular", sound: "", sentencePres: "It is hard to <b>find</b> a parking spot here.", sentencePast: "I <b>found</b> my lost keys under the sofa.", gif: "find" },
+  { present: "grow", past: "grew", participle: "grown", type: "irregular", sound: "", sentencePres: "Plants <b>grow</b> faster with enough sunlight.", sentencePast: "The city <b>grew</b> quickly in the last decade.", gif: "growing" },
+  { present: "have", past: "had", participle: "had", type: "irregular", sound: "", sentencePres: "I <b>have</b> two brothers and one sister.", sentencePast: "We <b>had</b> a great time at the party.", gif: "having" },
+  { present: "know", past: "knew", participle: "known", type: "irregular", sound: "", sentencePres: "I <b>know</b> the answer to your question.", sentencePast: "I <b>knew</b> you were going to call me.", gif: "smart" },
+  { present: "lose", past: "lost", participle: "lost", type: "irregular", sound: "", sentencePres: "Don't <b>lose</b> your passport at the airport.", sentencePast: "Our team <b>lost</b> the game by one goal.", gif: "lost" },
+  { present: "meet", past: "met", participle: "met", type: "irregular", sound: "", sentencePres: "I want to <b>meet</b> your new friends.", sentencePast: "We <b>met</b> for the first time in high school.", gif: "meeting" },
+  { present: "read", past: "read", participle: "read", type: "irregular", sound: "", sentencePres: "You should <b>read</b> the instructions carefully.", sentencePast: "Last night, I <b>read</b> a very long article.", gif: "reading" },
+  { present: "speak", past: "spoke", participle: "spoken", type: "irregular", sound: "", sentencePres: "Can you <b>speak</b> more slowly, please?", sentencePast: "He <b>spoke</b> to the manager about the problem.", gif: "speaking" },
+  { present: "swim", past: "swam", participle: "swum", type: "irregular", sound: "", sentencePres: "I <b>swim</b> in the pool every Saturday.", sentencePast: "We <b>swam</b> in the ocean during our vacation.", gif: "swimming" },
+  { present: "take", past: "took", participle: "taken", type: "irregular", sound: "", sentencePres: "Remember to <b>take</b> your umbrella with you.", sentencePast: "She <b>took</b> the bus to go to the city center.", gif: "taking" },
+  { present: "write", past: "wrote", participle: "written", type: "irregular", sound: "", sentencePres: "I <b>write</b> in my journal every evening.", sentencePast: "He <b>wrote</b> a beautiful poem for his wife.", gif: "writing" },
+  { present: "visit", past: "visited", participle: "visited", type: "regular", sound: "/id/", sentencePres: "I like to <b>visit</b> museums on weekends.", sentencePast: "They <b>visited</b> many countries last year.", gif: "visiting" },
+  { present: "paint", past: "painted", participle: "painted", type: "regular", sound: "/id/", sentencePres: "She wants to <b>paint</b> her room blue.", sentencePast: "He <b>painted</b> a beautiful landscape yesterday.", gif: "painting" },
+  { present: "cook", past: "cooked", participle: "cooked", type: "regular", sound: "/t/", sentencePres: "I often <b>cook</b> dinner for my family.", sentencePast: "He <b>cooked</b> a special meal for her birthday.", gif: "cooking" },
+  { present: "talk", past: "talked", participle: "talked", type: "regular", sound: "/t/", sentencePres: "We need to <b>talk</b> about the new project.", sentencePast: "I <b>talked</b> to the teacher after the class.", gif: "talking" },
+  { present: "walk", past: "walked", participle: "walked", type: "regular", sound: "/t/", sentencePres: "I <b>walk</b> to work when the weather is nice.", sentencePast: "We <b>walked</b> for three miles in the park.", gif: "walking" },
+  { present: "work", past: "worked", participle: "worked", type: "regular", sound: "/t/", sentencePres: "They <b>work</b> in a very large office.", sentencePast: "She <b>worked</b> until late last Friday night.", gif: "working" },
+  { present: "watch", past: "watched", participle: "watched", type: "regular", sound: "/t/", sentencePres: "Do you want to <b>watch</b> a movie tonight?", sentencePast: "We <b>watched</b> the football game on TV.", gif: "watching" },
+  { present: "laugh", past: "laughed", participle: "laughed", type: "regular", sound: "/t/", sentencePres: "Funny movies make me <b>laugh</b> a lot.", sentencePast: "She <b>laughed</b> at the joke I told her.", gif: "laughing" },
+  { present: "listen", past: "listened", participle: "listened", type: "regular", sound: "/d/", sentencePres: "I <b>listen</b> to music while I study.", sentencePast: "He <b>listened</b> carefully to the instructions.", gif: "listening" },
+  { present: "play", past: "played", participle: "played", type: "regular", sound: "/d/", sentencePres: "The children <b>play</b> in the garden every day.", sentencePast: "We <b>played</b> soccer for two hours yesterday.", gif: "playing" },
+  { present: "call", past: "called", participle: "called", type: "regular", sound: "/d/", sentencePres: "I will <b>call</b> you as soon as I arrive.", sentencePast: "She <b>called</b> her mother this morning.", gif: "calling" },
+  { present: "arise", past: "arose", participle: "arisen", type: "irregular", sound: "", sentencePres: "New problems <b>arise</b> every single day.", sentencePast: "A huge conflict <b>arose</b> during the meeting.", gif: "rising" },
+  { present: "awake", past: "awoke", participle: "awoken", type: "irregular", sound: "", sentencePres: "I usually <b>awake</b> when the sun rises.", sentencePast: "He <b>awoke</b> suddenly in the middle of the night.", gif: "awake" },
+  { present: "be", past: "was / were", participle: "been", type: "irregular", sound: "", sentencePres: "Please <b>be</b> patient with the new students.", sentencePast: "I <b>was</b> very happy to see you yesterday.", gif: "being" },
+  { present: "beat", past: "beat", participle: "beaten", type: "irregular", sound: "", sentencePres: "Can you <b>beat</b> the high score in this game?", sentencePast: "They <b>beat</b> the rival team last Saturday.", gif: "beat" },
+  { present: "become", past: "became", participle: "become", type: "irregular", sound: "", sentencePres: "It is hard to <b>become</b> a professional doctor.", sentencePast: "He <b>became</b> a famous singer in a short time.", gif: "transformation" },
+  { present: "begin", past: "began", participle: "begun", type: "irregular", sound: "", sentencePres: "The classes <b>begin</b> at eight in the morning.", sentencePast: "It <b>began</b> to rain just after we left home.", gif: "starting" },
+  { present: "bend", past: "bent", participle: "bent", type: "irregular", sound: "", sentencePres: "Be careful not to <b>bend</b> the credit card.", sentencePast: "He <b>bent</b> the metal pipe with his hands.", gif: "bending" },
+  { present: "bet", past: "bet", participle: "bet", type: "irregular", sound: "", sentencePres: "I <b>bet</b> you can't finish that huge burger.", sentencePast: "He <b>bet</b> all his money and lost it all.", gif: "betting" },
+  { present: "bite", past: "bit", participle: "bit / bitten", type: "irregular", sound: "", sentencePres: "Be careful! That dog might <b>bite</b> you.", sentencePast: "A mosquito <b>bit</b> me on the arm last night.", gif: "bite" },
+  { present: "blow", past: "blew", participle: "blown", type: "irregular", sound: "", sentencePres: "The kids love to <b>blow</b> soap bubbles.", sentencePast: "A strong wind <b>blew</b> the leaves away.", gif: "blowing" },
+  { present: "break", past: "broke", participle: "broken", type: "irregular", sound: "", sentencePres: "If you <b>break</b> the rules, you will be punished.", sentencePast: "The glass <b>broke</b> into a thousand pieces.", gif: "broken" },
+  { present: "bring", past: "brought", participle: "brought", type: "irregular", sound: "", sentencePres: "Always <b>bring</b> your notebook to the class.", sentencePast: "She <b>brought</b> some cookies for the party.", gif: "carrying" },
+  { present: "choose", past: "chose", participle: "chosen", type: "irregular", sound: "", sentencePres: "You must <b>choose</b> the correct answer now.", sentencePast: "I <b>chose</b> the red shirt instead of the blue one.", gif: "choosing" },
+  { present: "come", past: "came", participle: "come", type: "irregular", sound: "", sentencePres: "Please <b>come</b> to my house this afternoon.", sentencePast: "They <b>came</b> back from their trip yesterday.", gif: "coming" },
+  { present: "cut", past: "cut", participle: "cut", type: "irregular", sound: "", sentencePres: "Use these scissors to <b>cut</b> the paper.", sentencePast: "He <b>cut</b> the cake into eight equal pieces.", gif: "cutting" },
+  { present: "do", past: "did", participle: "done", type: "irregular", sound: "", sentencePres: "I need to <b>do</b> my homework tonight.", sentencePast: "You <b>did</b> a very good job on the project.", gif: "doing" },
+  { present: "drink", past: "drank", participle: "drunk", type: "irregular", sound: "", sentencePres: "You should <b>drink</b> eight glasses of water.", sentencePast: "He <b>drank</b> a cold soda after the race.", gif: "drinking" },
+  { present: "fall", past: "fell", participle: "fallen", type: "irregular", sound: "", sentencePres: "Be careful or you will <b>fall</b> on the ice.", sentencePast: "The leaves <b>fell</b> from the trees in autumn.", gif: "falling" },
+  { present: "forget", past: "forgot", participle: "forgotten", type: "irregular", sound: "", sentencePres: "I often <b>forget</b> where I put my glasses.", sentencePast: "I <b>forgot</b> to buy milk at the supermarket.", gif: "forget" },
+  { present: "get", past: "got", participle: "got / gotten", type: "irregular", sound: "", sentencePres: "I need to <b>get</b> a new pair of shoes.", sentencePast: "She <b>got</b> a perfect score on her exam.", gif: "getting" },
+  { present: "give", past: "gave", participle: "given", type: "irregular", sound: "", sentencePres: "Please <b>give</b> me a hand with this box.", sentencePast: "My father <b>gave</b> me this watch for my birthday.", gif: "giving" },
+  { present: "go", past: "went", participle: "gone", type: "irregular", sound: "", sentencePres: "I <b>go</b> to the gym four times a week.", sentencePast: "We <b>went</b> to the cinema last Sunday.", gif: "going" },
+  { present: "make", past: "made", participle: "made", type: "irregular", sound: "", sentencePres: "I like to <b>make</b> my own clothes.", sentencePast: "She <b>made</b> a delicious chocolate cake.", gif: "making" },
+  { present: "see", past: "saw", participle: "seen", type: "irregular", sound: "", sentencePres: "I can <b>see</b> the mountains from my window.", sentencePast: "I <b>saw</b> a famous actor at the airport.", gif: "seeing" },
+  { present: "sing", past: "sang", participle: "sung", type: "irregular", sound: "", sentencePres: "She can <b>sing</b> very high notes beautifully.", sentencePast: "We <b>sang</b> happy birthday to our friend.", gif: "singing" },
+  { present: "sleep", past: "slept", participle: "slept", type: "irregular", sound: "", sentencePres: "I need to <b>sleep</b> at least seven hours.", sentencePast: "The baby <b>slept</b> peacefully all night.", gif: "sleeping" },
+  { present: "think", past: "thought", participle: "thought", type: "irregular", sound: "", sentencePres: "I <b>think</b> it is going to rain today.", sentencePast: "I <b>thought</b> you were at the office.", gif: "thinking" },
+  { present: "win", past: "won", participle: "won", type: "irregular", sound: "", sentencePres: "We want to <b>win</b> the championship this year.", sentencePast: "They <b>won</b> the lottery two years ago.", gif: "winning" },
+  { present: "accept", past: "accepted", participle: "accepted", type: "regular", sound: "/id/", sentencePres: "Do you <b>accept</b> credit cards here?", sentencePast: "She <b>accepted</b> the job offer immediately.", gif: "yes" },
+  { present: "count", past: "counted", participle: "counted", type: "regular", sound: "/id/", sentencePres: "Can you <b>count</b> from one to twenty?", sentencePast: "He <b>counted</b> the money twice to be sure.", gif: "numbers" },
+  { present: "need", past: "needed", participle: "needed", type: "regular", sound: "/id/", sentencePres: "I <b>need</b> some help with my homework.", sentencePast: "We <b>needed</b> a bigger car for the trip.", gif: "need" },
+  { present: "start", past: "started", participle: "started", type: "regular", sound: "/id/", sentencePres: "The movie will <b>start</b> in five minutes.", sentencePast: "It <b>started</b> to snow early this morning.", gif: "start" },
+  { present: "want", past: "wanted", participle: "wanted", type: "regular", sound: "/id/", sentencePres: "I <b>want</b> to travel around the world.", sentencePast: "He <b>wanted</b> to buy a new computer.", gif: "want" },
+  { present: "ask", past: "asked", participle: "asked", type: "regular", sound: "/t/", sentencePres: "Don't be afraid to <b>ask</b> questions.", sentencePast: "I <b>asked</b> the police for directions.", gif: "asking" },
+  { present: "dance", past: "danced", participle: "danced", type: "regular", sound: "/t/", sentencePres: "They <b>dance</b> salsa very well together.", sentencePast: "We <b>danced</b> all night at the wedding.", gif: "dancing" },
+  { present: "finish", past: "finished", participle: "finished", type: "regular", sound: "/t/", sentencePres: "I must <b>finish</b> this report by Friday.", sentencePast: "She <b>finished</b> her dinner very quickly.", gif: "finish" },
+  { present: "help", past: "helped", participle: "helped", type: "regular", sound: "/t/", sentencePres: "I am happy to <b>help</b> you with that.", sentencePast: "He <b>helped</b> me carry the heavy bags.", gif: "help" },
+  { present: "look", past: "looked", participle: "looked", type: "regular", sound: "/t/", sentencePres: "Please <b>look</b> at the whiteboard now.", sentencePast: "I <b>looked</b> for my keys everywhere.", gif: "looking" },
+  { present: "answer", past: "answered", participle: "answered", type: "regular", sound: "/d/", sentencePres: "I always <b>answer</b> my emails promptly.", sentencePast: "He <b>answered</b> all the questions correctly.", gif: "answering" },
+  { present: "clean", past: "cleaned", participle: "cleaned", type: "regular", sound: "/d/", sentencePres: "I <b>clean</b> my bedroom every Saturday.", sentencePast: "We <b>cleaned</b> the entire house yesterday.", gif: "cleaning" },
+  { present: "love", past: "loved", participle: "loved", type: "regular", sound: "/d/", sentencePres: "I <b>love</b> spending time with my family.", sentencePast: "She <b>loved</b> that movie when she was a kid.", gif: "love" },
+  { present: "open", past: "opened", participle: "opened", type: "regular", sound: "/d/", sentencePres: "Could you <b>open</b> the window, please?", sentencePast: "He <b>opened</b> the door for the lady.", gif: "opening" },
+  { present: "stay", past: "stayed", participle: "stayed", type: "regular", sound: "/d/", sentencePres: "I usually <b>stay</b> at home on Sundays.", sentencePast: "They <b>stayed</b> in a very nice hotel.", gif: "stay" },
   { present: "bid", past: "bid", participle: "bid", type: "irregular", sound: "", sentencePres: "Investors <b>bid</b> on rare paintings.", sentencePast: "She <b>bid</b> ten dollars for the old book.", gif: "auction" },
   { present: "bind", past: "bound", participle: "bound", type: "irregular", sound: "", sentencePres: "Strong rules <b>bind</b> every member of the club.", sentencePast: "He <b>bound</b> the papers together with a string.", gif: "binding" },
   { present: "bleed", past: "bled", participle: "bled", type: "irregular", sound: "", sentencePres: "Deep cuts often <b>bleed</b> for several minutes.", sentencePast: "His nose <b>bled</b> after the fall.", gif: "bleeding" },
@@ -458,19 +458,19 @@ const VERB_IPA = {
 };
 
 const VERB_MEANINGS_ES = {
-  bear:"soportar",buy:"comprar",drive:"conducir",eat:"comer",find:"encontrar",
-  grow:"crecer",have:"tener",know:"saber / conocer",lose:"perder",meet:"conocer / reunirse",
-  read:"leer",speak:"hablar",swim:"nadar",take:"tomar / llevar",write:"escribir",
-  visit:"visitar",paint:"pintar",cook:"cocinar",talk:"hablar",walk:"caminar",
-  work:"trabajar",watch:"mirar / ver",laugh:"reír",listen:"escuchar",play:"jugar / tocar",
-  call:"llamar",arise:"surgir",awake:"despertar",be:"ser / estar",beat:"golpear / vencer",
-  become:"convertirse",begin:"empezar",bend:"doblar",bet:"apostar",bite:"morder",
-  blow:"soplar",break:"romper",bring:"traer",choose:"elegir",come:"venir",cut:"cortar",
-  do:"hacer",drink:"beber",fall:"caer",forget:"olvidar",get:"obtener / conseguir",
-  give:"dar",go:"ir",make:"hacer",see:"ver",sing:"cantar",sleep:"dormir",think:"pensar",
-  win:"ganar",accept:"aceptar",count:"contar",need:"necesitar",start:"empezar / iniciar",
-  want:"querer",ask:"preguntar",dance:"bailar",finish:"terminar",help:"ayudar",look:"mirar",
-  answer:"responder",clean:"limpiar",love:"amar",open:"abrir",stay:"quedarse",
+  bear: "soportar", buy: "comprar", drive: "conducir", eat: "comer", find: "encontrar",
+  grow: "crecer", have: "tener", know: "saber / conocer", lose: "perder", meet: "conocer / reunirse",
+  read: "leer", speak: "hablar", swim: "nadar", take: "tomar / llevar", write: "escribir",
+  visit: "visitar", paint: "pintar", cook: "cocinar", talk: "hablar", walk: "caminar",
+  work: "trabajar", watch: "mirar / ver", laugh: "reír", listen: "escuchar", play: "jugar / tocar",
+  call: "llamar", arise: "surgir", awake: "despertar", be: "ser / estar", beat: "golpear / vencer",
+  become: "convertirse", begin: "empezar", bend: "doblar", bet: "apostar", bite: "morder",
+  blow: "soplar", break: "romper", bring: "traer", choose: "elegir", come: "venir", cut: "cortar",
+  do: "hacer", drink: "beber", fall: "caer", forget: "olvidar", get: "obtener / conseguir",
+  give: "dar", go: "ir", make: "hacer", see: "ver", sing: "cantar", sleep: "dormir", think: "pensar",
+  win: "ganar", accept: "aceptar", count: "contar", need: "necesitar", start: "empezar / iniciar",
+  want: "querer", ask: "preguntar", dance: "bailar", finish: "terminar", help: "ayudar", look: "mirar",
+  answer: "responder", clean: "limpiar", love: "amar", open: "abrir", stay: "quedarse",
   bid: "pujar / ofertar",
   bind: "atar / encuadernar",
   bleed: "sangrar",
@@ -633,13 +633,13 @@ const VERB_MEANINGS_ES = {
    - vfc_streak: número de días consecutivos
    - vfc_lastDate: YYYY-MM-DD del último día con actividad
    ───────────────────────────────────────────────────────── */
-const STREAK_KEY      = "vfc_streak";
+const STREAK_KEY = "vfc_streak";
 const STREAK_DATE_KEY = "vfc_lastDate";
 
 function _streakToday() {
   const d = new Date();
   const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2, "0");
+  const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
@@ -648,9 +648,9 @@ function _streakDaysBetween(a, b) {
   // Diferencia en días (b - a) usando solo la parte de fecha.
   const [ya, ma, da] = a.split("-").map(Number);
   const [yb, mb, db_] = b.split("-").map(Number);
-  const da1 = Date.UTC(ya, ma-1, da);
-  const da2 = Date.UTC(yb, mb-1, db_);
-  return Math.round((da2 - da1) / (1000*60*60*24));
+  const da1 = Date.UTC(ya, ma - 1, da);
+  const da2 = Date.UTC(yb, mb - 1, db_);
+  return Math.round((da2 - da1) / (1000 * 60 * 60 * 24));
 }
 
 /**
@@ -658,31 +658,31 @@ function _streakDaysBetween(a, b) {
  *   kind: "unlocked" | "incremented" | "kept" | "reset"
  */
 function updateStreak() {
-  const prev  = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
-  const last  = localStorage.getItem(STREAK_DATE_KEY);
+  const prev = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+  const last = localStorage.getItem(STREAK_DATE_KEY);
   const today = _streakToday();
 
   let streak = prev;
-  let kind   = "kept";
+  let kind = "kept";
 
   if (!last || prev === 0) {
     // Primera vez en este dispositivo → desbloquea
     streak = 1;
-    kind   = (prev === 0) ? "unlocked" : "incremented";
+    kind = (prev === 0) ? "unlocked" : "incremented";
   } else if (last === today) {
     if (streak < 1) { streak = 1; kind = "unlocked"; }
-    else            { kind = "kept"; }
+    else { kind = "kept"; }
   } else {
     const diff = _streakDaysBetween(last, today);
     if (diff === 1) {
       streak = prev + 1;
-      kind   = "incremented";
+      kind = "incremented";
     } else if (diff > 1) {
       streak = 1;
-      kind   = "reset";
+      kind = "reset";
     } else {
       if (streak < 1) { streak = 1; kind = "unlocked"; }
-      else            { kind = "kept"; }
+      else { kind = "kept"; }
     }
   }
 
@@ -712,7 +712,7 @@ function _streakMilestoneInfo(n) {
   }
   const span = Math.max(1, nextMs - prevMs);
   const into = Math.max(0, n - prevMs);
-  const pct  = Math.min(100, Math.round((into / span) * 100));
+  const pct = Math.min(100, Math.round((into / span) * 100));
   return { prevMs, nextMs, pct };
 }
 
@@ -761,7 +761,7 @@ function renderStreakBadge() {
 
     // Notify the goals system that the streak might have changed
     if (typeof checkGoals === "function") {
-      try { checkGoals({ silent: kind === "kept" }); } catch (e) {}
+      try { checkGoals({ silent: kind === "kept" }); } catch (e) { }
     }
   } catch (err) {
     // localStorage no disponible
@@ -777,13 +777,13 @@ function celebrateStreak(n, isUnlock) {
   document.getElementById("streakCounterLbl").textContent = (n === 1 ? "día" : "días seguidos");
 
   const titleEl = document.getElementById("streakCelebrateTitle");
-  const msgEl   = document.getElementById("streakCelebrateMsg");
+  const msgEl = document.getElementById("streakCelebrateMsg");
   if (isUnlock) {
     titleEl.textContent = "¡Racha desbloqueada!";
-    msgEl.textContent   = "Empezaste tu camino diario. Vuelve mañana para sumar otro día.";
+    msgEl.textContent = "Empezaste tu camino diario. Vuelve mañana para sumar otro día.";
   } else {
     titleEl.textContent = "¡Racha en marcha!";
-    msgEl.textContent   = `Llevas ${n} ${n === 1 ? "día" : "días seguidos"} practicando.`;
+    msgEl.textContent = `Llevas ${n} ${n === 1 ? "día" : "días seguidos"} practicando.`;
   }
 
   // Generar confetti dinámico
@@ -819,21 +819,21 @@ function spawnStreakConfetti() {
     const piece = document.createElement("span");
     piece.className = "streak-confetti-piece";
     const angle = (i / N) * 360 + (Math.random() - 0.5) * 14;
-    const dist  = 130 + Math.random() * 90;
-    const dx    = Math.cos(angle * Math.PI / 180) * dist;
-    const dy    = Math.sin(angle * Math.PI / 180) * dist;
-    const rot   = (Math.random() - 0.5) * 720;
-    const dur   = 0.9 + Math.random() * 0.7;
+    const dist = 130 + Math.random() * 90;
+    const dx = Math.cos(angle * Math.PI / 180) * dist;
+    const dy = Math.sin(angle * Math.PI / 180) * dist;
+    const rot = (Math.random() - 0.5) * 720;
+    const dur = 0.9 + Math.random() * 0.7;
     const delay = Math.random() * 0.15;
-    const size  = 6 + Math.random() * 6;
+    const size = 6 + Math.random() * 6;
     piece.style.setProperty("--dx", dx + "px");
     piece.style.setProperty("--dy", dy + "px");
     piece.style.setProperty("--rot", rot + "deg");
     piece.style.animationDuration = dur + "s";
-    piece.style.animationDelay    = delay + "s";
-    piece.style.background        = colors[i % colors.length];
-    piece.style.width             = size + "px";
-    piece.style.height            = (size * (0.55 + Math.random() * 0.5)) + "px";
+    piece.style.animationDelay = delay + "s";
+    piece.style.background = colors[i % colors.length];
+    piece.style.width = size + "px";
+    piece.style.height = (size * (0.55 + Math.random() * 0.5)) + "px";
     cf.appendChild(piece);
   }
 }
@@ -842,15 +842,15 @@ function spawnStreakConfetti() {
 function animateStreakIncrement(prev, next) {
   const badge = document.getElementById("streakBadge");
   const numEl = document.getElementById("streakNum");
-  const fill  = document.getElementById("streakProgressFill");
-  const tgt   = document.getElementById("streakTarget");
+  const fill = document.getElementById("streakProgressFill");
+  const tgt = document.getElementById("streakTarget");
   if (!badge || !numEl) return;
 
   // Mostrar primero el número anterior y la barra al estado anterior
   numEl.textContent = String(prev);
   const prevInfo = _streakMilestoneInfo(prev);
   if (fill) fill.style.width = prevInfo.pct + "%";
-  if (tgt)  tgt.textContent  = `→ ${prevInfo.nextMs}`;
+  if (tgt) tgt.textContent = `→ ${prevInfo.nextMs}`;
 
   badge.classList.add("streak-fill-anim");
 
@@ -886,7 +886,7 @@ function spawnStreakBurst(anchorEl) {
   if (!anchorEl) return;
   const rect = anchorEl.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
-  const cy = rect.top  + rect.height / 2;
+  const cy = rect.top + rect.height / 2;
   const layer = document.createElement("div");
   layer.className = "streak-burst-layer";
   document.body.appendChild(layer);
@@ -896,9 +896,9 @@ function spawnStreakBurst(anchorEl) {
     const p = document.createElement("span");
     p.className = "streak-burst-particle";
     const angle = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-    const dist  = 50 + Math.random() * 40;
+    const dist = 50 + Math.random() * 40;
     p.style.left = cx + "px";
-    p.style.top  = cy + "px";
+    p.style.top = cy + "px";
     p.style.setProperty("--bx", Math.cos(angle) * dist + "px");
     p.style.setProperty("--by", Math.sin(angle) * dist + "px");
     p.style.background = colors[i % colors.length];
@@ -909,16 +909,16 @@ function spawnStreakBurst(anchorEl) {
 }
 
 /* ── FLASHCARD STATE ── */
-let deck          = [];
-let cursor        = 0;
-let isFlipped     = false;
-let correct       = 0;
-let skipped       = 0;
+let deck = [];
+let cursor = 0;
+let isFlipped = false;
+let correct = 0;
+let skipped = 0;
 let currentFilter = "all";
 
 /* ── PRÁCTICA DE ERRORES (round) ── */
-let skippedDeck     = [];   // verbos marcados como skipped en la ronda actual
-let practiceMode    = false; // true cuando estamos repasando los skipped
+let skippedDeck = [];   // verbos marcados como skipped en la ronda actual
+let practiceMode = false; // true cuando estamos repasando los skipped
 let originalDeckLen = 0;     // tamaño del mazo original (para el resumen final)
 
 /* ── HELPERS ── */
@@ -957,8 +957,8 @@ function speakVerb(text, opts) {
   rate = Math.min(2, Math.max(0.3, rate));
 
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang  = opts.lang || "en-US";
-  utter.rate  = rate;
+  utter.lang = opts.lang || "en-US";
+  utter.rate = rate;
   utter.pitch = 1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
@@ -996,7 +996,7 @@ function buildShareText(kind) {
   const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
   if (kind === "quiz") {
     const total = quizOriginalTotal || quizQuestions.length || 0;
-    const pct   = total ? Math.round((quizOk / total) * 100) : 0;
+    const pct = total ? Math.round((quizOk / total) * 100) : 0;
     const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
     return (
       `${emoji} Verb Flashcards – Final Quiz\n` +
@@ -1008,7 +1008,7 @@ function buildShareText(kind) {
   }
   // round complete (flashcards)
   const total = originalDeckLen || deck.length || 0;
-  const pct   = total ? Math.round((correct / total) * 100) : 0;
+  const pct = total ? Math.round((correct / total) * 100) : 0;
   const emoji = pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
   return (
     `${emoji} Verb Flashcards – Round complete!\n` +
@@ -1020,9 +1020,9 @@ function buildShareText(kind) {
 }
 
 async function shareResults(kind) {
-  const text  = buildShareText(kind);
+  const text = buildShareText(kind);
   const title = kind === "quiz" ? "My Final Quiz Results" : "My Flashcards Round";
-  const url   = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : undefined;
+  const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : undefined;
 
   // 1. Try native Web Share API (mobile + some desktops)
   if (navigator.share) {
@@ -1049,7 +1049,7 @@ async function shareResults(kind) {
     const ta = document.createElement("textarea");
     ta.value = text;
     ta.style.position = "fixed";
-    ta.style.opacity  = "0";
+    ta.style.opacity = "0";
     document.body.appendChild(ta);
     ta.select();
     document.execCommand("copy");
@@ -1062,7 +1062,7 @@ async function shareResults(kind) {
 
 /* ── DECK CON PROGRESIÓN DIARIA ── */
 function updateDeck() {
-  const today    = new Date();
+  const today = new Date();
   const timeDiff = today - START_DATE;
   const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
   const verbsToUnlock = Math.max(10, (daysDiff + 1) * 10);
@@ -1074,10 +1074,10 @@ function buildDeck() {
   const base = currentFilter === "all"
     ? deck
     : deck.filter(v => v.type === currentFilter);
-  deck    = shuffle(base);
-  cursor  = 0; correct = 0; skipped = 0; isFlipped = false;
-  skippedDeck     = [];
-  practiceMode    = false;
+  deck = shuffle(base);
+  cursor = 0; correct = 0; skipped = 0; isFlipped = false;
+  skippedDeck = [];
+  practiceMode = false;
   originalDeckLen = deck.length;
 }
 
@@ -1090,19 +1090,19 @@ function renderCard(animate = true) {
   const scene = document.getElementById("cardScene");
   scene.className = `card-scene col-${colorIdx(verb)}`;
 
-  document.getElementById("cardPresent").textContent    = verb.present;
-  document.getElementById("cardPast").textContent       = verb.past;
+  document.getElementById("cardPresent").textContent = verb.present;
+  document.getElementById("cardPast").textContent = verb.past;
   document.getElementById("cardPresentRef").textContent = `← ${verb.present}`;
 
-  const badge       = document.getElementById("cardBadge");
+  const badge = document.getElementById("cardBadge");
   badge.textContent = verb.type === "irregular" ? "Irregular" : "Regular";
-  badge.className   = "type-badge " + (verb.type === "irregular" ? "badge-irr" : "badge-reg");
+  badge.className = "type-badge " + (verb.type === "irregular" ? "badge-irr" : "badge-reg");
 
   const pct = (cursor / deck.length) * 100;
-  document.getElementById("progressFill").style.width  = pct + "%";
+  document.getElementById("progressFill").style.width = pct + "%";
   document.getElementById("progressLabel").textContent = `${cursor + 1} / ${deck.length}`;
-  document.getElementById("scoreCorrect").textContent  = correct;
-  document.getElementById("scoreSkip").textContent     = skipped;
+  document.getElementById("scoreCorrect").textContent = correct;
+  document.getElementById("scoreSkip").textContent = skipped;
 
   if (animate) {
     scene.classList.remove("animate");
@@ -1128,9 +1128,9 @@ function toggleFlip() {
 
 /* ── NEXT CARD ── */
 function next() {
-  const scene     = document.getElementById("cardScene");
+  const scene = document.getElementById("cardScene");
   const cardInner = scene.querySelector(".card-inner");
-  const backText  = document.getElementById("cardPast");
+  const backText = document.getElementById("cardPast");
 
   backText.style.visibility = "hidden";
   cardInner.style.transition = "none";
@@ -1165,9 +1165,9 @@ function next() {
 function startPracticeRound() {
   // Reordena el deck con los pendientes y entra en modo práctica
   practiceMode = true;
-  deck         = shuffle(skippedDeck);
-  cursor       = 0;
-  isFlipped    = false;
+  deck = shuffle(skippedDeck);
+  cursor = 0;
+  isFlipped = false;
   // Mostrar pill de modo práctica
   showPracticePill(true);
   renderCard(true);
@@ -1183,8 +1183,8 @@ function showPracticePill(show) {
       pill.innerHTML = (
         '<span class="practice-banner-icon">🎯</span>' +
         '<div class="practice-banner-body">' +
-          '<div class="practice-banner-title">Practicando errores</div>' +
-          '<div class="practice-banner-sub">Domina cada verbo para terminar la ronda</div>' +
+        '<div class="practice-banner-title">Practicando errores</div>' +
+        '<div class="practice-banner-sub">Domina cada verbo para terminar la ronda</div>' +
         '</div>' +
         '<div class="practice-banner-count"><b id="practiceCount">0</b><span>por dominar</span></div>'
       );
@@ -1220,25 +1220,25 @@ function showFinish() {
 
   const total = originalDeckLen || deck.length;
   const pct = Math.round((correct / Math.max(1, total)) * 100);
-  document.getElementById("fCorrect").textContent       = correct;
-  document.getElementById("fSkip").textContent          = skipped;
-  document.getElementById("fTotal").textContent         = total;
+  document.getElementById("fCorrect").textContent = correct;
+  document.getElementById("fSkip").textContent = skipped;
+  document.getElementById("fTotal").textContent = total;
   document.getElementById("finishSubtitle").textContent =
     pct >= 80 ? "Excellent work! 🔥" : pct >= 50 ? "Good progress, keep going!" : "Keep practicing, you'll get there!";
   document.getElementById("finishEmoji").textContent =
     pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
-  document.getElementById("progressFill").style.width  = "100%";
+  document.getElementById("progressFill").style.width = "100%";
   document.getElementById("progressLabel").textContent = `${total} / ${total}`;
 }
 
 /* ── DETAIL MODAL ── */
 async function openDetail() {
   const verb = deck[cursor];
-  const ipa  = VERB_IPA[verb.present] || { pres: "", past: "" };
+  const ipa = VERB_IPA[verb.present] || { pres: "", past: "" };
 
   // Hero words
   document.getElementById("modalPresent").textContent = verb.present;
-  document.getElementById("modalPast").textContent    = verb.past;
+  document.getElementById("modalPast").textContent = verb.past;
   document.getElementById("modalIpaPres").textContent = ipa.pres || "";
   document.getElementById("modalIpaPast").textContent = ipa.past || "";
 
@@ -1278,26 +1278,26 @@ async function openDetail() {
   // Badge with phonetic sound tag for regular verbs
   const badge = document.getElementById("modalBadge");
   if (verb.type === "irregular") {
-    badge.textContent      = "Irregular";
+    badge.textContent = "Irregular";
     badge.style.background = "var(--text)";
-    badge.style.color      = "var(--bg)";
+    badge.style.color = "var(--bg)";
   } else {
-    badge.textContent      = verb.sound ? `Regular · ${verb.sound}` : "Regular";
+    badge.textContent = verb.sound ? `Regular · ${verb.sound}` : "Regular";
     badge.style.background = "var(--accent-soft)";
-    badge.style.color      = "var(--accent)";
+    badge.style.color = "var(--accent)";
   }
 
   // Reset speed UI to current value
   syncSpeedUI();
 
-  const gifEl     = document.getElementById("modalGif");
+  const gifEl = document.getElementById("modalGif");
   gifEl.innerHTML = `<span class="gif-msg">Loading GIF…</span>`;
   document.getElementById("overlay").classList.add("open");
   document.body.style.overflow = "hidden";
 
   try {
-    const url  = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(verb.gif)}&limit=6&rating=g`;
-    const res  = await fetch(url);
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(verb.gif)}&limit=6&rating=g`;
+    const res = await fetch(url);
     if (!res.ok) {
       if (res.status === 401 || res.status === 403) throw new Error("API Key inválida o expirada.");
       if (res.status === 429) throw new Error("Límite de GIFs alcanzado.");
@@ -1305,7 +1305,7 @@ async function openDetail() {
     }
     const json = await res.json();
     if (json.data?.length) {
-      const pick      = json.data[Math.floor(Math.random() * json.data.length)];
+      const pick = json.data[Math.floor(Math.random() * json.data.length)];
       gifEl.innerHTML = `<img src="${pick.images.fixed_height.url}" alt="${verb.gif}" />`;
     } else {
       gifEl.innerHTML = `<span class="gif-msg">No GIF found</span>`;
@@ -1327,7 +1327,7 @@ const SPEED_KEY = "vfc_speed";
 function setSpeed(value) {
   const v = Math.min(1.4, Math.max(0.4, parseFloat(value) || 1));
   currentSpeed = v;
-  try { localStorage.setItem(SPEED_KEY, String(v)); } catch (e) {}
+  try { localStorage.setItem(SPEED_KEY, String(v)); } catch (e) { }
   syncSpeedUI();
 }
 
@@ -1344,7 +1344,7 @@ function syncSpeedUI() {
   try {
     const saved = parseFloat(localStorage.getItem(SPEED_KEY));
     if (!isNaN(saved) && saved > 0) currentSpeed = Math.min(1.4, Math.max(0.4, saved));
-  } catch (e) {}
+  } catch (e) { }
 })();
 
 /* ════════════════════════════════════════════════════════
@@ -1352,12 +1352,12 @@ function syncSpeedUI() {
    ════════════════════════════════════════════════════════ */
 
 let quizQuestions = [];
-let quizIdx       = 0;
-let quizOk        = 0;
-let quizNo        = 0;
-let quizLocked    = false;
-let quizFailedSet     = new Set(); // verbos fallados pendientes de dominar
-let quizPracticeMode  = false;     // true cuando repasamos los fallados
+let quizIdx = 0;
+let quizOk = 0;
+let quizNo = 0;
+let quizLocked = false;
+let quizFailedSet = new Set(); // verbos fallados pendientes de dominar
+let quizPracticeMode = false;     // true cuando repasamos los fallados
 let quizOriginalTotal = 0;         // total del quiz original (para el resumen)
 
 /* ── Get distractors ── */
@@ -1372,13 +1372,13 @@ function getDistractors(correctPast, pool) {
 function buildQuestion(verb, pool) {
   const roll = Math.random();
   if (roll < 0.333) {
-    const distractor     = getDistractor(verb.past, pool);
+    const distractor = getDistractor(verb.past, pool);
     const correctOnRight = Math.random() > 0.5;
     return {
       mech: "swipe", label: "Swipe to the past tense", verb,
-      leftOpt:     correctOnRight ? distractor : verb.past,
-      rightOpt:    correctOnRight ? verb.past  : distractor,
-      correctSide: correctOnRight ? "right"    : "left",
+      leftOpt: correctOnRight ? distractor : verb.past,
+      rightOpt: correctOnRight ? verb.past : distractor,
+      correctSide: correctOnRight ? "right" : "left",
     };
   }
   if (roll < 0.666) {
@@ -1402,15 +1402,15 @@ function startQuiz() {
 
   quizQuestions = buildQuiz(base);
   quizIdx = 0; quizOk = 0; quizNo = 0; quizLocked = false;
-  quizFailedSet     = new Set();
-  quizPracticeMode  = false;
+  quizFailedSet = new Set();
+  quizPracticeMode = false;
   quizOriginalTotal = quizQuestions.length;
   showQuizPracticePill(false);
 
   document.querySelector(".score-correct .score-lbl").textContent = "Correct";
   document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
   document.getElementById("scoreCorrect").textContent = "0";
-  document.getElementById("scoreSkip").textContent    = "0";
+  document.getElementById("scoreSkip").textContent = "0";
 
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display = "none";
@@ -1431,11 +1431,11 @@ function startQuiz() {
 /* ── Update header ── */
 function updateQuizHeader() {
   const total = quizQuestions.length;
-  const pct   = Math.round((quizIdx / total) * 100);
-  document.getElementById("progressFill").style.width  = pct + "%";
+  const pct = Math.round((quizIdx / total) * 100);
+  document.getElementById("progressFill").style.width = pct + "%";
   document.getElementById("progressLabel").textContent = `${Math.min(quizIdx + 1, total)} / ${total}`;
-  document.getElementById("scoreCorrect").textContent  = quizOk;
-  document.getElementById("scoreSkip").textContent     = quizNo;
+  document.getElementById("scoreCorrect").textContent = quizOk;
+  document.getElementById("scoreSkip").textContent = quizNo;
   if (quizPracticeMode) {
     const cnt = document.getElementById("quizPracticeCount");
     if (cnt) cnt.textContent = quizFailedSet.size;
@@ -1444,14 +1444,14 @@ function updateQuizHeader() {
 
 /* ── Avanzar a la siguiente pregunta con animación de salida ── */
 function animateToNextQuestion(flyDirection, delay) {
-  const c1   = document.getElementById("qCard1");
+  const c1 = document.getElementById("qCard1");
   const wait = delay !== undefined ? delay : 700;
 
   setTimeout(() => {
     c1.style.transition = "none";
     const flyClass = flyDirection === "right" ? "anim-exit-right"
-                   : flyDirection === "left"  ? "anim-exit-left"
-                   : "anim-exit-up";
+      : flyDirection === "left" ? "anim-exit-left"
+        : "anim-exit-up";
 
     c1.classList.add(flyClass);
 
@@ -1471,11 +1471,11 @@ function promoteBackCards() {
 
   if (c2) {
     c2.style.transform = "translateY(0) scale(1)";
-    c2.style.opacity   = "1";
+    c2.style.opacity = "1";
   }
   if (c3) {
     c3.style.transform = "translateY(7px) scale(0.96)";
-    c3.style.opacity   = "1";
+    c3.style.opacity = "1";
   }
 }
 
@@ -1514,14 +1514,14 @@ function renderQuizQuestion(animateIn = false) {
   }
 
   quizLocked = false;
-  const q    = quizQuestions[quizIdx];
-  const c1   = document.getElementById("qCard1");
+  const q = quizQuestions[quizIdx];
+  const c1 = document.getElementById("qCard1");
 
   const qStackCards = document.getElementById("qStackCards");
   qStackCards.classList.remove("results-mode");
 
   c1.style.cssText = "";
-  c1.className     = "quiz-card top";
+  c1.className = "quiz-card top";
   if (q.mech === "choice") c1.classList.add("no-drag");
   if (animateIn) {
     void c1.offsetWidth;
@@ -1537,14 +1537,14 @@ function renderQuizQuestion(animateIn = false) {
   hideSwipeGhosts();
 
   const dirRow = document.getElementById("qDirRow");
-  const body   = document.getElementById("qBody");
+  const body = document.getElementById("qBody");
 
   /* ── Render the label pill ── */
   const lbl = QUIZ_LABELS[q.mech];
   document.getElementById("qLabel").innerHTML =
     `<span class="qlabel-pill" style="background:${lbl.bg};color:${lbl.color};">` +
-      `<span class="qlabel-icon">${lbl.icon}</span>` +
-      `<span class="qlabel-text">${lbl.text}</span>` +
+    `<span class="qlabel-icon">${lbl.icon}</span>` +
+    `<span class="qlabel-text">${lbl.text}</span>` +
     `</span>`;
 
   if (q.mech === "swipe") {
@@ -1553,9 +1553,9 @@ function renderQuizQuestion(animateIn = false) {
       `<div class="qsw-verb">${q.verb.present}</div>` +
       `<div class="qsw-sub">past tense</div>` +
       `<div class="qsw-opts">` +
-        `<div class="qsw-opt" id="qOptL">${q.leftOpt}</div>` +
-        `<div class="qsw-or">or</div>` +
-        `<div class="qsw-opt" id="qOptR">${q.rightOpt}</div>` +
+      `<div class="qsw-opt" id="qOptL">${q.leftOpt}</div>` +
+      `<div class="qsw-or">or</div>` +
+      `<div class="qsw-opt" id="qOptR">${q.rightOpt}</div>` +
       `</div>`;
 
   } else if (q.mech === "type") {
@@ -1563,37 +1563,37 @@ function renderQuizQuestion(animateIn = false) {
     body.innerHTML =
       `<div class="qtype-verb">${q.verb.present}</div>` +
       `<div class="qtype-wrap">` +
-        `<div class="qtype-tip">Write the past tense below</div>` +
-        `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="past tense…" />` +
-        `<div class="qtype-fb" id="qTypeFb"></div>` +
+      `<div class="qtype-tip">Write the past tense below</div>` +
+      `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="past tense…" />` +
+      `<div class="qtype-fb" id="qTypeFb"></div>` +
       `</div>`;
 
     const inp = document.getElementById("qTypeInput");
-    inp.addEventListener("keydown", function(e) {
+    inp.addEventListener("keydown", function (e) {
       if (e.key !== "Enter") return;
       e.preventDefault();
       if (quizLocked) return;
-      const val     = this.value.trim().toLowerCase();
+      const val = this.value.trim().toLowerCase();
       const targets = q.verb.past.toLowerCase().split("/").map(s => s.trim());
-      const isOk    = targets.includes(val);
+      const isOk = targets.includes(val);
       this.className = isOk ? "right" : "wrong";
       const fb = document.getElementById("qTypeFb");
       fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.verb.past;
       fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
-      this.disabled  = true;
-      quizLocked     = true;
+      this.disabled = true;
+      quizLocked = true;
       registerQuizAnswer(q.verb, isOk);
       updateQuizHeader();
       animateToNextQuestion("up", 820);
     });
-    setTimeout(() => { try { inp.focus(); } catch(e) {} }, 80);
+    setTimeout(() => { try { inp.focus(); } catch (e) { } }, 80);
 
   } else {
     dirRow.style.display = "none";
     body.innerHTML =
       `<div class="qbubble-wrap">` +
-        `<div class="qbubble-verb">${q.verb.present}</div>` +
-        `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
+      `<div class="qbubble-verb">${q.verb.present}</div>` +
+      `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
       `</div>`;
     setTimeout(() => initBubbles(q.opts, q.correct), 40);
   }
@@ -1611,7 +1611,7 @@ function renderQuizQuestion(animateIn = false) {
    ════════════════════════════════════════════════════════ */
 
 let bubbleRAF = null;
-let bubbles   = [];
+let bubbles = [];
 
 function initBubbles(opts, correct) {
   const canvas = document.getElementById("qBubbleCanvas");
@@ -1619,9 +1619,9 @@ function initBubbles(opts, correct) {
   if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
 
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const W   = canvas.offsetWidth;
-  const H   = canvas.offsetHeight;
-  canvas.width  = W * dpr;
+  const W = canvas.offsetWidth;
+  const H = canvas.offsetHeight;
+  canvas.width = W * dpr;
   canvas.height = H * dpr;
   const ctx = canvas.getContext("2d");
   ctx.scale(dpr, dpr);
@@ -1640,31 +1640,31 @@ function initBubbles(opts, correct) {
     { fill: "#f43f5e18", stroke: "#f43f5e", text: "#c01a3c" },
   ];
 
-  const palOrder = [0,1,2,3].sort(() => Math.random()-0.5);
+  const palOrder = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
 
   const R = Math.min(W * 0.18, H * 0.20, 62);
 
   const quadCenters = [
-    { x: W*0.27, y: H*0.28 },
-    { x: W*0.73, y: H*0.28 },
-    { x: W*0.27, y: H*0.72 },
-    { x: W*0.73, y: H*0.72 },
+    { x: W * 0.27, y: H * 0.28 },
+    { x: W * 0.73, y: H * 0.28 },
+    { x: W * 0.27, y: H * 0.72 },
+    { x: W * 0.73, y: H * 0.72 },
   ];
 
   bubbles = opts.map((opt, i) => {
     const qc = quadCenters[i];
     return {
-      x:    qc.x + (Math.random()-0.5)*16,
-      y:    qc.y + (Math.random()-0.5)*16,
-      r:    R + (Math.random()-0.5)*6,
-      vx:   (Math.random()-0.5)*0.55,
-      vy:   (Math.random()-0.5)*0.55,
-      phase: Math.random()*Math.PI*2,
-      text:  opt,
+      x: qc.x + (Math.random() - 0.5) * 16,
+      y: qc.y + (Math.random() - 0.5) * 16,
+      r: R + (Math.random() - 0.5) * 6,
+      vx: (Math.random() - 0.5) * 0.55,
+      vy: (Math.random() - 0.5) * 0.55,
+      phase: Math.random() * Math.PI * 2,
+      text: opt,
       correct: opt === correct,
-      pal:  PALETTES[palOrder[i]],
-      state:  'alive',
-      popT:   0,
+      pal: PALETTES[palOrder[i]],
+      state: 'alive',
+      popT: 0,
       particles: [],
     };
   });
@@ -1672,39 +1672,39 @@ function initBubbles(opts, correct) {
   /* Separar solapamientos iniciales */
   for (let iter = 0; iter < 40; iter++) {
     for (let a = 0; a < bubbles.length; a++) {
-      for (let b2 = a+1; b2 < bubbles.length; b2++) {
+      for (let b2 = a + 1; b2 < bubbles.length; b2++) {
         const ba = bubbles[a], bb = bubbles[b2];
         const dx = bb.x - ba.x, dy = bb.y - ba.y;
-        const dist = Math.sqrt(dx*dx+dy*dy);
+        const dist = Math.sqrt(dx * dx + dy * dy);
         const minD = ba.r + bb.r + 6;
         if (dist < minD && dist > 0) {
-          const push = (minD-dist)/2;
-          const nx = dx/dist, ny = dy/dist;
-          ba.x -= nx*push; ba.y -= ny*push;
-          bb.x += nx*push; bb.y += ny*push;
+          const push = (minD - dist) / 2;
+          const nx = dx / dist, ny = dy / dist;
+          ba.x -= nx * push; ba.y -= ny * push;
+          bb.x += nx * push; bb.y += ny * push;
         }
       }
     }
   }
 
   for (const b of bubbles) {
-    b.x = Math.max(b.r, Math.min(W-b.r, b.x));
-    b.y = Math.max(b.r, Math.min(H-b.r, b.y));
+    b.x = Math.max(b.r, Math.min(W - b.r, b.x));
+    b.y = Math.max(b.r, Math.min(H - b.r, b.y));
   }
 
   let done = false;
-  let t    = 0;
+  let t = 0;
 
   function spawnParticles(b) {
     const count = 14;
     for (let i = 0; i < count; i++) {
-      const angle = (i/count)*Math.PI*2 + Math.random()*0.4;
-      const speed = 2.5 + Math.random()*3;
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.4;
+      const speed = 2.5 + Math.random() * 3;
       b.particles.push({
         x: b.x, y: b.y,
-        vx: Math.cos(angle)*speed,
-        vy: Math.sin(angle)*speed,
-        r: 3+Math.random()*4,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        r: 3 + Math.random() * 4,
         life: 1,
         color: b.pal.stroke,
       });
@@ -1718,65 +1718,65 @@ function initBubbles(opts, correct) {
 
     if (b.state === 'popping-ok') {
       b.popT += 0.055;
-      const eased = 1 - Math.pow(1-Math.min(b.popT,1), 3);
+      const eased = 1 - Math.pow(1 - Math.min(b.popT, 1), 3);
       const scale = 1 + eased * 0.7;
-      ctx.globalAlpha = Math.max(0, 1 - eased*1.1);
+      ctx.globalAlpha = Math.max(0, 1 - eased * 1.1);
       ctx.translate(b.x, b.y);
       ctx.scale(scale, scale);
 
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.strokeStyle = '#10b981';
-      ctx.lineWidth   = 4 * (1/scale);
+      ctx.lineWidth = 4 * (1 / scale);
       ctx.stroke();
 
       ctx.strokeStyle = '#10b981';
-      ctx.lineWidth   = 3 * (1/scale);
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
+      ctx.lineWidth = 3 * (1 / scale);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.moveTo(-b.r*0.28, 0);
-      ctx.lineTo(-b.r*0.06, b.r*0.24);
-      ctx.lineTo(b.r*0.30, -b.r*0.22);
+      ctx.moveTo(-b.r * 0.28, 0);
+      ctx.lineTo(-b.r * 0.06, b.r * 0.24);
+      ctx.lineTo(b.r * 0.30, -b.r * 0.22);
       ctx.stroke();
 
       if (b.popT >= 1) b.state = 'dead';
 
     } else if (b.state === 'popping-no') {
       b.popT += 0.055;
-      const shakeAmp = Math.max(0, 1-b.popT)*10;
-      const shakeX   = Math.sin(b.popT * 38) * shakeAmp;
-      const scale    = Math.max(0, 1 - Math.max(0, b.popT-0.35)*1.4);
-      ctx.globalAlpha = Math.max(0, 1 - Math.max(0, b.popT-0.35)*1.8);
+      const shakeAmp = Math.max(0, 1 - b.popT) * 10;
+      const shakeX = Math.sin(b.popT * 38) * shakeAmp;
+      const scale = Math.max(0, 1 - Math.max(0, b.popT - 0.35) * 1.4);
+      ctx.globalAlpha = Math.max(0, 1 - Math.max(0, b.popT - 0.35) * 1.8);
       ctx.translate(b.x + shakeX, b.y);
       ctx.scale(scale, scale);
 
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#2d0a1255' : '#fef2f2';
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.strokeStyle = '#f43f5e';
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.strokeStyle = '#f43f5e';
-      ctx.lineWidth   = 3;
-      ctx.lineCap     = 'round';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo(-b.r*0.25, -b.r*0.25);
-      ctx.lineTo( b.r*0.25,  b.r*0.25);
-      ctx.moveTo( b.r*0.25, -b.r*0.25);
-      ctx.lineTo(-b.r*0.25,  b.r*0.25);
+      ctx.moveTo(-b.r * 0.25, -b.r * 0.25);
+      ctx.lineTo(b.r * 0.25, b.r * 0.25);
+      ctx.moveTo(b.r * 0.25, -b.r * 0.25);
+      ctx.lineTo(-b.r * 0.25, b.r * 0.25);
       ctx.stroke();
 
-      ctx.font = `700 ${Math.min(16,(b.r*1.3)/(b.text.length*0.6))}px "DM Sans",sans-serif`;
+      ctx.font = `700 ${Math.min(16, (b.r * 1.3) / (b.text.length * 0.6))}px "DM Sans",sans-serif`;
       ctx.fillStyle = '#f43f5e';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.globalAlpha *= 0.5;
-      ctx.fillText(b.text, 0, b.r*0.55);
+      ctx.fillText(b.text, 0, b.r * 0.55);
 
       if (b.popT >= 1) b.state = 'dead';
 
@@ -1791,48 +1791,48 @@ function initBubbles(opts, correct) {
       ctx.translate(b.x, b.y + bob);
 
       /* Soft shadow */
-      ctx.shadowColor   = b.pal.stroke + "55";
-      ctx.shadowBlur    = 14;
+      ctx.shadowColor = b.pal.stroke + "55";
+      ctx.shadowBlur = 14;
       ctx.shadowOffsetY = 4;
 
       /* Radial gradient fill */
-      const grd = ctx.createRadialGradient(-b.r*0.25, -b.r*0.25, b.r*0.05, 0, 0, b.r);
+      const grd = ctx.createRadialGradient(-b.r * 0.25, -b.r * 0.25, b.r * 0.05, 0, 0, b.r);
       grd.addColorStop(0, b.pal.stroke + "55");
       grd.addColorStop(1, b.pal.fill);
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.fillStyle = grd;
       ctx.fill();
 
       /* Reset shadow before stroke so it doesn't double */
-      ctx.shadowColor   = "transparent";
-      ctx.shadowBlur    = 0;
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
       ctx.shadowOffsetY = 0;
 
       /* Stroke */
       ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
       ctx.strokeStyle = b.pal.stroke;
-      ctx.lineWidth   = 2.5;
+      ctx.lineWidth = 2.5;
       ctx.stroke();
 
       /* Large shine */
       ctx.beginPath();
-      ctx.ellipse(-b.r*0.28, -b.r*0.32, b.r*0.24, b.r*0.13, -0.45, 0, Math.PI*2);
+      ctx.ellipse(-b.r * 0.28, -b.r * 0.32, b.r * 0.24, b.r * 0.13, -0.45, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(255,255,255,0.60)";
       ctx.fill();
 
       /* Mini shine */
       ctx.beginPath();
-      ctx.ellipse(-b.r*0.12, -b.r*0.50, b.r*0.08, b.r*0.05, -0.3, 0, Math.PI*2);
+      ctx.ellipse(-b.r * 0.12, -b.r * 0.50, b.r * 0.08, b.r * 0.05, -0.3, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(255,255,255,0.40)";
       ctx.fill();
 
       /* Text */
-      const maxW  = b.r * 1.65;
+      const maxW = b.r * 1.65;
       const chars = Math.max(b.text.length, 2);
-      const fs    = Math.min(18, maxW / (chars * 0.56));
-      ctx.font      = `800 ${fs}px "DM Sans", sans-serif`;
+      const fs = Math.min(18, maxW / (chars * 0.56));
+      ctx.font = `800 ${fs}px "DM Sans", sans-serif`;
       ctx.fillStyle = b.pal.text;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -1844,15 +1844,15 @@ function initBubbles(opts, correct) {
 
   function drawParticles(b) {
     for (const p of b.particles) {
-      p.x   += p.vx;
-      p.y   += p.vy;
-      p.vy  += 0.12;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.12;
       p.life -= 0.035;
       if (p.life <= 0) continue;
       ctx.save();
       ctx.globalAlpha = p.life * 0.9;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI*2);
+      ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
       ctx.fillStyle = p.color;
       ctx.fill();
       ctx.restore();
@@ -1870,45 +1870,45 @@ function initBubbles(opts, correct) {
 
     const alive = bubbles.filter(b => b.state === 'alive');
     for (const b of alive) {
-      b.x  += b.vx;
-      b.y  += b.vy;
-      b.vx += (Math.random()-0.5)*0.04;
-      b.vy += (Math.random()-0.5)*0.04;
+      b.x += b.vx;
+      b.y += b.vy;
+      b.vx += (Math.random() - 0.5) * 0.04;
+      b.vy += (Math.random() - 0.5) * 0.04;
 
       /* Cap speed */
-      const spd = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
-      if (spd > 0.65) { b.vx = b.vx/spd*0.65; b.vy = b.vy/spd*0.65; }
+      const spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+      if (spd > 0.65) { b.vx = b.vx / spd * 0.65; b.vy = b.vy / spd * 0.65; }
 
       /* ── Wall bounce: hard clamp + velocity flip, no squish ── */
       /* Previously the bubble used scaleX/Y near walls, which caused
          visible size changes. Now we just bounce and damp velocity. */
-      if (b.x - b.r < 0)  { b.x = b.r;     b.vx =  Math.abs(b.vx) * 0.85; }
-      if (b.x + b.r > W)  { b.x = W - b.r; b.vx = -Math.abs(b.vx) * 0.85; }
-      if (b.y - b.r < 0)  { b.y = b.r;     b.vy =  Math.abs(b.vy) * 0.85; }
-      if (b.y + b.r > H)  { b.y = H - b.r; b.vy = -Math.abs(b.vy) * 0.85; }
+      if (b.x - b.r < 0) { b.x = b.r; b.vx = Math.abs(b.vx) * 0.85; }
+      if (b.x + b.r > W) { b.x = W - b.r; b.vx = -Math.abs(b.vx) * 0.85; }
+      if (b.y - b.r < 0) { b.y = b.r; b.vy = Math.abs(b.vy) * 0.85; }
+      if (b.y + b.r > H) { b.y = H - b.r; b.vy = -Math.abs(b.vy) * 0.85; }
     }
 
     /* Elastic collision between bubbles */
     for (let a = 0; a < alive.length; a++) {
-      for (let i = a+1; i < alive.length; i++) {
+      for (let i = a + 1; i < alive.length; i++) {
         const ba = alive[a], bb = alive[i];
-        const dx   = bb.x - ba.x;
-        const dy   = bb.y - ba.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
+        const dx = bb.x - ba.x;
+        const dy = bb.y - ba.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
         const minD = ba.r + bb.r;
         if (dist < minD && dist > 0.01) {
           const overlap = (minD - dist) / 2;
-          const nx = dx/dist, ny = dy/dist;
-          ba.x -= nx*overlap; ba.y -= ny*overlap;
-          bb.x += nx*overlap; bb.y += ny*overlap;
+          const nx = dx / dist, ny = dy / dist;
+          ba.x -= nx * overlap; ba.y -= ny * overlap;
+          bb.x += nx * overlap; bb.y += ny * overlap;
           const dvx = ba.vx - bb.vx;
           const dvy = ba.vy - bb.vy;
-          const dot = dvx*nx + dvy*ny;
+          const dot = dvx * nx + dvy * ny;
           if (dot > 0) {
-            ba.vx -= dot*nx * 0.9;
-            ba.vy -= dot*ny * 0.9;
-            bb.vx += dot*nx * 0.9;
-            bb.vy += dot*ny * 0.9;
+            ba.vx -= dot * nx * 0.9;
+            ba.vy -= dot * ny * 0.9;
+            bb.vx += dot * nx * 0.9;
+            bb.vy += dot * ny * 0.9;
           }
         }
       }
@@ -1928,14 +1928,14 @@ function initBubbles(opts, correct) {
   function handleTap(clientX, clientY) {
     if (quizLocked) return;
     const rect = canvas.getBoundingClientRect();
-    const mx   = clientX - rect.left;
-    const my   = clientY - rect.top;
+    const mx = clientX - rect.left;
+    const my = clientY - rect.top;
 
     for (const b of bubbles) {
       if (b.state !== 'alive') continue;
       const dx = mx - b.x;
       const dy = my - b.y;
-      if (Math.sqrt(dx*dx + dy*dy) > b.r) continue;
+      if (Math.sqrt(dx * dx + dy * dy) > b.r) continue;
 
       quizLocked = true;
 
@@ -1948,14 +1948,14 @@ function initBubbles(opts, correct) {
         }
       } else {
         b.state = 'popping-no';
-        b.popT  = 0;
+        b.popT = 0;
         for (const ob of bubbles) {
           if (ob.correct) {
             ob.state = 'popping-ok';
             spawnParticles(ob);
           } else if (ob !== b) {
             ob.state = 'popping-no';
-            ob.popT  = 0.38;
+            ob.popT = 0.38;
           }
         }
       }
@@ -1985,7 +1985,7 @@ function initBubbles(opts, correct) {
 function quizAdvanceSwipe(swiped) {
   if (quizLocked) return;
   quizLocked = true;
-  const q    = quizQuestions[quizIdx];
+  const q = quizQuestions[quizIdx];
   const isOk = swiped === q.correctSide;
 
   const optL = document.getElementById("qOptL");
@@ -2004,12 +2004,12 @@ function quizAdvanceSwipe(swiped) {
   updateQuizHeader();
   hideSwipeGhosts();
 
-  const c1  = document.getElementById("qCard1");
-  const tx  = swiped === "right" ? 160 : -160;
-  const rot = swiped === "right" ? 18  : -18;
+  const c1 = document.getElementById("qCard1");
+  const tx = swiped === "right" ? 160 : -160;
+  const rot = swiped === "right" ? 18 : -18;
   c1.style.transition = "transform 0.28s cubic-bezier(0.4,0,0.6,1), opacity 0.28s";
-  c1.style.transform  = `translateX(${tx}%) rotate(${rot}deg)`;
-  c1.style.opacity    = "0";
+  c1.style.transform = `translateX(${tx}%) rotate(${rot}deg)`;
+  c1.style.opacity = "0";
 
   promoteBackCards();
 
@@ -2045,16 +2045,16 @@ function qDragMove(e) {
   const rot = qCx * 0.05;
   c1.style.transform = `translateX(${qCx}px) translateY(${qCy * 0.3}px) rotate(${rot}deg)`;
 
-  const t    = 40;
+  const t = 40;
   const optL = document.getElementById("qOptL");
   const optR = document.getElementById("qOptR");
   if (optL && optR) {
     if (qCx < -t) {
       optL.style.background = "var(--quiz-hover)"; optL.style.color = "var(--quiz-hover-text)";
-      optR.style.background = "";                  optR.style.color = "";
+      optR.style.background = ""; optR.style.color = "";
     } else if (qCx > t) {
       optR.style.background = "var(--quiz-hover)"; optR.style.color = "var(--quiz-hover-text)";
-      optL.style.background = "";                  optL.style.color = "";
+      optL.style.background = ""; optL.style.color = "";
     } else {
       optL.style.background = ""; optL.style.color = "";
       optR.style.background = ""; optR.style.color = "";
@@ -2075,7 +2075,7 @@ function qDragEnd() {
     quizAdvanceSwipe("left");
   } else {
     c1.style.transition = "transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1)";
-    c1.style.transform  = "";
+    c1.style.transform = "";
     const optL = document.getElementById("qOptL");
     const optR = document.getElementById("qOptR");
     if (optL) { optL.style.background = ""; optL.style.color = ""; }
@@ -2120,7 +2120,7 @@ function startQuizPracticeRound() {
   showQuizPracticePill(true);
   // Header refleja la vuelta de práctica
   document.getElementById("progressLabel").textContent = `1 / ${quizQuestions.length}`;
-  document.getElementById("progressFill").style.width  = "0%";
+  document.getElementById("progressFill").style.width = "0%";
   setTimeout(() => renderQuizQuestion(true), 30);
 }
 
@@ -2135,8 +2135,8 @@ function showQuizPracticePill(show) {
       pill.innerHTML = (
         '<span class="practice-banner-icon">🔁</span>' +
         '<div class="practice-banner-body">' +
-          '<div class="practice-banner-title">Repasando fallados</div>' +
-          '<div class="practice-banner-sub">Acierta cada uno para terminar el quiz</div>' +
+        '<div class="practice-banner-title">Repasando fallados</div>' +
+        '<div class="practice-banner-sub">Acierta cada uno para terminar el quiz</div>' +
         '</div>' +
         '<div class="practice-banner-count"><b id="quizPracticeCount">0</b><span>por dominar</span></div>'
       );
@@ -2162,7 +2162,7 @@ function showQuizPracticePill(show) {
 
 function showQuizResults() {
   const total = quizOriginalTotal || quizQuestions.length;
-  const pct   = Math.round((quizOk / Math.max(1, total)) * 100);
+  const pct = Math.round((quizOk / Math.max(1, total)) * 100);
   quizPracticeMode = false;
   showQuizPracticePill(false);
   // Goals: count quizzes finished + perfect quizzes
@@ -2170,10 +2170,10 @@ function showQuizResults() {
     goalsOnQuizFinished({ correct: quizOk, wrong: quizNo, total: total });
   }
 
-  document.getElementById("progressFill").style.width  = "100%";
+  document.getElementById("progressFill").style.width = "100%";
   document.getElementById("progressLabel").textContent = `${total} / ${total}`;
-  document.getElementById("scoreCorrect").textContent  = quizOk;
-  document.getElementById("scoreSkip").textContent     = quizNo;
+  document.getElementById("scoreCorrect").textContent = quizOk;
+  document.getElementById("scoreSkip").textContent = quizNo;
 
   const qStackCards = document.getElementById("qStackCards");
   qStackCards.classList.add("results-mode");
@@ -2181,12 +2181,12 @@ function showQuizResults() {
   document.getElementById("qDirRow").style.display = "none";
 
   const qResultScreen = document.getElementById("quizResultScreen");
-  const emoji   = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
-  const title   = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
+  const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
+  const title = pct >= 90 ? "Outstanding!" : pct >= 70 ? "Great work!" : pct >= 50 ? "Good effort!" : "Keep going!";
   const message = pct >= 90 ? "You nailed every conjugation."
     : pct >= 70 ? "Solid progress — almost there."
-    : pct >= 50 ? "Practice a bit more and you'll get it."
-    : "Repetition is the key. Don't stop now.";
+      : pct >= 50 ? "Practice a bit more and you'll get it."
+        : "Repetition is the key. Don't stop now.";
 
   qResultScreen.innerHTML = `
     <div class="qresult-emoji">${emoji}</div>
@@ -2253,7 +2253,7 @@ document.getElementById("btnCorrect").addEventListener("click", (e) => {
   if (typeof goalsBumpLearned === "function") goalsBumpLearned();
   next();
 });
-document.getElementById("btnSkip").addEventListener("click",    (e) => {
+document.getElementById("btnSkip").addEventListener("click", (e) => {
   e.stopPropagation();
   if (practiceMode) {
     // En modo práctica el skip se queda pendiente, no aumenta el total
@@ -2264,7 +2264,7 @@ document.getElementById("btnSkip").addEventListener("click",    (e) => {
   }
   next();
 });
-document.getElementById("btnDetail").addEventListener("click",  (e) => { e.stopPropagation(); openDetail(); });
+document.getElementById("btnDetail").addEventListener("click", (e) => { e.stopPropagation(); openDetail(); });
 
 document.getElementById("restartBtn").addEventListener("click", () => {
   buildDeck();
@@ -2327,12 +2327,12 @@ document.getElementById("themeToggle").addEventListener("click", () => { dark = 
 
 /* Quiz swipe listeners */
 const qStackEl = document.getElementById("qStackCards");
-qStackEl.addEventListener("mousedown",  qDragStart);
+qStackEl.addEventListener("mousedown", qDragStart);
 qStackEl.addEventListener("touchstart", qDragStart, { passive: true });
-document.addEventListener("mousemove",  qDragMove);
-document.addEventListener("touchmove",  qDragMove, { passive: true });
-document.addEventListener("mouseup",    qDragEnd);
-document.addEventListener("touchend",   qDragEnd);
+document.addEventListener("mousemove", qDragMove);
+document.addEventListener("touchmove", qDragMove, { passive: true });
+document.addEventListener("mouseup", qDragEnd);
+document.addEventListener("touchend", qDragEnd);
 
 /* Keyboard shortcuts */
 document.addEventListener("keydown", (e) => {
@@ -2342,7 +2342,7 @@ document.addEventListener("keydown", (e) => {
   if (document.getElementById("quizScreen").style.display !== "none") return;
   if ((e.key === " " || e.key === "ArrowUp") && !isFlipped) { e.preventDefault(); toggleFlip(); }
   if (e.key === "ArrowRight" && isFlipped) { document.getElementById("btnCorrect").click(); }
-  if (e.key === "ArrowLeft"  && isFlipped) { document.getElementById("btnSkip").click(); }
+  if (e.key === "ArrowLeft" && isFlipped) { document.getElementById("btnSkip").click(); }
 });
 
 /* ── INIT ── */
@@ -2372,8 +2372,8 @@ if (streakBadgeEl) {
 /* ════════════════════════════════════════════════════════
    G O A L S   /   O B J E C T I V E S   S Y S T E M
    ════════════════════════════════════════════════════════ */
-const GOALS_KEY      = "vfc_goals_done";        // JSON array of completed goal ids
-const GOALS_STATS    = "vfc_goals_stats";       // JSON object with counters
+const GOALS_KEY = "vfc_goals_done";        // JSON array of completed goal ids
+const GOALS_STATS = "vfc_goals_stats";       // JSON object with counters
 
 function _gReadStats() {
   try {
@@ -2382,7 +2382,7 @@ function _gReadStats() {
   } catch (e) { return {}; }
 }
 function _gWriteStats(s) {
-  try { localStorage.setItem(GOALS_STATS, JSON.stringify(s)); } catch (e) {}
+  try { localStorage.setItem(GOALS_STATS, JSON.stringify(s)); } catch (e) { }
 }
 function _gReadDone() {
   try {
@@ -2391,43 +2391,67 @@ function _gReadDone() {
   } catch (e) { return new Set(); }
 }
 function _gWriteDone(set) {
-  try { localStorage.setItem(GOALS_KEY, JSON.stringify([...set])); } catch (e) {}
+  try { localStorage.setItem(GOALS_KEY, JSON.stringify([...set])); } catch (e) { }
 }
 
 /* Goal definitions. Each goal has:
    id, icon, name, desc, tier, target, getProgress(stats, streak) -> number */
 const GOALS = [
   // --- Aprendizaje ---
-  { id: "first_step",   icon: "🌱", name: "Primer paso",       desc: "Aprende tu primer verbo.",                   tier: "Inicio",  target: 1,
-    getProgress: s => s.learned || 0 },
-  { id: "studious_10",  icon: "📘", name: "Estudioso",         desc: "Domina 10 verbos en total.",                  tier: "Bronce", target: 10,
-    getProgress: s => s.learned || 0 },
-  { id: "veteran_50",   icon: "🎓", name: "Veterano",          desc: "Domina 50 verbos en total.",                  tier: "Plata",  target: 50,
-    getProgress: s => s.learned || 0 },
-  { id: "master_100",   icon: "🏅", name: "Maestro",           desc: "Domina 100 verbos en total.",                 tier: "Oro",    target: 100,
-    getProgress: s => s.learned || 0 },
+  {
+    id: "first_step", icon: "🌱", name: "Primer paso", desc: "Aprende tu primer verbo.", tier: "Inicio", target: 1,
+    getProgress: s => s.learned || 0
+  },
+  {
+    id: "studious_10", icon: "📘", name: "Estudioso", desc: "Domina 10 verbos en total.", tier: "Bronce", target: 10,
+    getProgress: s => s.learned || 0
+  },
+  {
+    id: "veteran_50", icon: "🎓", name: "Veterano", desc: "Domina 50 verbos en total.", tier: "Plata", target: 50,
+    getProgress: s => s.learned || 0
+  },
+  {
+    id: "master_100", icon: "🏅", name: "Maestro", desc: "Domina 100 verbos en total.", tier: "Oro", target: 100,
+    getProgress: s => s.learned || 0
+  },
 
   // --- Quizzes ---
-  { id: "first_quiz",   icon: "📝", name: "Primer quiz",       desc: "Termina tu primer quiz.",                     tier: "Inicio", target: 1,
-    getProgress: s => s.quizzes_done || 0 },
-  { id: "clean_quiz",   icon: "✨", name: "Quiz limpio",       desc: "Termina un quiz sin errores.",                tier: "Plata",  target: 1,
-    getProgress: s => s.perfect_quizzes || 0 },
-  { id: "perfectionist",icon: "💎", name: "Perfeccionista",    desc: "Termina 5 quizzes sin errores.",              tier: "Oro",    target: 5,
-    getProgress: s => s.perfect_quizzes || 0 },
+  {
+    id: "first_quiz", icon: "📝", name: "Primer quiz", desc: "Termina tu primer quiz.", tier: "Inicio", target: 1,
+    getProgress: s => s.quizzes_done || 0
+  },
+  {
+    id: "clean_quiz", icon: "✨", name: "Quiz limpio", desc: "Termina un quiz sin errores.", tier: "Plata", target: 1,
+    getProgress: s => s.perfect_quizzes || 0
+  },
+  {
+    id: "perfectionist", icon: "💎", name: "Perfeccionista", desc: "Termina 5 quizzes sin errores.", tier: "Oro", target: 5,
+    getProgress: s => s.perfect_quizzes || 0
+  },
 
   // --- Rachas ---
-  { id: "streak_3",     icon: "🔥", name: "Constancia",        desc: "Mantén una racha de 3 días.",                 tier: "Bronce", target: 3,
-    getProgress: (s, st) => st || 0 },
-  { id: "streak_7",     icon: "🚀", name: "Semana fuerte",     desc: "Mantén una racha de 7 días.",                 tier: "Plata",  target: 7,
-    getProgress: (s, st) => st || 0 },
-  { id: "streak_30",    icon: "👑", name: "Mes legendario",    desc: "Mantén una racha de 30 días.",                tier: "Oro",    target: 30,
-    getProgress: (s, st) => st || 0 },
+  {
+    id: "streak_3", icon: "🔥", name: "Constancia", desc: "Mantén una racha de 3 días.", tier: "Bronce", target: 3,
+    getProgress: (s, st) => st || 0
+  },
+  {
+    id: "streak_7", icon: "🚀", name: "Semana fuerte", desc: "Mantén una racha de 7 días.", tier: "Plata", target: 7,
+    getProgress: (s, st) => st || 0
+  },
+  {
+    id: "streak_30", icon: "👑", name: "Mes legendario", desc: "Mantén una racha de 30 días.", tier: "Oro", target: 30,
+    getProgress: (s, st) => st || 0
+  },
 
   // --- Especiales ---
-  { id: "no_skip",      icon: "🎯", name: "Sin miedo",         desc: "Termina una ronda sin hacer skip.",           tier: "Plata",  target: 1,
-    getProgress: s => s.no_skip_rounds || 0 },
-  { id: "comeback_5",   icon: "💪", name: "Recuperación",      desc: "Domina 5 verbos saltados al practicarlos.",   tier: "Bronce", target: 5,
-    getProgress: s => s.recovered_skips || 0 },
+  {
+    id: "no_skip", icon: "🎯", name: "Sin miedo", desc: "Termina una ronda sin hacer skip.", tier: "Plata", target: 1,
+    getProgress: s => s.no_skip_rounds || 0
+  },
+  {
+    id: "comeback_5", icon: "💪", name: "Recuperación", desc: "Domina 5 verbos saltados al practicarlos.", tier: "Bronce", target: 5,
+    getProgress: s => s.recovered_skips || 0
+  },
 ];
 
 /* Counter mutators (called from gameplay) */
@@ -2471,9 +2495,9 @@ function _currentStreakReadOnly() {
 /* Evaluate all goals; trigger toasts for newly-completed ones (unless silent) */
 function checkGoals(opts) {
   opts = opts || {};
-  const stats   = _gReadStats();
-  const streak  = _currentStreakReadOnly();
-  const done    = _gReadDone();
+  const stats = _gReadStats();
+  const streak = _currentStreakReadOnly();
+  const done = _gReadDone();
   let newlyDone = [];
 
   GOALS.forEach(g => {
@@ -2506,8 +2530,8 @@ function _refreshGoalsDot(forceShow) {
   const dot = document.getElementById("goalsBtnDot");
   if (!dot) return;
   const stats = _gReadStats();
-  const seen  = stats._goals_seen_count || 0;
-  const done  = _gReadDone().size;
+  const seen = stats._goals_seen_count || 0;
+  const done = _gReadDone().size;
   if (forceShow || done > seen) {
     dot.hidden = false;
   }
@@ -2518,10 +2542,10 @@ function showGoalToast(goal) {
   if (!toast) return;
   const emoji = document.getElementById("goalToastEmoji");
   const title = document.getElementById("goalToastTitle");
-  const name  = document.getElementById("goalToastName");
+  const name = document.getElementById("goalToastName");
   if (emoji) emoji.textContent = goal.icon;
   if (title) title.textContent = "¡Objetivo desbloqueado!";
-  if (name)  name.textContent  = goal.name;
+  if (name) name.textContent = goal.name;
   toast.classList.add("show");
   // restart bounce
   if (emoji) {
@@ -2538,9 +2562,9 @@ function showGoalToast(goal) {
 function renderGoalsList() {
   const list = document.getElementById("goalsList");
   if (!list) return;
-  const stats  = _gReadStats();
+  const stats = _gReadStats();
   const streak = _currentStreakReadOnly();
-  const done   = _gReadDone();
+  const done = _gReadDone();
 
   const completed = GOALS.filter(g => done.has(g.id)).length;
   const sumEl = document.getElementById("goalsSummary");
@@ -2608,7 +2632,7 @@ function closeGoalsModal() {
     }
   });
   // Initial dot evaluation (silent so no toast)
-  try { checkGoals({ silent: true }); } catch (e) {}
+  try { checkGoals({ silent: true }); } catch (e) { }
 })();
 
 
@@ -2616,37 +2640,37 @@ function closeGoalsModal() {
    NUEVOS OBJETIVOS — se inyectan en GOALS al cargar
    ════════════════════════════════════════════════════════════════ */
 const EXTRA_GOALS = [
-  { id:"studious_5",      icon:"📗", name:"Aprendiz II",         desc:"Marca 5 verbos como 'I know it'",           tier:"Bronce", target:5,   getProgress:s=>s.learned||0 },
-  { id:"studious_25",     icon:"📘", name:"Aprendiz III",        desc:"Marca 25 verbos como 'I know it'",          tier:"Plata",  target:25,  getProgress:s=>s.learned||0 },
-  { id:"studious_75",     icon:"📙", name:"Aprendiz IV",         desc:"Marca 75 verbos como 'I know it'",          tier:"Oro",    target:75,  getProgress:s=>s.learned||0 },
-  { id:"explorer_1",      icon:"🔍", name:"Explorador I",        desc:"Abre detalles de 1 verbo (✦)",              tier:"Inicio", target:1,   getProgress:s=>s.details||0 },
-  { id:"explorer_10",     icon:"🔎", name:"Explorador II",       desc:"Explora 10 verbos con ✦",                   tier:"Bronce", target:10,  getProgress:s=>s.details||0 },
-  { id:"explorer_25",     icon:"🧭", name:"Explorador III",      desc:"Explora 25 verbos con ✦",                   tier:"Plata",  target:25,  getProgress:s=>s.details||0 },
-  { id:"humble_1",        icon:"🙋", name:"Honesto I",           desc:"Usa 'I don't know' por primera vez",        tier:"Inicio", target:1,   getProgress:s=>s.skipped_total||0 },
-  { id:"humble_10",       icon:"🙌", name:"Honesto II",          desc:"Usa 'I don't know' 10 veces",               tier:"Bronce", target:10,  getProgress:s=>s.skipped_total||0 },
-  { id:"rounds_1",        icon:"🔄", name:"Primera ronda",       desc:"Completa tu primera ronda",                 tier:"Inicio", target:1,   getProgress:s=>s.rounds_done||0 },
-  { id:"rounds_5",        icon:"🔁", name:"5 rondas",            desc:"Completa 5 rondas",                         tier:"Bronce", target:5,   getProgress:s=>s.rounds_done||0 },
-  { id:"rounds_15",       icon:"⚡", name:"15 rondas",           desc:"Completa 15 rondas",                        tier:"Plata",  target:15,  getProgress:s=>s.rounds_done||0 },
-  { id:"quiz_3",          icon:"📝", name:"Quizzer I",           desc:"Completa 3 quizzes",                        tier:"Bronce", target:3,   getProgress:s=>s.quizzes_done||0 },
-  { id:"quiz_10",         icon:"📋", name:"Quizzer II",          desc:"Completa 10 quizzes",                       tier:"Plata",  target:10,  getProgress:s=>s.quizzes_done||0 },
-  { id:"perfect_10",      icon:"💯", name:"Perfeccionista II",   desc:"Obtén 10 resultados perfectos en quiz",     tier:"Oro",    target:10,  getProgress:s=>s.perfect_quizzes||0 },
-  { id:"speed_slow",      icon:"🐢", name:"Pace lento",          desc:"Usa velocidad Lento al menos una vez",      tier:"Inicio", target:1,   getProgress:s=>s.usedSlow?1:0 },
-  { id:"speed_fast",      icon:"🐇", name:"Pace rápido",         desc:"Usa velocidad Rápido al menos una vez",     tier:"Inicio", target:1,   getProgress:s=>s.usedFast?1:0 },
-  { id:"streak_14",       icon:"🔥", name:"2 semanas",           desc:"Mantén una racha de 14 días",               tier:"Plata",  target:14,  getProgress:(s,st)=>st||0 },
-  { id:"streak_60",       icon:"🌟", name:"2 meses",             desc:"Mantén una racha de 60 días",               tier:"Oro",    target:60,  getProgress:(s,st)=>st||0 },
-  { id:"streak_100",      icon:"👑", name:"100 días",            desc:"Mantén una racha de 100 días",              tier:"Legendario", target:100, getProgress:(s,st)=>st||0 },
+  { id: "studious_5", icon: "📗", name: "Aprendiz II", desc: "Marca 5 verbos como 'I know it'", tier: "Bronce", target: 5, getProgress: s => s.learned || 0 },
+  { id: "studious_25", icon: "📘", name: "Aprendiz III", desc: "Marca 25 verbos como 'I know it'", tier: "Plata", target: 25, getProgress: s => s.learned || 0 },
+  { id: "studious_75", icon: "📙", name: "Aprendiz IV", desc: "Marca 75 verbos como 'I know it'", tier: "Oro", target: 75, getProgress: s => s.learned || 0 },
+  { id: "explorer_1", icon: "🔍", name: "Explorador I", desc: "Abre detalles de 1 verbo (✦)", tier: "Inicio", target: 1, getProgress: s => s.details || 0 },
+  { id: "explorer_10", icon: "🔎", name: "Explorador II", desc: "Explora 10 verbos con ✦", tier: "Bronce", target: 10, getProgress: s => s.details || 0 },
+  { id: "explorer_25", icon: "🧭", name: "Explorador III", desc: "Explora 25 verbos con ✦", tier: "Plata", target: 25, getProgress: s => s.details || 0 },
+  { id: "humble_1", icon: "🙋", name: "Honesto I", desc: "Usa 'I don't know' por primera vez", tier: "Inicio", target: 1, getProgress: s => s.skipped_total || 0 },
+  { id: "humble_10", icon: "🙌", name: "Honesto II", desc: "Usa 'I don't know' 10 veces", tier: "Bronce", target: 10, getProgress: s => s.skipped_total || 0 },
+  { id: "rounds_1", icon: "🔄", name: "Primera ronda", desc: "Completa tu primera ronda", tier: "Inicio", target: 1, getProgress: s => s.rounds_done || 0 },
+  { id: "rounds_5", icon: "🔁", name: "5 rondas", desc: "Completa 5 rondas", tier: "Bronce", target: 5, getProgress: s => s.rounds_done || 0 },
+  { id: "rounds_15", icon: "⚡", name: "15 rondas", desc: "Completa 15 rondas", tier: "Plata", target: 15, getProgress: s => s.rounds_done || 0 },
+  { id: "quiz_3", icon: "📝", name: "Quizzer I", desc: "Completa 3 quizzes", tier: "Bronce", target: 3, getProgress: s => s.quizzes_done || 0 },
+  { id: "quiz_10", icon: "📋", name: "Quizzer II", desc: "Completa 10 quizzes", tier: "Plata", target: 10, getProgress: s => s.quizzes_done || 0 },
+  { id: "perfect_10", icon: "💯", name: "Perfeccionista II", desc: "Obtén 10 resultados perfectos en quiz", tier: "Oro", target: 10, getProgress: s => s.perfect_quizzes || 0 },
+  { id: "speed_slow", icon: "🐢", name: "Pace lento", desc: "Usa velocidad Lento al menos una vez", tier: "Inicio", target: 1, getProgress: s => s.usedSlow ? 1 : 0 },
+  { id: "speed_fast", icon: "🐇", name: "Pace rápido", desc: "Usa velocidad Rápido al menos una vez", tier: "Inicio", target: 1, getProgress: s => s.usedFast ? 1 : 0 },
+  { id: "streak_14", icon: "🔥", name: "2 semanas", desc: "Mantén una racha de 14 días", tier: "Plata", target: 14, getProgress: (s, st) => st || 0 },
+  { id: "streak_60", icon: "🌟", name: "2 meses", desc: "Mantén una racha de 60 días", tier: "Oro", target: 60, getProgress: (s, st) => st || 0 },
+  { id: "streak_100", icon: "👑", name: "100 días", desc: "Mantén una racha de 100 días", tier: "Legendario", target: 100, getProgress: (s, st) => st || 0 },
 ];
 
 // Orden secuencial por familia para desbloqueo progresivo
 const GOAL_FAMILY_ORDER = {
-  studious:  ["first_step","studious_10","studious_5","studious_25","studious_75","veteran_50","master_100"],
-  explorer:  ["explorer_1","explorer_10","explorer_25"],
-  humble:    ["humble_1","humble_10"],
-  rounds:    ["rounds_1","rounds_5","rounds_15"],
-  quizzes:   ["first_quiz","quiz_3","quiz_10"],
-  perfect:   ["clean_quiz","perfectionist","perfect_10"],
-  speed:     ["speed_slow","speed_fast"],
-  streak:    ["streak_3","streak_7","streak_14","streak_30","streak_60","streak_100"],
+  studious: ["first_step", "studious_10", "studious_5", "studious_25", "studious_75", "veteran_50", "master_100"],
+  explorer: ["explorer_1", "explorer_10", "explorer_25"],
+  humble: ["humble_1", "humble_10"],
+  rounds: ["rounds_1", "rounds_5", "rounds_15"],
+  quizzes: ["first_quiz", "quiz_3", "quiz_10"],
+  perfect: ["clean_quiz", "perfectionist", "perfect_10"],
+  speed: ["speed_slow", "speed_fast"],
+  streak: ["streak_3", "streak_7", "streak_14", "streak_30", "streak_60", "streak_100"],
 };
 
 // Inyectar extra goals en GOALS si aún no existen
@@ -2671,7 +2695,7 @@ function isGoalFamilyUnlocked(id) {
 // Patch renderGoalsList para mostrar estado bloqueado
 const _origRenderGoalsList = typeof renderGoalsList === "function" ? renderGoalsList : null;
 if (_origRenderGoalsList) {
-  window.renderGoalsList = function() {
+  window.renderGoalsList = function () {
     _origRenderGoalsList();
     // Marcar los bloqueados
     const list = document.getElementById("goalsList");
@@ -2718,8 +2742,15 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
    ════════════════════════════════════════════════════════════════ */
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
+/*
+  In app.js, replace the entire initOnboarding IIFE with this version.
+  Key additions:
+    - Progress bar fill
+    - Smoother visual sync
+    - Fixed "see intro" button in Settings (was calling classList.add("visible"), now uses opacity)
+*/
+
 (function initOnboarding() {
-  // ?preview=1 fuerza el onboarding siempre (modo debug)
   const _forceOnboarding = new URLSearchParams(location.search).has('preview');
   if (!_forceOnboarding && localStorage.getItem(ONBOARDING_KEY)) return;
   const overlay = document.getElementById("onboardingOverlay");
@@ -2730,29 +2761,38 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   requestAnimationFrame(() => { overlay.style.opacity = "1"; });
 
   let current = 0;
-  const slides  = overlay.querySelectorAll(".onboarding-slide");
-  const dots    = overlay.querySelectorAll(".ob-dot");
-  const btnBack  = document.getElementById("obBack");
-  const btnNext  = document.getElementById("obNext");
+  const slides = overlay.querySelectorAll(".onboarding-slide");
+  const dots = overlay.querySelectorAll(".ob-dot");
+  const btnBack = document.getElementById("obBack");
+  const btnNext = document.getElementById("obNext");
   const btnStart = document.getElementById("obStart");
+  const progFill = document.getElementById("obProgressFill");
 
   function goTo(n) {
     slides[current].classList.remove("active");
     dots[current].classList.remove("active");
-    dots[current].setAttribute("aria-selected","false");
+    dots[current].setAttribute("aria-selected", "false");
     current = n;
     slides[current].classList.add("active");
     dots[current].classList.add("active");
-    dots[current].setAttribute("aria-selected","true");
-    btnBack.style.visibility  = current === 0 ? "hidden" : "visible";
-    btnNext.style.display     = current < slides.length - 1 ? "inline-flex" : "none";
-    btnStart.style.display    = current === slides.length - 1 ? "inline-flex" : "none";
+    dots[current].setAttribute("aria-selected", "true");
+    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnNext.style.display = current < slides.length - 1 ? "inline-flex" : "none";
+    btnStart.style.display = current === slides.length - 1 ? "inline-flex" : "none";
+    // Update progress bar
+    if (progFill) {
+      const pct = Math.round(((current + 1) / slides.length) * 100);
+      progFill.style.width = pct + "%";
+    }
   }
 
-  btnNext.addEventListener("click",  () => { if (current < slides.length-1) goTo(current+1); });
-  btnBack.addEventListener("click",  () => { if (current > 0) goTo(current-1); });
+  btnNext.addEventListener("click", () => { if (current < slides.length - 1) goTo(current + 1); });
+  btnBack.addEventListener("click", () => { if (current > 0) goTo(current - 1); });
   btnStart.addEventListener("click", closeOnboarding);
   dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
+
+  // Set initial progress
+  goTo(0);
 
   function closeOnboarding() {
     localStorage.setItem(ONBOARDING_KEY, "1");
@@ -2761,22 +2801,21 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   }
 })();
 
-
 /* ════════════════════════════════════════════════════════════════
    SETTINGS — configuración persistida en vfc_settings
    ════════════════════════════════════════════════════════════════ */
 const SETTINGS_KEY = "vfc_settings";
-const DEFAULT_SETTINGS = { theme:"auto", animations:"on", audioSpeed:"1", autoPlay:"off", roundSize:"10", quizConfirm:"on" };
+const DEFAULT_SETTINGS = { theme: "auto", animations: "on", audioSpeed: "1", autoPlay: "off", roundSize: "10", quizConfirm: "on" };
 
 function loadVFCSettings() {
-  try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")); }
-  catch { return {...DEFAULT_SETTINGS}; }
+  try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
+  catch { return { ...DEFAULT_SETTINGS }; }
 }
-function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch {} }
+function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { } }
 
 function applyVFCSettings(s) {
   // Tema
-  if (s.theme === "dark")  { dark = true;  applyTheme(); }
+  if (s.theme === "dark") { dark = true; applyTheme(); }
   else if (s.theme === "light") { dark = false; applyTheme(); }
   // Animaciones
   if (s.animations === "off") document.documentElement.classList.add("no-animations");
@@ -2794,8 +2833,8 @@ function applyVFCSettings(s) {
 }
 
 (function initSettings() {
-  const overlay  = document.getElementById("settingsOverlay");
-  const openBtn  = document.getElementById("settingsBtn");
+  const overlay = document.getElementById("settingsOverlay");
+  const openBtn = document.getElementById("settingsBtn");
   const closeBtn = document.getElementById("settingsClose");
   if (!overlay || !openBtn) return;
 
@@ -2817,13 +2856,13 @@ function applyVFCSettings(s) {
     if (tEl) tEl.value = s.theme;
     if (aEl) aEl.value = s.audioSpeed;
     if (rEl) rEl.value = s.roundSize;
-    _syncToggle("settingAnimations",  s.animations  === "on");
-    _syncToggle("settingAutoPlay",    s.autoPlay    === "on");
+    _syncToggle("settingAnimations", s.animations === "on");
+    _syncToggle("settingAutoPlay", s.autoPlay === "on");
     _syncToggle("settingQuizConfirm", s.quizConfirm === "on");
   }
 
   // Selects
-  [["settingTheme","theme"],["settingAudioSpeed","audioSpeed"],["settingRoundSize","roundSize"]].forEach(([id,key]) => {
+  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"], ["settingRoundSize", "roundSize"]].forEach(([id, key]) => {
     document.getElementById(id)?.addEventListener("change", e => {
       s[key] = e.target.value;
       saveVFCSettings(s);
@@ -2832,7 +2871,7 @@ function applyVFCSettings(s) {
   });
 
   // Toggles
-  [["settingAnimations","animations"],["settingAutoPlay","autoPlay"],["settingQuizConfirm","quizConfirm"]].forEach(([id,key]) => {
+  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"], ["settingQuizConfirm", "quizConfirm"]].forEach(([id, key]) => {
     document.getElementById(id)?.addEventListener("click", () => {
       const isOn = document.getElementById(id).dataset.val !== "on";
       s[key] = isOn ? "on" : "off";
@@ -2858,7 +2897,7 @@ function applyVFCSettings(s) {
   // Reset racha
   document.getElementById("settingResetStreak")?.addEventListener("click", () => {
     if (!confirm("¿Resetear tu racha diaria?")) return;
-    try { localStorage.removeItem(STREAK_KEY); localStorage.removeItem(STREAK_DATE_KEY); } catch {}
+    try { localStorage.removeItem(STREAK_KEY); localStorage.removeItem(STREAK_DATE_KEY); } catch { }
     _setStreakNumText(0);
     if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
   });
@@ -2867,7 +2906,7 @@ function applyVFCSettings(s) {
   document.getElementById("settingResetAll")?.addEventListener("click", () => {
     if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
     [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY, ONBOARDING_KEY, "vfc_speed"].forEach(k => {
-      try { localStorage.removeItem(k); } catch {}
+      try { localStorage.removeItem(k); } catch { }
     });
     if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
     setTimeout(() => location.reload(), 900);
@@ -2900,15 +2939,17 @@ function applyVFCSettings(s) {
 (function initPWA() {
   let deferredPrompt = null;
   const pwaSection = document.getElementById("pwaSection");
-  const pwaBtn     = document.getElementById("pwaInstallBtn");
+  const pwaBtn = document.getElementById("pwaInstallBtn");
 
+  /* Capture the install prompt so we can trigger it later */
   window.addEventListener("beforeinstallprompt", e => {
     e.preventDefault();
     deferredPrompt = e;
-    if (pwaSection) pwaSection.style.display = "";
+    if (pwaSection) pwaSection.style.display = "";  // show Settings install row
   });
 
-  pwaBtn?.addEventListener("click", async () => {
+  /* Shared install trigger */
+  async function triggerInstall() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
@@ -2917,45 +2958,22 @@ function applyVFCSettings(s) {
       if (pwaSection) pwaSection.style.display = "none";
       if (typeof showShareToast === "function") showShareToast("¡App instalada! 📲");
     }
-  });
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  // modo debug: ?preview=1 muestra el banner aunque no haya prompt
-  if (new URLSearchParams(location.search).has('preview')) {
-    setTimeout(() => {
-      if (pwaBanner) {
-        pwaBanner.style.display = "flex";
-        requestAnimationFrame(() => pwaBanner.classList.add("is-visible"));
-      }
-    }, 4000);
   }
 
-  // Ya está instalada
-  window.addEventListener("appinstalled", () => hidePWAUI());
+  /* Settings row button */
+  if (pwaBtn) pwaBtn.addEventListener("click", triggerInstall);
 
-  // Botón en Settings
-  pwaBtnSettings?.addEventListener("click", triggerInstall);
-
-  // Botón en el banner
-  pwaBannerInstall?.addEventListener("click", triggerInstall);
-
-  // Cerrar banner
-  pwaBannerDismiss?.addEventListener("click", () => {
-    bannerDismissed = true;
-    hidePWAUI();
+  /* Already installed */
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    if (pwaSection) pwaSection.style.display = "none";
   });
 
-  // Service Worker
-=======
->>>>>>> parent of bb293a9 (vfc_update_v3)
-=======
->>>>>>> parent of bb293a9 (vfc_update_v3)
-=======
->>>>>>> parent of bb293a9 (vfc_update_v3)
+  /* Register service worker */
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    navigator.serviceWorker.register("./sw.js")
+      .then(reg => console.log("[PWA] SW registered", reg.scope))
+      .catch(err => console.warn("[PWA] SW registration failed", err));
   }
 })();
 

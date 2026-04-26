@@ -1,26 +1,38 @@
 {
-  "name": "Verb Flashcards",
-  "short_name": "VerbCards",
-  "description": "Aprende verbos en inglés con flashcards, quizzes y objetivos",
-  "start_url": "./index.html",
+  "name": "Verb Flashcards – JC",
+  "short_name": "Verbos",
+  "description": "Aprende verbos en inglés con flashcards interactivas, quizzes y rachas diarias.",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#141414",
-  "theme_color": "#f0a500",
   "orientation": "portrait-primary",
+  "background_color": "#faf8f5",
+  "theme_color": "#ff6b35",
+  "lang": "es",
+  "categories": [
+    "education",
+    "games"
+  ],
   "icons": [
     {
       "src": "https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["education"],
-  "lang": "es"
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Practicar ahora",
+      "short_name": "Practicar",
+      "description": "Ir directo a las flashcards",
+      "url": "./"
+    }
+  ]
 }

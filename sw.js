@@ -1,43 +1,51 @@
-/* ── VerbFlashCards Service Worker ── */
-const CACHE_NAME = "vfc-v1";
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.webmanifest"
-];
+/* ── Verb Flashcards — Service Worker ── */
+const CACHE = "vfc-v1";
+const PRECACHE = ["./", "./index.html", "./app.js", "./styles.css", "./manifest.webmanifest"];
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+/* Install: pre-cache shell assets */
+self.addEventListener("install", e => {
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(PRECACHE))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+/* Activate: remove old caches */
+self.addEventListener("activate", e => {
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-self.addEventListener("fetch", event => {
-  // Solo cachear GET del mismo origen
-  if (event.request.method !== "GET") return;
-  event.respondWith(
-    caches.match(event.request).then(cached => {
+/* Fetch: cache-first for same-origin, network-first for external (fonts, GIPHY) */
+self.addEventListener("fetch", e => {
+  const url = new URL(e.request.url);
+  const isSameOrigin = url.origin === self.location.origin;
+
+  if (!isSameOrigin) {
+    /* External: try network, ignore errors */
+    return;
+  }
+
+  e.respondWith(
+    caches.match(e.request).then(cached => {
       if (cached) return cached;
-      return fetch(event.request).then(response => {
-        // Guardar en cache solo respuestas válidas del origen
-        if (response && response.status === 200 && response.type === "basic") {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+      return fetch(e.request).then(res => {
+        /* Cache successful GET responses */
+        if (res && res.status === 200 && e.request.method === "GET") {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
         }
-        return response;
-      }).catch(() => cached);
+        return res;
+      });
+    }).catch(() => {
+      /* Offline fallback for navigation requests */
+      if (e.request.mode === "navigate") {
+        return caches.match("./index.html");
+      }
     })
   );
 });

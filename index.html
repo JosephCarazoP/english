@@ -17,19 +17,15 @@
 
   <header class="app-header">
     <div class="header-row header-row-top">
-      <img
-        src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg"
-        alt="Logo"
-        class="logo-web"
-        onclick="location.reload()"
-        title="Restart"
-      >
+      <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" alt="Logo" class="logo-web"
+        onclick="location.reload()" title="Restart">
 
       <button class="streak-progress" id="streakBadge" aria-label="Tu racha diaria" type="button">
         <span class="streak-flame" aria-hidden="true">🔥</span>
         <div class="streak-progress-body">
           <div class="streak-progress-top">
-            <span class="streak-progress-num"><b id="streakNum">0</b><span class="streak-progress-day">días</span></span>
+            <span class="streak-progress-num"><b id="streakNum">0</b><span
+                class="streak-progress-day">días</span></span>
             <span class="streak-progress-target" id="streakTarget">→ 3</span>
           </div>
           <div class="streak-progress-track">
@@ -43,7 +39,8 @@
         <span class="goals-btn-dot" id="goalsBtnDot" hidden></span>
       </button>
 
-      <button class="icon-btn settings-btn" id="settingsBtn" title="Configuración" aria-label="Configuración" type="button">
+      <button class="icon-btn settings-btn" id="settingsBtn" title="Configuración" aria-label="Configuración"
+        type="button">
         ⚙️
       </button>
     </div>
@@ -99,9 +96,9 @@
     </div>
 
     <div class="actions" id="actions">
-      <button class="act-btn btn-skip"    id="btnSkip">I don't know</button>
+      <button class="act-btn btn-skip" id="btnSkip">I don't know</button>
       <button class="act-btn btn-correct" id="btnCorrect">I know it</button>
-      <button class="act-btn btn-detail"  id="btnDetail">✦</button>
+      <button class="act-btn btn-detail" id="btnDetail">✦</button>
     </div>
   </div>
 
@@ -131,14 +128,17 @@
     <div class="finish-subtitle" id="finishSubtitle"></div>
     <div class="finish-stats">
       <div class="finish-stat ok"><b id="fCorrect">0</b><span>Learned</span></div>
-      <div class="finish-stat">   <b id="fSkip">0</b>   <span>Skipped</span></div>
-      <div class="finish-stat">   <b id="fTotal">0</b>  <span>Total</span></div>
+      <div class="finish-stat"> <b id="fSkip">0</b> <span>Skipped</span></div>
+      <div class="finish-stat"> <b id="fTotal">0</b> <span>Total</span></div>
     </div>
     <div id="retentionMsg" style="display:none;"></div>
     <div class="finish-actions">
-      <button class="restart-btn" onclick="startQuiz()" style="background:var(--text);color:var(--bg);">Take Final Quiz 📝</button>
+      <button class="restart-btn" onclick="startQuiz()" style="background:var(--text);color:var(--bg);">Take Final Quiz
+        📝</button>
       <button class="restart-btn share-btn" id="shareFinishBtn" type="button">Share Results 📤</button>
-      <button class="restart-btn" id="restartBtn" style="background:transparent;border:2px solid var(--progress-bg);color:var(--text);">Shuffle &amp; Restart</button>
+      <button class="restart-btn" id="restartBtn"
+        style="background:transparent;border:2px solid var(--progress-bg);color:var(--text);">Shuffle &amp;
+        Restart</button>
     </div>
   </div>
 
@@ -161,7 +161,8 @@
           <div class="pron-word" id="modalPresent"></div>
           <div class="pron-ipa" id="modalIpaPres"></div>
           <div class="pron-actions">
-            <button class="pron-btn pron-btn-single" data-form="pres" type="button" aria-label="Reproducir verbo en presente">
+            <button class="pron-btn pron-btn-single" data-form="pres" type="button"
+              aria-label="Reproducir verbo en presente">
               <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
@@ -174,7 +175,8 @@
           <div class="pron-word" id="modalPast"></div>
           <div class="pron-ipa" id="modalIpaPast"></div>
           <div class="pron-actions">
-            <button class="pron-btn pron-btn-single" data-form="past" type="button" aria-label="Reproducir verbo en pasado">
+            <button class="pron-btn pron-btn-single" data-form="past" type="button"
+              aria-label="Reproducir verbo en pasado">
               <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
@@ -202,7 +204,8 @@
         <div class="ex-card ex-pres">
           <div class="ex-head">
             <span class="ex-tag">Present</span>
-            <button class="ex-mini-play" id="playSentencePres" type="button" aria-label="Play present sentence">▶</button>
+            <button class="ex-mini-play" id="playSentencePres" type="button"
+              aria-label="Play present sentence">▶</button>
           </div>
           <div id="modalSentencePres" class="ex-text"></div>
         </div>
@@ -272,69 +275,117 @@
 
 
   <!-- ── ONBOARDING OVERLAY ── -->
-  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida" style="display:none;">
+  <!--
+  REPLACE the entire <div class="onboarding-overlay" ...> block in index.html with this.
+  Everything else in index.html stays the same.
+-->
+
+  <!-- ── ONBOARDING OVERLAY ── -->
+  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida"
+    style="display:none;">
     <div class="onboarding-card">
+
+      <!-- Progress bar -->
+      <div class="ob-progress-track">
+        <div class="ob-progress-fill" id="obProgressFill"></div>
+      </div>
+
+      <!-- Slides -->
       <div class="onboarding-slides">
 
+        <!-- Slide 0: Cómo funciona -->
         <div class="onboarding-slide active" data-slide="0">
-          <div class="onboarding-icon">📚</div>
-          <h2 class="onboarding-title">¿Cómo funciona?</h2>
-          <ul class="onboarding-steps">
-            <li><span class="ob-num">1</span> Verás el verbo en <b>presente</b></li>
-            <li><span class="ob-num">2</span> Toca la tarjeta para ver su forma en <b>pasado</b></li>
-            <li><span class="ob-num">3</span> Decide si lo sabes o no</li>
-            <li><span class="ob-num">4</span> Al final verás tu <b>resultado</b></li>
-          </ul>
+          <div class="ob-hero ob-hero-0" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">📚</div>
+            <div class="ob-hero-chip ob-chip-irr">Irregular</div>
+            <div class="ob-hero-chip ob-chip-reg">Regular</div>
+          </div>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Así funciona</h2>
+            <p class="ob-desc">Aprende verbos irregulares y regulares en inglés paso a paso.</p>
+            <ul class="onboarding-steps">
+              <li><span class="ob-num">1</span><span>Ve el verbo en <b>presente</b></span></li>
+              <li><span class="ob-num">2</span><span>Toca la tarjeta para ver el <b>pasado</b></span></li>
+              <li><span class="ob-num">3</span><span>Decide si lo sabías o no</span></li>
+              <li><span class="ob-num">4</span><span>Al final revisa tu <b>resultado</b></span></li>
+            </ul>
+          </div>
         </div>
 
+        <!-- Slide 1: Las acciones -->
         <div class="onboarding-slide" data-slide="1">
-          <div class="onboarding-icon">🎮</div>
-          <h2 class="onboarding-title">Las acciones</h2>
-          <div class="onboarding-actions-list">
-            <div class="ob-action">
-              <span class="ob-action-icon">✔️</span>
-              <div><b>I know it</b><span>Ya dominas ese verbo</span></div>
-            </div>
-            <div class="ob-action">
-              <span class="ob-action-icon">❌</span>
-              <div><b>I don't know</b><span>Aún lo estás aprendiendo</span></div>
-            </div>
-            <div class="ob-action">
-              <span class="ob-action-icon">✦</span>
-              <div><b>Ver detalles</b><span>Ejemplos, IPA y pronunciación</span></div>
+          <div class="ob-hero ob-hero-1" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">🎮</div>
+            <div class="ob-hero-btn-demo ob-demo-ok">✔ I know it</div>
+            <div class="ob-hero-btn-demo ob-demo-no">✘ Don't know</div>
+          </div>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Las acciones</h2>
+            <p class="ob-desc">Después de ver la respuesta, usa uno de los tres botones.</p>
+            <div class="onboarding-actions-list">
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-ok"></span>
+                <div><b>I know it</b><span>Ya dominas ese verbo</span></div>
+              </div>
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-no"></span>
+                <div><b>I don't know</b><span>Seguirás practicándolo</span></div>
+              </div>
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-pu"></span>
+                <div><b>✦ Detalles</b><span>IPA, ejemplos y audio</span></div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Slide 2: Quizzes -->
         <div class="onboarding-slide" data-slide="2">
-          <div class="onboarding-icon">📝</div>
-          <h2 class="onboarding-title">Los quizzes</h2>
-          <p class="onboarding-desc">Después de practicar, pon a prueba tu conocimiento.</p>
-          <div class="onboarding-quiz-features">
-            <div class="ob-quiz-feat"><span>✏️</span><span>Escribe la respuesta</span></div>
-            <div class="ob-quiz-feat"><span>🔘</span><span>Selecciona la opción correcta</span></div>
-            <div class="ob-quiz-feat"><span>🧠</span><span>Aprender + practicar = recordar mejor</span></div>
+          <div class="ob-hero ob-hero-2" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">🏆</div>
+            <div class="ob-streak-demo">
+              <span>🔥</span>
+              <span class="ob-streak-num">7</span>
+              <span class="ob-streak-lbl">días</span>
+            </div>
           </div>
-          <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa los verbos del round actual.</p>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Quizzes &amp; racha</h2>
+            <p class="ob-desc">Pon a prueba lo aprendido y mantén tu racha diaria.</p>
+            <div class="onboarding-quiz-features">
+              <div class="ob-quiz-feat"><span>✏️</span><span>Escribe la forma en pasado</span></div>
+              <div class="ob-quiz-feat"><span>🫧</span><span>Revienta la burbuja correcta</span></div>
+              <div class="ob-quiz-feat"><span>🔥</span><span>Racha diaria para mantenerte activo</span></div>
+            </div>
+            <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa los verbos de la ronda actual.</p>
+          </div>
+        </div>
+
+      </div><!-- /onboarding-slides -->
+
+      <!-- Bottom: dots + nav -->
+      <div class="ob-footer">
+        <div class="onboarding-dots" role="tablist" aria-label="Progreso del tutorial">
+          <button class="ob-dot active" data-target="0" role="tab" aria-selected="true"
+            aria-label="Paso 1 de 3"></button>
+          <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Paso 2 de 3"></button>
+          <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Paso 3 de 3"></button>
+        </div>
+        <div class="onboarding-nav">
+          <button class="ob-btn ob-btn-back" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
+          <button class="ob-btn ob-btn-next" id="obNext" type="button">Siguiente →</button>
+          <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 ¡Empezar!</button>
         </div>
       </div>
 
-      <div class="onboarding-dots" role="tablist">
-        <button class="ob-dot active" data-target="0" role="tab" aria-selected="true" aria-label="Slide 1"></button>
-        <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
-        <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Slide 3"></button>
-      </div>
-
-      <div class="onboarding-nav">
-        <button class="ob-btn ob-btn-back" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
-        <button class="ob-btn ob-btn-next" id="obNext" type="button">Siguiente →</button>
-        <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 Empezar</button>
-      </div>
-    </div>
+    </div><!-- /onboarding-card -->
   </div>
-
   <!-- ── SETTINGS MODAL ── -->
-  <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración" style="display:none;">
+  <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración"
+    style="display:none;">
     <div class="settings-card">
       <div class="settings-header">
         <h2 class="settings-title">⚙️ Configuración</h2>
@@ -354,7 +405,8 @@
           </div>
           <div class="settings-row">
             <label class="settings-label">Animaciones</label>
-            <button class="settings-toggle" id="settingAnimations" data-val="on" type="button" aria-pressed="true"><span class="toggle-knob"></span></button>
+            <button class="settings-toggle" id="settingAnimations" data-val="on" type="button" aria-pressed="true"><span
+                class="toggle-knob"></span></button>
           </div>
         </section>
 
@@ -370,7 +422,8 @@
           </div>
           <div class="settings-row">
             <label class="settings-label">Auto-play al abrir ✦</label>
-            <button class="settings-toggle" id="settingAutoPlay" data-val="off" type="button" aria-pressed="false"><span class="toggle-knob"></span></button>
+            <button class="settings-toggle" id="settingAutoPlay" data-val="off" type="button" aria-pressed="false"><span
+                class="toggle-knob"></span></button>
           </div>
         </section>
 
@@ -386,7 +439,8 @@
           </div>
           <div class="settings-row">
             <label class="settings-label">Confirmar al salir del quiz</label>
-            <button class="settings-toggle" id="settingQuizConfirm" data-val="on" type="button" aria-pressed="true"><span class="toggle-knob"></span></button>
+            <button class="settings-toggle" id="settingQuizConfirm" data-val="on" type="button"
+              aria-pressed="true"><span class="toggle-knob"></span></button>
           </div>
         </section>
 
@@ -410,7 +464,8 @@
           </div>
           <div class="settings-row">
             <span class="settings-label">Borrar todo el progreso</span>
-            <button class="settings-danger-btn settings-danger-btn-red" id="settingResetAll" type="button">Borrar todo</button>
+            <button class="settings-danger-btn settings-danger-btn-red" id="settingResetAll" type="button">Borrar
+              todo</button>
           </div>
         </section>
 
@@ -420,4 +475,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
