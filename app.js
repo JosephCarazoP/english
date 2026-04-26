@@ -485,13 +485,31 @@ function renderQuizQuestion(animateIn = false) {
     setTimeout(() => { try { inp.focus(); } catch(e) {} }, 80);
 
   } else {
-    // choice
+    // choice — blur active element first so iOS doesn't carry over tap state
+    if (document.activeElement && document.activeElement !== document.body) {
+      document.activeElement.blur();
+    }
     dirRow.style.display = "none";
+    // Clear body completely and force a reflow before inserting new buttons
+    // This prevents iOS from inheriting :active/:focus state on same-position elements
+    body.innerHTML = "";
+    void body.offsetHeight;
     body.innerHTML =
       `<div class="qch-q">${q.question}</div>` +
       `<div class="qch-grid" id="qOptGrid">` +
         q.opts.map(o => `<button class="qch-opt" type="button" data-val="${o}">${o}</button>`).join("") +
       `</div>`;
+
+    // On next frame, mark grid as settled — iOS needs this tick to clear tap state
+    const grid = document.getElementById("qOptGrid");
+    if (grid) {
+      grid.style.opacity = "0";
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (grid) grid.style.opacity = "";
+        });
+      });
+    }
 
     document.querySelectorAll(".qch-opt").forEach(btn => {
       let used = false;
