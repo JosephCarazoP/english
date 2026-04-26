@@ -22,6 +22,7 @@
       >
     </div>
     <div class="header-right">
+      <div class="streak-badge" id="streakBadge" aria-label="Streak"></div>
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="irregular">Irregular</button>
       <button class="filter-btn" data-filter="regular">Regular</button>
@@ -110,28 +111,83 @@
     </div>
   </div>
 
-  <!-- ── DETAIL MODAL ── -->
+  <!-- ── DETAIL MODAL (redesigned) ── -->
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="modal-handle"></div>
-      <button class="modal-close" id="modalClose">✕</button>
-      <div class="modal-badge" id="modalBadge"></div>
-      <div class="modal-verbs">
-        <span class="modal-present" id="modalPresent"></span>
-        <span class="modal-arrow">→</span>
-        <span class="modal-past" id="modalPast"></span>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+
+      <!-- Header strip: badge + spanish meaning chip -->
+      <div class="modal-header-row">
+        <span class="modal-badge" id="modalBadge"></span>
+        <span class="modal-meaning-chip" id="modalMeaningChip"></span>
       </div>
-      <div class="modal-audio">
-        <button class="speak-btn" id="speakPresent" type="button">🔊 Present</button>
-        <button class="speak-btn" id="speakPast" type="button">🔊 Past</button>
+
+      <!-- Hero: two pronunciation cards side by side -->
+      <div class="pron-grid">
+        <article class="pron-card pron-present">
+          <div class="pron-tag">Present</div>
+          <div class="pron-word" id="modalPresent"></div>
+          <div class="pron-ipa" id="modalIpaPres"></div>
+          <div class="pron-actions">
+            <button class="pron-btn" data-form="pres" data-rate="normal" type="button" aria-label="Play present at normal speed">
+              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Normal</span>
+            </button>
+            <button class="pron-btn pron-btn-slow" data-form="pres" data-rate="slow" type="button" aria-label="Play present slowly">
+              <span class="pron-btn-icon">🐢</span><span class="pron-btn-lbl">Slow</span>
+            </button>
+          </div>
+        </article>
+
+        <div class="pron-arrow" aria-hidden="true">→</div>
+
+        <article class="pron-card pron-past">
+          <div class="pron-tag">Past</div>
+          <div class="pron-word" id="modalPast"></div>
+          <div class="pron-ipa" id="modalIpaPast"></div>
+          <div class="pron-actions">
+            <button class="pron-btn" data-form="past" data-rate="normal" type="button" aria-label="Play past at normal speed">
+              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Normal</span>
+            </button>
+            <button class="pron-btn pron-btn-slow" data-form="past" data-rate="slow" type="button" aria-label="Play past slowly">
+              <span class="pron-btn-icon">🐢</span><span class="pron-btn-lbl">Slow</span>
+            </button>
+          </div>
+        </article>
       </div>
-      <div class="modal-section-label">Meaning in Spanish</div>
-      <div id="modalMeaningEs" class="modal-sentence modal-meaning"></div>
-      <div class="modal-section-label">Present Tense Example</div>
-      <div id="modalSentencePres" class="modal-sentence"></div>
-      <div class="modal-section-label">Past Tense Example</div>
-      <div id="modalSentencePast" class="modal-sentence"></div>
-      <div class="modal-section-label"></div>
+
+      <!-- Speed slider -->
+      <div class="speed-row">
+        <span class="speed-lbl">Speed</span>
+        <div class="speed-presets" id="speedPresets">
+          <button type="button" class="speed-preset" data-speed="0.5">0.5×</button>
+          <button type="button" class="speed-preset" data-speed="0.75">0.75×</button>
+          <button type="button" class="speed-preset active" data-speed="1">1×</button>
+          <button type="button" class="speed-preset" data-speed="1.25">1.25×</button>
+        </div>
+        <span class="speed-val" id="speedVal">1.00×</span>
+      </div>
+      <input type="range" min="0.4" max="1.4" step="0.05" value="1" class="speed-slider" id="speedSlider" aria-label="Playback speed">
+
+      <!-- Examples -->
+      <div class="ex-block">
+        <div class="ex-card ex-pres">
+          <div class="ex-head">
+            <span class="ex-tag">Present</span>
+            <button class="ex-mini-play" id="playSentencePres" type="button" aria-label="Play present sentence">▶</button>
+          </div>
+          <div id="modalSentencePres" class="ex-text"></div>
+        </div>
+        <div class="ex-card ex-past">
+          <div class="ex-head">
+            <span class="ex-tag">Past</span>
+            <button class="ex-mini-play" id="playSentencePast" type="button" aria-label="Play past sentence">▶</button>
+          </div>
+          <div id="modalSentencePast" class="ex-text"></div>
+        </div>
+      </div>
+
+      <!-- GIF -->
       <div class="modal-gif" id="modalGif">
         <span class="gif-msg">Loading…</span>
       </div>
