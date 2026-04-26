@@ -2920,6 +2920,7 @@ function applyVFCSettings(s) {
   });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   // modo debug: ?preview=1 muestra el banner aunque no haya prompt
   if (new URLSearchParams(location.search).has('preview')) {
     setTimeout(() => {
@@ -2946,6 +2947,8 @@ function applyVFCSettings(s) {
   });
 
   // Service Worker
+=======
+>>>>>>> parent of bb293a9 (vfc_update_v3)
 =======
 >>>>>>> parent of bb293a9 (vfc_update_v3)
   if ("serviceWorker" in navigator) {
