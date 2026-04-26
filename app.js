@@ -230,6 +230,233 @@ const ALL_VERBS = [
 ];
 
 const GIPHY_KEY = window.GIPHY_KEY || "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
+const VERB_IPA = {
+  bear: { pres: "/bɛr/", past: "/bɔːr/" },
+  buy: { pres: "/baɪ/", past: "/bɔːt/" },
+  drive: { pres: "/draɪv/", past: "/droʊv/" },
+  eat: { pres: "/iːt/", past: "/eɪt/" },
+  find: { pres: "/faɪnd/", past: "/faʊnd/" },
+  grow: { pres: "/ɡroʊ/", past: "/ɡruː/" },
+  have: { pres: "/hæv/", past: "/hæd/" },
+  know: { pres: "/noʊ/", past: "/nuː/" },
+  lose: { pres: "/luːz/", past: "/lɔːst/" },
+  meet: { pres: "/miːt/", past: "/mɛt/" },
+  read: { pres: "/riːd/", past: "/rɛd/" },
+  speak: { pres: "/spiːk/", past: "/spoʊk/" },
+  swim: { pres: "/swɪm/", past: "/swæm/" },
+  take: { pres: "/teɪk/", past: "/tʊk/" },
+  write: { pres: "/raɪt/", past: "/roʊt/" },
+  visit: { pres: "/ˈvɪzɪt/", past: "/ˈvɪzɪtɪd/" },
+  paint: { pres: "/peɪnt/", past: "/ˈpeɪntɪd/" },
+  cook: { pres: "/kʊk/", past: "/kʊkt/" },
+  talk: { pres: "/tɔːk/", past: "/tɔːkt/" },
+  walk: { pres: "/wɔːk/", past: "/wɔːkt/" },
+  work: { pres: "/wɜːrk/", past: "/wɜːrkt/" },
+  watch: { pres: "/wɑːtʃ/", past: "/wɑːtʃt/" },
+  laugh: { pres: "/læf/", past: "/læft/" },
+  listen: { pres: "/ˈlɪsən/", past: "/ˈlɪsənd/" },
+  play: { pres: "/pleɪ/", past: "/pleɪd/" },
+  call: { pres: "/kɔːl/", past: "/kɔːld/" },
+  arise: { pres: "/əˈraɪz/", past: "/əˈroʊz/" },
+  awake: { pres: "/əˈweɪk/", past: "/əˈwoʊk/" },
+  be: { pres: "/biː/", past: "/wʌz/ / /wɜːr/" },
+  beat: { pres: "/biːt/", past: "/biːt/" },
+  become: { pres: "/bɪˈkʌm/", past: "/bɪˈkeɪm/" },
+  begin: { pres: "/bɪˈɡɪn/", past: "/bɪˈɡæn/" },
+  bend: { pres: "/bɛnd/", past: "/bɛnt/" },
+  bet: { pres: "/bɛt/", past: "/bɛt/" },
+  bite: { pres: "/baɪt/", past: "/bɪt/" },
+  blow: { pres: "/bloʊ/", past: "/bluː/" },
+  break: { pres: "/breɪk/", past: "/broʊk/" },
+  bring: { pres: "/brɪŋ/", past: "/brɔːt/" },
+  choose: { pres: "/tʃuːz/", past: "/tʃoʊz/" },
+  come: { pres: "/kʌm/", past: "/keɪm/" },
+  cut: { pres: "/kʌt/", past: "/kʌt/" },
+  do: { pres: "/duː/", past: "/dɪd/" },
+  drink: { pres: "/drɪŋk/", past: "/dræŋk/" },
+  fall: { pres: "/fɔːl/", past: "/fɛl/" },
+  forget: { pres: "/fərˈɡɛt/", past: "/fərˈɡɑːt/" },
+  get: { pres: "/ɡɛt/", past: "/ɡɑːt/" },
+  give: { pres: "/ɡɪv/", past: "/ɡeɪv/" },
+  go: { pres: "/ɡoʊ/", past: "/wɛnt/" },
+  make: { pres: "/meɪk/", past: "/meɪd/" },
+  see: { pres: "/siː/", past: "/sɔː/" },
+  sing: { pres: "/sɪŋ/", past: "/sæŋ/" },
+  sleep: { pres: "/sliːp/", past: "/slɛpt/" },
+  think: { pres: "/θɪŋk/", past: "/θɔːt/" },
+  win: { pres: "/wɪn/", past: "/wʌn/" },
+  accept: { pres: "/əkˈsɛpt/", past: "/əkˈsɛptɪd/" },
+  count: { pres: "/kaʊnt/", past: "/ˈkaʊntɪd/" },
+  need: { pres: "/niːd/", past: "/ˈniːdɪd/" },
+  start: { pres: "/stɑːrt/", past: "/ˈstɑːrtɪd/" },
+  want: { pres: "/wɑːnt/", past: "/ˈwɑːntɪd/" },
+  ask: { pres: "/æsk/", past: "/æskt/" },
+  dance: { pres: "/dæns/", past: "/dænst/" },
+  finish: { pres: "/ˈfɪnɪʃ/", past: "/ˈfɪnɪʃt/" },
+  help: { pres: "/hɛlp/", past: "/hɛlpt/" },
+  look: { pres: "/lʊk/", past: "/lʊkt/" },
+  answer: { pres: "/ˈænsər/", past: "/ˈænsərd/" },
+  clean: { pres: "/kliːn/", past: "/kliːnd/" },
+  love: { pres: "/lʌv/", past: "/lʌvd/" },
+  open: { pres: "/ˈoʊpən/", past: "/ˈoʊpənd/" },
+  stay: { pres: "/steɪ/", past: "/steɪd/" },
+  bid: { pres: "/bɪd/", past: "/bɪd/" },
+  bind: { pres: "/baɪnd/", past: "/baʊnd/" },
+  bleed: { pres: "/bliːd/", past: "/blɛd/" },
+  breed: { pres: "/briːd/", past: "/brɛd/" },
+  broadcast: { pres: "/ˈbrɔːdkæst/", past: "/ˈbrɔːdkæst/" },
+  build: { pres: "/bɪld/", past: "/bɪlt/" },
+  burn: { pres: "/bɜːrn/", past: "/bɜːrnt/" },
+  burst: { pres: "/bɜːrst/", past: "/bɜːrst/" },
+  cast: { pres: "/kæst/", past: "/kæst/" },
+  catch: { pres: "/kætʃ/", past: "/kɔːt/" },
+  cling: { pres: "/klɪŋ/", past: "/klʌŋ/" },
+  cost: { pres: "/kɔːst/", past: "/kɔːst/" },
+  creep: { pres: "/kriːp/", past: "/krɛpt/" },
+  deal: { pres: "/diːl/", past: "/dɛlt/" },
+  dig: { pres: "/dɪɡ/", past: "/dʌɡ/" },
+  draw: { pres: "/drɔː/", past: "/druː/" },
+  dream: { pres: "/driːm/", past: "/drɛmt/" },
+  feed: { pres: "/fiːd/", past: "/fɛd/" },
+  feel: { pres: "/fiːl/", past: "/fɛlt/" },
+  fight: { pres: "/faɪt/", past: "/fɔːt/" },
+  flee: { pres: "/fliː/", past: "/flɛd/" },
+  fly: { pres: "/flaɪ/", past: "/fluː/" },
+  forbid: { pres: "/fərˈbɪd/", past: "/fərˈbeɪd/" },
+  forgive: { pres: "/fərˈɡɪv/", past: "/fərˈɡeɪv/" },
+  freeze: { pres: "/friːz/", past: "/froʊz/" },
+  grind: { pres: "/ɡraɪnd/", past: "/ɡraʊnd/" },
+  hang: { pres: "/hæŋ/", past: "/hʌŋ/" },
+  hear: { pres: "/hɪr/", past: "/hɜːrd/" },
+  hide: { pres: "/haɪd/", past: "/hɪd/" },
+  hit: { pres: "/hɪt/", past: "/hɪt/" },
+  hold: { pres: "/hoʊld/", past: "/hɛld/" },
+  hurt: { pres: "/hɜːrt/", past: "/hɜːrt/" },
+  keep: { pres: "/kiːp/", past: "/kɛpt/" },
+  kneel: { pres: "/niːl/", past: "/nɛlt/" },
+  knit: { pres: "/nɪt/", past: "/nɪt/" },
+  lay: { pres: "/leɪ/", past: "/leɪd/" },
+  lead: { pres: "/liːd/", past: "/lɛd/" },
+  lean: { pres: "/liːn/", past: "/lɛnt/" },
+  leap: { pres: "/liːp/", past: "/lɛpt/" },
+  learn: { pres: "/lɜːrn/", past: "/lɜːrnt/" },
+  leave: { pres: "/liːv/", past: "/lɛft/" },
+  lend: { pres: "/lɛnd/", past: "/lɛnt/" },
+  let: { pres: "/lɛt/", past: "/lɛt/" },
+  lie: { pres: "/laɪ/", past: "/leɪ/" },
+  light: { pres: "/laɪt/", past: "/lɪt/" },
+  mean: { pres: "/miːn/", past: "/mɛnt/" },
+  mistake: { pres: "/mɪˈsteɪk/", past: "/mɪˈstʊk/" },
+  overcome: { pres: "/ˌoʊvərˈkʌm/", past: "/ˌoʊvərˈkeɪm/" },
+  pay: { pres: "/peɪ/", past: "/peɪd/" },
+  put: { pres: "/pʊt/", past: "/pʊt/" },
+  ride: { pres: "/raɪd/", past: "/roʊd/" },
+  ring: { pres: "/rɪŋ/", past: "/ræŋ/" },
+  rise: { pres: "/raɪz/", past: "/roʊz/" },
+  run: { pres: "/rʌn/", past: "/ræn/" },
+  say: { pres: "/seɪ/", past: "/sɛd/" },
+  seek: { pres: "/siːk/", past: "/sɔːt/" },
+  sell: { pres: "/sɛl/", past: "/soʊld/" },
+  send: { pres: "/sɛnd/", past: "/sɛnt/" },
+  set: { pres: "/sɛt/", past: "/sɛt/" },
+  sew: { pres: "/soʊ/", past: "/soʊd/" },
+  shake: { pres: "/ʃeɪk/", past: "/ʃʊk/" },
+  shine: { pres: "/ʃaɪn/", past: "/ʃoʊn/" },
+  shoot: { pres: "/ʃuːt/", past: "/ʃɑːt/" },
+  show: { pres: "/ʃoʊ/", past: "/ʃoʊd/" },
+  shrink: { pres: "/ʃrɪŋk/", past: "/ʃræŋk/" },
+  shut: { pres: "/ʃʌt/", past: "/ʃʌt/" },
+  sink: { pres: "/sɪŋk/", past: "/sæŋk/" },
+  sit: { pres: "/sɪt/", past: "/sæt/" },
+  slide: { pres: "/slaɪd/", past: "/slɪd/" },
+  smell: { pres: "/smɛl/", past: "/smɛlt/" },
+  sow: { pres: "/soʊ/", past: "/soʊd/" },
+  speed: { pres: "/spiːd/", past: "/spɛd/" },
+  spell: { pres: "/spɛl/", past: "/spɛlt/" },
+  spend: { pres: "/spɛnd/", past: "/spɛnt/" },
+  spill: { pres: "/spɪl/", past: "/spɪlt/" },
+  spin: { pres: "/spɪn/", past: "/spʌn/" },
+  spit: { pres: "/spɪt/", past: "/spæt/" },
+  split: { pres: "/splɪt/", past: "/splɪt/" },
+  spoil: { pres: "/spɔɪl/", past: "/spɔɪlt/" },
+  spread: { pres: "/sprɛd/", past: "/sprɛd/" },
+  spring: { pres: "/sprɪŋ/", past: "/spræŋ/" },
+  stand: { pres: "/stænd/", past: "/stʊd/" },
+  steal: { pres: "/stiːl/", past: "/stoʊl/" },
+  stick: { pres: "/stɪk/", past: "/stʌk/" },
+  sting: { pres: "/stɪŋ/", past: "/stʌŋ/" },
+  stink: { pres: "/stɪŋk/", past: "/stæŋk/" },
+  stride: { pres: "/straɪd/", past: "/stroʊd/" },
+  strike: { pres: "/straɪk/", past: "/strʌk/" },
+  swear: { pres: "/swɛr/", past: "/swɔːr/" },
+  sweat: { pres: "/swɛt/", past: "/swɛt/" },
+  sweep: { pres: "/swiːp/", past: "/swɛpt/" },
+  swell: { pres: "/swɛl/", past: "/swɛld/" },
+  swing: { pres: "/swɪŋ/", past: "/swʌŋ/" },
+  teach: { pres: "/tiːtʃ/", past: "/tɔːt/" },
+  tear: { pres: "/tɛr/", past: "/tɔːr/" },
+  tell: { pres: "/tɛl/", past: "/toʊld/" },
+  throw: { pres: "/θroʊ/", past: "/θruː/" },
+  thrust: { pres: "/θrʌst/", past: "/θrʌst/" },
+  tread: { pres: "/trɛd/", past: "/trɑːd/" },
+  understand: { pres: "/ˌʌndərˈstænd/", past: "/ˌʌndərˈstʊd/" },
+  undergo: { pres: "/ˌʌndərˈɡoʊ/", past: "/ˌʌndərˈwɛnt/" },
+  undertake: { pres: "/ˌʌndərˈteɪk/", past: "/ˌʌndərˈtʊk/" },
+  wake: { pres: "/weɪk/", past: "/woʊk/" },
+  wear: { pres: "/wɛr/", past: "/wɔːr/" },
+  weave: { pres: "/wiːv/", past: "/woʊv/" },
+  weep: { pres: "/wiːp/", past: "/wɛpt/" },
+  wet: { pres: "/wɛt/", past: "/wɛt/" },
+  wind: { pres: "/waɪnd/", past: "/waʊnd/" },
+  withdraw: { pres: "/wɪðˈdrɔː/", past: "/wɪðˈdruː/" },
+  wring: { pres: "/rɪŋ/", past: "/rʌŋ/" },
+  date: { pres: "/deɪt/", past: "/ˈdeɪtɪd/" },
+  end: { pres: "/ɛnd/", past: "/ˈɛndɪd/" },
+  expect: { pres: "/ɪkˈspɛkt/", past: "/ɪkˈspɛktɪd/" },
+  intend: { pres: "/ɪnˈtɛnd/", past: "/ɪnˈtɛndɪd/" },
+  plant: { pres: "/plænt/", past: "/ˈplæntɪd/" },
+  point: { pres: "/pɔɪnt/", past: "/ˈpɔɪntɪd/" },
+  rent: { pres: "/rɛnt/", past: "/ˈrɛntɪd/" },
+  repeat: { pres: "/rɪˈpiːt/", past: "/rɪˈpiːtɪd/" },
+  resist: { pres: "/rɪˈzɪst/", past: "/rɪˈzɪstɪd/" },
+  wait: { pres: "/weɪt/", past: "/ˈweɪtɪd/" },
+  dress: { pres: "/drɛs/", past: "/drɛst/" },
+  erase: { pres: "/ɪˈreɪs/", past: "/ɪˈreɪst/" },
+  jump: { pres: "/dʒʌmp/", past: "/dʒʌmpt/" },
+  like: { pres: "/laɪk/", past: "/laɪkt/" },
+  miss: { pres: "/mɪs/", past: "/mɪst/" },
+  practice: { pres: "/ˈpræktɪs/", past: "/ˈpræktɪst/" },
+  push: { pres: "/pʊʃ/", past: "/pʊʃt/" },
+  shop: { pres: "/ʃɑːp/", past: "/ʃɑːpt/" },
+  smoke: { pres: "/smoʊk/", past: "/smoʊkt/" },
+  stop: { pres: "/stɑːp/", past: "/stɑːpt/" },
+  use: { pres: "/juːz/", past: "/juːzd/" },
+  wash: { pres: "/wɑːʃ/", past: "/wɑːʃt/" },
+  wish: { pres: "/wɪʃ/", past: "/wɪʃt/" },
+  arrive: { pres: "/əˈraɪv/", past: "/əˈraɪvd/" },
+  belong: { pres: "/bɪˈlɔːŋ/", past: "/bɪˈlɔːŋd/" },
+  change: { pres: "/tʃeɪndʒ/", past: "/tʃeɪndʒd/" },
+  climb: { pres: "/klaɪm/", past: "/klaɪmd/" },
+  close: { pres: "/kloʊz/", past: "/kloʊzd/" },
+  consider: { pres: "/kənˈsɪdər/", past: "/kənˈsɪdərd/" },
+  dare: { pres: "/dɛr/", past: "/dɛrd/" },
+  deliver: { pres: "/dɪˈlɪvər/", past: "/dɪˈlɪvərd/" },
+  enjoy: { pres: "/ɪnˈdʒɔɪ/", past: "/ɪnˈdʒɔɪd/" },
+  fill: { pres: "/fɪl/", past: "/fɪld/" },
+  follow: { pres: "/ˈfɑːloʊ/", past: "/ˈfɑːloʊd/" },
+  hurry: { pres: "/ˈhɜːri/", past: "/ˈhɜːrid/" },
+  live: { pres: "/lɪv/", past: "/lɪvd/" },
+  name: { pres: "/neɪm/", past: "/neɪmd/" },
+  order: { pres: "/ˈɔːrdər/", past: "/ˈɔːrdərd/" },
+  plan: { pres: "/plæn/", past: "/plænd/" },
+  rain: { pres: "/reɪn/", past: "/reɪnd/" },
+  remember: { pres: "/rɪˈmɛmbər/", past: "/rɪˈmɛmbərd/" },
+  study: { pres: "/ˈstʌdi/", past: "/ˈstʌdid/" },
+  travel: { pres: "/ˈtrævəl/", past: "/ˈtrævəld/" },
+  try: { pres: "/traɪ/", past: "/traɪd/" },
+  turn: { pres: "/tɜːrn/", past: "/tɜːrnd/" },
+};
+
 const VERB_MEANINGS_ES = {
   bear:"soportar",buy:"comprar",drive:"conducir",eat:"comer",find:"encontrar",
   grow:"crecer",have:"tener",know:"saber / conocer",lose:"perder",meet:"conocer / reunirse",
@@ -401,6 +628,71 @@ const VERB_MEANINGS_ES = {
   turn: "girar / voltear",
 };
 
+/* ── RACHA DIARIA (streak) ─────────────────────────────────
+   Persistencia 100% local con localStorage.
+   - vfc_streak: número de días consecutivos
+   - vfc_lastDate: YYYY-MM-DD del último día con actividad
+   ───────────────────────────────────────────────────────── */
+const STREAK_KEY      = "vfc_streak";
+const STREAK_DATE_KEY = "vfc_lastDate";
+
+function _streakToday() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function _streakDaysBetween(a, b) {
+  // Diferencia en días (b - a) usando solo la parte de fecha.
+  const [ya, ma, da] = a.split("-").map(Number);
+  const [yb, mb, db_] = b.split("-").map(Number);
+  const da1 = Date.UTC(ya, ma-1, da);
+  const da2 = Date.UTC(yb, mb-1, db_);
+  return Math.round((da2 - da1) / (1000*60*60*24));
+}
+
+function updateStreak() {
+  let streak = parseInt(localStorage.getItem(STREAK_KEY) || "0", 10);
+  const last = localStorage.getItem(STREAK_DATE_KEY);
+  const today = _streakToday();
+
+  if (!last) {
+    streak = 1;
+  } else if (last === today) {
+    if (streak < 1) streak = 1;
+  } else {
+    const diff = _streakDaysBetween(last, today);
+    if (diff === 1) {
+      streak = streak + 1;
+    } else if (diff > 1) {
+      streak = 1;
+    } else {
+      // diff <= 0 (reloj cambió hacia atrás): mantenemos racha actual
+      if (streak < 1) streak = 1;
+    }
+  }
+
+  localStorage.setItem(STREAK_KEY, String(streak));
+  localStorage.setItem(STREAK_DATE_KEY, today);
+  return streak;
+}
+
+function renderStreakBadge() {
+  try {
+    const n = updateStreak();
+    const el = document.getElementById("streakBadge");
+    if (!el) return;
+    const txt = n === 1 ? "1 día" : `${n} días seguidos`;
+    el.innerHTML = `<span class="streak-flame">🔥</span><span class="streak-text">${txt}</span>`;
+    el.title = `Llevas ${txt} practicando`;
+    el.classList.add("show");
+  } catch (err) {
+    // localStorage no disponible (modo privado, etc.) → ignorar silenciosamente
+  }
+}
+
 /* ── FLASHCARD STATE ── */
 let deck          = [];
 let cursor        = 0;
@@ -408,6 +700,11 @@ let isFlipped     = false;
 let correct       = 0;
 let skipped       = 0;
 let currentFilter = "all";
+
+/* ── PRÁCTICA DE ERRORES (round) ── */
+let skippedDeck     = [];   // verbos marcados como skipped en la ronda actual
+let practiceMode    = false; // true cuando estamos repasando los skipped
+let originalDeckLen = 0;     // tamaño del mazo original (para el resumen final)
 
 /* ── HELPERS ── */
 function shuffle(arr) {
@@ -421,12 +718,42 @@ function shuffle(arr) {
 
 function colorIdx(verb) { return ALL_VERBS.indexOf(verb) % 10; }
 
-function speakVerb(text) {
-  if (!("speechSynthesis" in window)) return;
+/* Audio playback speed (1 = normal). Persisted across the session. */
+let currentSpeed = 1;
+
+/**
+ * Speak a phrase using the Web Speech API.
+ *  - text: string to read
+ *  - opts.rate: "normal" | "slow" | number (overrides currentSpeed)
+ *  - opts.lang: BCP-47 (defaults to en-US)
+ */
+function speakVerb(text, opts) {
+  if (!("speechSynthesis" in window) || !text) return;
+  opts = opts || {};
+  let rate;
+  if (typeof opts.rate === "number") {
+    rate = opts.rate;
+  } else if (opts.rate === "slow") {
+    rate = Math.max(0.35, currentSpeed * 0.55);
+  } else {
+    rate = currentSpeed;
+  }
+  // Web Speech rate is clamped 0.1–2. Stay in safe range.
+  rate = Math.min(2, Math.max(0.3, rate));
+
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-US"; utter.rate = 0.92; utter.pitch = 1;
+  utter.lang  = opts.lang || "en-US";
+  utter.rate  = rate;
+  utter.pitch = 1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
+}
+
+/* Strip simple HTML to get clean text for TTS (removes <b>, etc.) */
+function stripHtml(html) {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html || "";
+  return (tmp.textContent || tmp.innerText || "").trim();
 }
 
 function hideSwipeGhosts() {
@@ -453,7 +780,7 @@ function showShareToast(msg) {
 function buildShareText(kind) {
   const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
   if (kind === "quiz") {
-    const total = quizQuestions.length || 0;
+    const total = quizOriginalTotal || quizQuestions.length || 0;
     const pct   = total ? Math.round((quizOk / total) * 100) : 0;
     const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
     return (
@@ -465,7 +792,7 @@ function buildShareText(kind) {
     );
   }
   // round complete (flashcards)
-  const total = deck.length || 0;
+  const total = originalDeckLen || deck.length || 0;
   const pct   = total ? Math.round((correct / total) * 100) : 0;
   const emoji = pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
   return (
@@ -534,6 +861,9 @@ function buildDeck() {
     : deck.filter(v => v.type === currentFilter);
   deck    = shuffle(base);
   cursor  = 0; correct = 0; skipped = 0; isFlipped = false;
+  skippedDeck     = [];
+  practiceMode    = false;
+  originalDeckLen = deck.length;
 }
 
 /* ── RENDER CARD ── */
@@ -557,7 +887,7 @@ function renderCard(animate = true) {
   document.getElementById("progressFill").style.width  = pct + "%";
   document.getElementById("progressLabel").textContent = `${cursor + 1} / ${deck.length}`;
   document.getElementById("scoreCorrect").textContent  = correct;
-  document.getElementById("scoreSkip").textContent     = skipped;
+  document.getElementById("scoreSkip").textContent     = practiceMode ? skippedDeck.length : skipped;
 
   if (animate) {
     scene.classList.remove("animate");
@@ -601,10 +931,50 @@ function next() {
 
   if (cursor >= deck.length) {
     backText.style.visibility = "visible";
+    if (skippedDeck.length > 0) {
+      // Vuelta de práctica: reordenar con los que quedan
+      startPracticeRound();
+      return;
+    }
+    // Todo dominado → mostrar finish
+    practiceMode = false;
+    showPracticePill(false);
     showFinish();
   } else {
     renderCard(true);
     backText.style.visibility = "visible";
+  }
+}
+
+/* ── PRÁCTICA DE ERRORES ── */
+function startPracticeRound() {
+  // Reordena el deck con los pendientes y entra en modo práctica
+  practiceMode = true;
+  deck         = shuffle(skippedDeck);
+  cursor       = 0;
+  isFlipped    = false;
+  // Mostrar pill de modo práctica
+  showPracticePill(true);
+  document.getElementById("scoreSkip").textContent = skippedDeck.length;
+  renderCard(true);
+}
+
+function showPracticePill(show) {
+  let pill = document.getElementById("practicePill");
+  if (show) {
+    if (!pill) {
+      pill = document.createElement("div");
+      pill.id = "practicePill";
+      pill.className = "practice-pill";
+      pill.innerHTML = '<span class="practice-pill-icon">🎯</span> Practicando errores · <b id="practiceCount">0</b> por dominar';
+      const wrap = document.querySelector(".progress-wrap");
+      wrap.parentNode.insertBefore(pill, wrap);
+    }
+    pill.classList.add("show");
+    const cnt = document.getElementById("practiceCount");
+    if (cnt) cnt.textContent = skippedDeck.length;
+  } else if (pill) {
+    pill.classList.remove("show");
   }
 }
 
@@ -614,34 +984,75 @@ function showFinish() {
   document.getElementById("quizScreen").style.display = "none";
   document.getElementById("finishScreen").classList.add("show");
 
-  const pct = Math.round((correct / deck.length) * 100);
+  const total = originalDeckLen || deck.length;
+  const pct = Math.round((correct / Math.max(1, total)) * 100);
   document.getElementById("fCorrect").textContent       = correct;
   document.getElementById("fSkip").textContent          = skipped;
-  document.getElementById("fTotal").textContent         = deck.length;
+  document.getElementById("fTotal").textContent         = total;
   document.getElementById("finishSubtitle").textContent =
     pct >= 80 ? "Excellent work! 🔥" : pct >= 50 ? "Good progress, keep going!" : "Keep practicing, you'll get there!";
   document.getElementById("finishEmoji").textContent =
     pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
   document.getElementById("progressFill").style.width  = "100%";
-  document.getElementById("progressLabel").textContent = `${deck.length} / ${deck.length}`;
+  document.getElementById("progressLabel").textContent = `${total} / ${total}`;
 }
 
 /* ── DETAIL MODAL ── */
 async function openDetail() {
   const verb = deck[cursor];
-  const soundHTML = verb.sound ? `<span class="sound-tag">${verb.sound}</span>` : "";
-  document.getElementById("modalPresent").innerHTML  = `${verb.present} ${soundHTML}`;
-  document.getElementById("modalPast").textContent   = verb.past;
-  document.getElementById("modalMeaningEs").textContent = VERB_MEANINGS_ES[verb.present] || "Sin traducción disponible";
+  const ipa  = VERB_IPA[verb.present] || { pres: "", past: "" };
+
+  // Hero words
+  document.getElementById("modalPresent").textContent = verb.present;
+  document.getElementById("modalPast").textContent    = verb.past;
+  document.getElementById("modalIpaPres").textContent = ipa.pres || "";
+  document.getElementById("modalIpaPast").textContent = ipa.past || "";
+
+  // Spanish meaning chip
+  document.getElementById("modalMeaningChip").textContent =
+    VERB_MEANINGS_ES[verb.present] || "Sin traducción disponible";
+
+  // Examples
   document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
   document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
-  document.getElementById("speakPresent").onclick = () => speakVerb(verb.present);
-  document.getElementById("speakPast").onclick    = () => speakVerb(verb.past.split("/")[0].trim());
 
-  const badge            = document.getElementById("modalBadge");
-  badge.textContent      = verb.type === "irregular" ? "Irregular" : "Regular";
-  badge.style.background = verb.type === "irregular" ? "var(--text)"        : "var(--progress-bg)";
-  badge.style.color      = verb.type === "irregular" ? "var(--bg)"          : "var(--subtext)";
+  // Pronunciation buttons (Normal + Slow on each card)
+  const presWord = verb.present;
+  const pastWord = verb.past.split("/")[0].trim();
+  document.querySelectorAll(".pron-btn").forEach(btn => {
+    const form = btn.dataset.form;
+    const rate = btn.dataset.rate;
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const text = form === "pres" ? presWord : pastWord;
+      speakVerb(text, { rate });
+    };
+  });
+
+  // Sentence play buttons
+  document.getElementById("playSentencePres").onclick = (e) => {
+    e.stopPropagation();
+    speakVerb(stripHtml(verb.sentencePres));
+  };
+  document.getElementById("playSentencePast").onclick = (e) => {
+    e.stopPropagation();
+    speakVerb(stripHtml(verb.sentencePast));
+  };
+
+  // Badge with phonetic sound tag for regular verbs
+  const badge = document.getElementById("modalBadge");
+  if (verb.type === "irregular") {
+    badge.textContent      = "Irregular";
+    badge.style.background = "var(--text)";
+    badge.style.color      = "var(--bg)";
+  } else {
+    badge.textContent      = verb.sound ? `Regular · ${verb.sound}` : "Regular";
+    badge.style.background = "var(--accent-soft)";
+    badge.style.color      = "var(--accent)";
+  }
+
+  // Reset speed UI to current value
+  syncSpeedUI();
 
   const gifEl     = document.getElementById("modalGif");
   gifEl.innerHTML = `<span class="gif-msg">Loading GIF…</span>`;
@@ -671,6 +1082,25 @@ async function openDetail() {
 function closeModal() {
   document.getElementById("overlay").classList.remove("open");
   document.body.style.overflow = "";
+  // Stop any in-progress speech when the user closes the modal
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+/* ── SPEED CONTROL ── */
+function setSpeed(value) {
+  const v = Math.min(1.4, Math.max(0.4, parseFloat(value) || 1));
+  currentSpeed = v;
+  syncSpeedUI();
+}
+
+function syncSpeedUI() {
+  const slider = document.getElementById("speedSlider");
+  const valEl  = document.getElementById("speedVal");
+  if (slider) slider.value = String(currentSpeed);
+  if (valEl)  valEl.textContent = currentSpeed.toFixed(2) + "×";
+  document.querySelectorAll(".speed-preset").forEach(b => {
+    b.classList.toggle("active", Math.abs(parseFloat(b.dataset.speed) - currentSpeed) < 0.01);
+  });
 }
 
 /* ════════════════════════════════════════════════════════
@@ -682,6 +1112,9 @@ let quizIdx       = 0;
 let quizOk        = 0;
 let quizNo        = 0;
 let quizLocked    = false;
+let quizFailedSet     = new Set(); // verbos fallados pendientes de dominar
+let quizPracticeMode  = false;     // true cuando repasamos los fallados
+let quizOriginalTotal = 0;         // total del quiz original (para el resumen)
 
 /* ── Get distractors ── */
 function getDistractor(correctPast, pool) {
@@ -725,6 +1158,10 @@ function startQuiz() {
 
   quizQuestions = buildQuiz(base);
   quizIdx = 0; quizOk = 0; quizNo = 0; quizLocked = false;
+  quizFailedSet     = new Set();
+  quizPracticeMode  = false;
+  quizOriginalTotal = quizQuestions.length;
+  showQuizPracticePill(false);
 
   document.querySelector(".score-correct .score-lbl").textContent = "Correct";
   document.querySelector(".score-skip    .score-lbl").textContent = "Wrong";
@@ -755,6 +1192,10 @@ function updateQuizHeader() {
   document.getElementById("progressLabel").textContent = `${Math.min(quizIdx + 1, total)} / ${total}`;
   document.getElementById("scoreCorrect").textContent  = quizOk;
   document.getElementById("scoreSkip").textContent     = quizNo;
+  if (quizPracticeMode) {
+    const cnt = document.getElementById("quizPracticeCount");
+    if (cnt) cnt.textContent = quizFailedSet.size;
+  }
 }
 
 /* ── Avanzar a la siguiente pregunta con animación de salida ── */
@@ -818,7 +1259,15 @@ const QUIZ_LABELS = {
 
 /* ── Render current quiz question ── */
 function renderQuizQuestion(animateIn = false) {
-  if (quizIdx >= quizQuestions.length) { showQuizResults(); return; }
+  if (quizIdx >= quizQuestions.length) {
+    if (quizFailedSet.size > 0) {
+      startQuizPracticeRound();
+      return;
+    }
+    showQuizPracticePill(false);
+    showQuizResults();
+    return;
+  }
 
   quizLocked = false;
   const q    = quizQuestions[quizIdx];
@@ -889,7 +1338,7 @@ function renderQuizQuestion(animateIn = false) {
       fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
       this.disabled  = true;
       quizLocked     = true;
-      if (isOk) quizOk++; else quizNo++;
+      registerQuizAnswer(q.verb, isOk);
       updateQuizHeader();
       animateToNextQuestion("up", 820);
     });
@@ -1246,13 +1695,13 @@ function initBubbles(opts, correct) {
 
       quizLocked = true;
 
-      if (b.correct) {
+      const _isOkBubble = !!b.correct;
+      if (_isOkBubble) {
         b.state = 'popping-ok';
         spawnParticles(b);
         for (const ob of bubbles) {
           if (ob !== b) { ob.state = 'popping-no'; ob.popT = 0.38; }
         }
-        quizOk++;
       } else {
         b.state = 'popping-no';
         b.popT  = 0;
@@ -1265,8 +1714,8 @@ function initBubbles(opts, correct) {
             ob.popT  = 0.38;
           }
         }
-        quizNo++;
       }
+      registerQuizAnswer(quizQuestions[quizIdx].verb, _isOkBubble);
 
       updateQuizHeader();
       animateToNextQuestion("up", 1100);
@@ -1307,7 +1756,7 @@ function quizAdvanceSwipe(swiped) {
     }
   }
 
-  if (isOk) quizOk++; else quizNo++;
+  registerQuizAnswer(q.verb, isOk);
   updateQuizHeader();
   hideSwipeGhosts();
 
@@ -1395,9 +1844,67 @@ function qDragEnd() {
    Q U I Z   R E S U L T S
    ════════════════════════════════════════════════════════ */
 
+/* ── Registrar respuesta de quiz (cuenta original + set de fallados) ── */
+function registerQuizAnswer(verb, isOk) {
+  if (quizPracticeMode) {
+    // En modo práctica solo actualizamos el set, no el resumen
+    if (isOk) {
+      quizFailedSet.delete(verb);
+      showQuizPracticePill(true);
+    } else {
+      quizFailedSet.add(verb);
+    }
+  } else {
+    if (isOk) {
+      quizOk++;
+    } else {
+      quizNo++;
+      quizFailedSet.add(verb);
+    }
+  }
+}
+
+/* ── Inicia una vuelta de práctica con los verbos fallados ── */
+function startQuizPracticeRound() {
+  quizPracticeMode = true;
+  const pool = ALL_VERBS.slice(0, deck.length);
+  const failedArr = Array.from(quizFailedSet);
+  // Para cada verbo fallado generamos una nueva pregunta (mecánica aleatoria)
+  quizQuestions = shuffle(failedArr).map(v => buildQuestion(v, pool));
+  quizIdx = 0;
+  quizLocked = false;
+  showQuizPracticePill(true);
+  // Header refleja la vuelta de práctica
+  document.getElementById("progressLabel").textContent = `1 / ${quizQuestions.length}`;
+  document.getElementById("progressFill").style.width  = "0%";
+  setTimeout(() => renderQuizQuestion(true), 30);
+}
+
+/* ── Pill de modo práctica del quiz ── */
+function showQuizPracticePill(show) {
+  let pill = document.getElementById("quizPracticePill");
+  if (show) {
+    if (!pill) {
+      pill = document.createElement("div");
+      pill.id = "quizPracticePill";
+      pill.className = "practice-pill quiz-practice-pill";
+      pill.innerHTML = '<span class="practice-pill-icon">🔁</span> Repasando fallados · <b id="quizPracticeCount">0</b> por dominar';
+      const wrap = document.querySelector(".progress-wrap");
+      wrap.parentNode.insertBefore(pill, wrap);
+    }
+    pill.classList.add("show");
+    const cnt = document.getElementById("quizPracticeCount");
+    if (cnt) cnt.textContent = quizFailedSet.size;
+  } else if (pill) {
+    pill.classList.remove("show");
+  }
+}
+
 function showQuizResults() {
-  const total = quizQuestions.length;
-  const pct   = Math.round((quizOk / total) * 100);
+  const total = quizOriginalTotal || quizQuestions.length;
+  const pct   = Math.round((quizOk / Math.max(1, total)) * 100);
+  quizPracticeMode = false;
+  showQuizPracticePill(false);
 
   document.getElementById("progressFill").style.width  = "100%";
   document.getElementById("progressLabel").textContent = `${total} / ${total}`;
@@ -1438,6 +1945,8 @@ function showQuizResults() {
 /* ── Back to cards ── */
 function backToCards() {
   if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
+  showQuizPracticePill(false);
+  quizPracticeMode = false;
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
   const qResultScreen = document.getElementById("quizResultScreen");
@@ -1465,12 +1974,35 @@ document.getElementById("cardScene").addEventListener("click", (e) => {
   toggleFlip();
 });
 
-document.getElementById("btnCorrect").addEventListener("click", (e) => { e.stopPropagation(); correct++; next(); });
-document.getElementById("btnSkip").addEventListener("click",    (e) => { e.stopPropagation(); skipped++;  next(); });
+document.getElementById("btnCorrect").addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (practiceMode) {
+    // En modo práctica: el verbo desaparece del set de errores
+    const v = deck[cursor];
+    skippedDeck = skippedDeck.filter(x => x !== v);
+    correct++;
+    if (skipped > 0) skipped--;  // el contador refleja el set restante
+  } else {
+    correct++;
+  }
+  next();
+});
+document.getElementById("btnSkip").addEventListener("click",    (e) => {
+  e.stopPropagation();
+  if (practiceMode) {
+    // En modo práctica el skip se queda pendiente, no aumenta el total
+  } else {
+    const v = deck[cursor];
+    if (!skippedDeck.includes(v)) skippedDeck.push(v);
+    skipped++;
+  }
+  next();
+});
 document.getElementById("btnDetail").addEventListener("click",  (e) => { e.stopPropagation(); openDetail(); });
 
 document.getElementById("restartBtn").addEventListener("click", () => {
   buildDeck();
+  showPracticePill(false);
   document.getElementById("finishScreen").classList.remove("show");
   document.getElementById("stage").style.display = "flex";
   renderCard(true);
@@ -1484,6 +2016,20 @@ if (shareFinishBtn) {
 document.getElementById("modalClose").addEventListener("click", closeModal);
 document.getElementById("overlay").addEventListener("click", (e) => {
   if (e.target === document.getElementById("overlay")) closeModal();
+});
+
+// Speed slider
+const speedSliderEl = document.getElementById("speedSlider");
+if (speedSliderEl) {
+  speedSliderEl.addEventListener("input",  (e) => setSpeed(e.target.value));
+  speedSliderEl.addEventListener("change", (e) => setSpeed(e.target.value));
+}
+// Speed preset chips
+document.querySelectorAll(".speed-preset").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setSpeed(btn.dataset.speed);
+  });
 });
 
 document.querySelectorAll(".filter-btn").forEach(btn => {
@@ -1533,10 +2079,11 @@ document.addEventListener("keydown", (e) => {
   if (document.getElementById("finishScreen").classList.contains("show")) return;
   if (document.getElementById("quizScreen").style.display !== "none") return;
   if ((e.key === " " || e.key === "ArrowUp") && !isFlipped) { e.preventDefault(); toggleFlip(); }
-  if (e.key === "ArrowRight" && isFlipped) { correct++; next(); }
-  if (e.key === "ArrowLeft"  && isFlipped) { skipped++;  next(); }
+  if (e.key === "ArrowRight" && isFlipped) { document.getElementById("btnCorrect").click(); }
+  if (e.key === "ArrowLeft"  && isFlipped) { document.getElementById("btnSkip").click(); }
 });
 
 /* ── INIT ── */
 buildDeck();
 renderCard(false);
+renderStreakBadge();
