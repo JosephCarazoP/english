@@ -72,6 +72,161 @@ const ALL_VERBS = [
   { present: "love",   past: "loved",        participle: "loved",        type: "regular",   sound: "/d/",  sentencePres: "I <b>love</b> spending time with my family.",           sentencePast: "She <b>loved</b> that movie when she was a kid.",         gif: "love" },
   { present: "open",   past: "opened",       participle: "opened",       type: "regular",   sound: "/d/",  sentencePres: "Could you <b>open</b> the window, please?",             sentencePast: "He <b>opened</b> the door for the lady.",                 gif: "opening" },
   { present: "stay",   past: "stayed",       participle: "stayed",       type: "regular",   sound: "/d/",  sentencePres: "I usually <b>stay</b> at home on Sundays.",             sentencePast: "They <b>stayed</b> in a very nice hotel.",               gif: "stay" },
+  { present: "bid", past: "bid", participle: "bid", type: "irregular", sound: "", sentencePres: "Investors <b>bid</b> on rare paintings.", sentencePast: "She <b>bid</b> ten dollars for the old book.", gif: "auction" },
+  { present: "bind", past: "bound", participle: "bound", type: "irregular", sound: "", sentencePres: "Strong rules <b>bind</b> every member of the club.", sentencePast: "He <b>bound</b> the papers together with a string.", gif: "binding" },
+  { present: "bleed", past: "bled", participle: "bled", type: "irregular", sound: "", sentencePres: "Deep cuts often <b>bleed</b> for several minutes.", sentencePast: "His nose <b>bled</b> after the fall.", gif: "bleeding" },
+  { present: "breed", past: "bred", participle: "bred", type: "irregular", sound: "", sentencePres: "They <b>breed</b> dogs on a small farm.", sentencePast: "The farmer <b>bred</b> horses for many years.", gif: "breeding" },
+  { present: "broadcast", past: "broadcast", participle: "broadcast", type: "irregular", sound: "", sentencePres: "Local stations <b>broadcast</b> the news every hour.", sentencePast: "They <b>broadcast</b> the match live last night.", gif: "broadcast" },
+  { present: "build", past: "built", participle: "built", type: "irregular", sound: "", sentencePres: "Engineers <b>build</b> bridges across the river.", sentencePast: "They <b>built</b> a new school in the town.", gif: "building" },
+  { present: "burn", past: "burnt", participle: "burnt", type: "irregular", sound: "", sentencePres: "Be careful, hot pans can <b>burn</b> your skin.", sentencePast: "She <b>burnt</b> the toast this morning.", gif: "burning" },
+  { present: "burst", past: "burst", participle: "burst", type: "irregular", sound: "", sentencePres: "Balloons <b>burst</b> when you press them too hard.", sentencePast: "The pipe <b>burst</b> during the cold night.", gif: "burst" },
+  { present: "cast", past: "cast", participle: "cast", type: "irregular", sound: "", sentencePres: "Fishermen <b>cast</b> their nets at dawn.", sentencePast: "He <b>cast</b> the line into the deep lake.", gif: "casting" },
+  { present: "catch", past: "caught", participle: "caught", type: "irregular", sound: "", sentencePres: "Goalkeepers must <b>catch</b> the ball with both hands.", sentencePast: "She <b>caught</b> the bus just in time.", gif: "catching" },
+  { present: "cling", past: "clung", participle: "clung", type: "irregular", sound: "", sentencePres: "Wet leaves <b>cling</b> to the windshield.", sentencePast: "The child <b>clung</b> to his mother's hand.", gif: "hugging" },
+  { present: "cost", past: "cost", participle: "cost", type: "irregular", sound: "", sentencePres: "Good shoes <b>cost</b> a lot of money.", sentencePast: "The repair <b>cost</b> more than I expected.", gif: "money" },
+  { present: "creep", past: "crept", participle: "crept", type: "irregular", sound: "", sentencePres: "Cats often <b>creep</b> silently on the floor.", sentencePast: "He <b>crept</b> into the room without a sound.", gif: "sneaking" },
+  { present: "deal", past: "dealt", participle: "dealt", type: "irregular", sound: "", sentencePres: "Good leaders <b>deal</b> with problems calmly.", sentencePast: "She <b>dealt</b> the cards to all the players.", gif: "cards" },
+  { present: "dig", past: "dug", participle: "dug", type: "irregular", sound: "", sentencePres: "Dogs love to <b>dig</b> holes in the garden.", sentencePast: "We <b>dug</b> a deep hole for the new tree.", gif: "digging" },
+  { present: "draw", past: "drew", participle: "drawn", type: "irregular", sound: "", sentencePres: "Children <b>draw</b> pictures of their family.", sentencePast: "He <b>drew</b> a beautiful portrait of her.", gif: "drawing" },
+  { present: "dream", past: "dreamt", participle: "dreamt", type: "irregular", sound: "", sentencePres: "I often <b>dream</b> about flying over the sea.", sentencePast: "She <b>dreamt</b> of becoming a famous artist.", gif: "dreaming" },
+  { present: "feed", past: "fed", participle: "fed", type: "irregular", sound: "", sentencePres: "Parents <b>feed</b> their babies several times a day.", sentencePast: "We <b>fed</b> the ducks at the park.", gif: "feeding" },
+  { present: "feel", past: "felt", participle: "felt", type: "irregular", sound: "", sentencePres: "I <b>feel</b> happy when I see my friends.", sentencePast: "He <b>felt</b> very tired after the long trip.", gif: "feeling" },
+  { present: "fight", past: "fought", participle: "fought", type: "irregular", sound: "", sentencePres: "Soldiers <b>fight</b> to protect their country.", sentencePast: "They <b>fought</b> bravely until the end.", gif: "fighting" },
+  { present: "flee", past: "fled", participle: "fled", type: "irregular", sound: "", sentencePres: "Animals <b>flee</b> when they sense danger.", sentencePast: "The thieves <b>fled</b> from the police.", gif: "running away" },
+  { present: "fly", past: "flew", participle: "flown", type: "irregular", sound: "", sentencePres: "Birds <b>fly</b> south every winter.", sentencePast: "We <b>flew</b> to Paris for our anniversary.", gif: "flying" },
+  { present: "forbid", past: "forbade", participle: "forbidden", type: "irregular", sound: "", sentencePres: "Some schools <b>forbid</b> the use of phones in class.", sentencePast: "His parents <b>forbade</b> him from going out late.", gif: "stop sign" },
+  { present: "forgive", past: "forgave", participle: "forgiven", type: "irregular", sound: "", sentencePres: "Good friends <b>forgive</b> small mistakes.", sentencePast: "She <b>forgave</b> him for being so late.", gif: "hug" },
+  { present: "freeze", past: "froze", participle: "frozen", type: "irregular", sound: "", sentencePres: "Water can <b>freeze</b> at zero degrees.", sentencePast: "The lake <b>froze</b> completely last winter.", gif: "frozen" },
+  { present: "grind", past: "ground", participle: "ground", type: "irregular", sound: "", sentencePres: "Coffee shops <b>grind</b> beans every morning.", sentencePast: "He <b>ground</b> the pepper over the salad.", gif: "grinding" },
+  { present: "hang", past: "hung", participle: "hung", type: "irregular", sound: "", sentencePres: "We usually <b>hang</b> our coats by the door.", sentencePast: "She <b>hung</b> the paintings on the wall.", gif: "hanging" },
+  { present: "hear", past: "heard", participle: "heard", type: "irregular", sound: "", sentencePres: "I can <b>hear</b> the birds singing outside.", sentencePast: "We <b>heard</b> a strange noise at midnight.", gif: "listening" },
+  { present: "hide", past: "hid", participle: "hidden", type: "irregular", sound: "", sentencePres: "Children love to <b>hide</b> behind the curtains.", sentencePast: "He <b>hid</b> the gift in the closet.", gif: "hiding" },
+  { present: "hit", past: "hit", participle: "hit", type: "irregular", sound: "", sentencePres: "Don't <b>hit</b> your sister, please.", sentencePast: "The ball <b>hit</b> the window very hard.", gif: "hit" },
+  { present: "hold", past: "held", participle: "held", type: "irregular", sound: "", sentencePres: "Parents <b>hold</b> their kids' hands in the street.", sentencePast: "She <b>held</b> the baby in her arms.", gif: "holding" },
+  { present: "hurt", past: "hurt", participle: "hurt", type: "irregular", sound: "", sentencePres: "Tight shoes can <b>hurt</b> your feet.", sentencePast: "He <b>hurt</b> his knee playing soccer.", gif: "ouch" },
+  { present: "keep", past: "kept", participle: "kept", type: "irregular", sound: "", sentencePres: "Good students <b>keep</b> their notes organized.", sentencePast: "She <b>kept</b> the secret for many years.", gif: "keeping" },
+  { present: "kneel", past: "knelt", participle: "knelt", type: "irregular", sound: "", sentencePres: "Many people <b>kneel</b> when they pray.", sentencePast: "He <b>knelt</b> down to tie his shoe.", gif: "kneeling" },
+  { present: "knit", past: "knit", participle: "knit", type: "irregular", sound: "", sentencePres: "My grandma loves to <b>knit</b> warm sweaters.", sentencePast: "She <b>knit</b> a beautiful scarf for me.", gif: "knitting" },
+  { present: "lay", past: "laid", participle: "laid", type: "irregular", sound: "", sentencePres: "Hens <b>lay</b> eggs almost every day.", sentencePast: "He <b>laid</b> the book on the table.", gif: "laying" },
+  { present: "lead", past: "led", participle: "led", type: "irregular", sound: "", sentencePres: "Good captains <b>lead</b> their team with respect.", sentencePast: "She <b>led</b> the group through the forest.", gif: "leading" },
+  { present: "lean", past: "leant", participle: "leant", type: "irregular", sound: "", sentencePres: "Don't <b>lean</b> on the new fence.", sentencePast: "He <b>leant</b> against the wall to rest.", gif: "leaning" },
+  { present: "leap", past: "leapt", participle: "leapt", type: "irregular", sound: "", sentencePres: "Frogs <b>leap</b> from one rock to another.", sentencePast: "She <b>leapt</b> over the small puddle.", gif: "jumping" },
+  { present: "learn", past: "learnt", participle: "learnt", type: "irregular", sound: "", sentencePres: "Babies <b>learn</b> to walk around their first year.", sentencePast: "I <b>learnt</b> a lot during my trip.", gif: "learning" },
+  { present: "leave", past: "left", participle: "left", type: "irregular", sound: "", sentencePres: "Workers usually <b>leave</b> the office at five.", sentencePast: "We <b>left</b> the party very early.", gif: "leaving" },
+  { present: "lend", past: "lent", participle: "lent", type: "irregular", sound: "", sentencePres: "Good friends <b>lend</b> a hand when needed.", sentencePast: "He <b>lent</b> me his car for the weekend.", gif: "lending" },
+  { present: "let", past: "let", participle: "let", type: "irregular", sound: "", sentencePres: "Please <b>let</b> me know if you need help.", sentencePast: "She <b>let</b> the dog come into the house.", gif: "allow" },
+  { present: "lie", past: "lay", participle: "lain", type: "irregular", sound: "", sentencePres: "Cats love to <b>lie</b> in the sun for hours.", sentencePast: "He <b>lay</b> on the couch all afternoon.", gif: "lying down" },
+  { present: "light", past: "lit", participle: "lit", type: "irregular", sound: "", sentencePres: "Please <b>light</b> the candles before dinner.", sentencePast: "She <b>lit</b> the fireplace last night.", gif: "lighting" },
+  { present: "mean", past: "meant", participle: "meant", type: "irregular", sound: "", sentencePres: "Words can <b>mean</b> different things in context.", sentencePast: "I <b>meant</b> to call you yesterday.", gif: "meaning" },
+  { present: "mistake", past: "mistook", participle: "mistaken", type: "irregular", sound: "", sentencePres: "People sometimes <b>mistake</b> me for my brother.", sentencePast: "I <b>mistook</b> her for an old friend.", gif: "confused" },
+  { present: "overcome", past: "overcame", participle: "overcome", type: "irregular", sound: "", sentencePres: "Brave people <b>overcome</b> their fears every day.", sentencePast: "She <b>overcame</b> many problems in her life.", gif: "victory" },
+  { present: "pay", past: "paid", participle: "paid", type: "irregular", sound: "", sentencePres: "Customers <b>pay</b> at the cashier on the way out.", sentencePast: "He <b>paid</b> the bill with a credit card.", gif: "paying" },
+  { present: "put", past: "put", participle: "put", type: "irregular", sound: "", sentencePres: "Please <b>put</b> the books on the shelf.", sentencePast: "She <b>put</b> the keys in her bag.", gif: "putting" },
+  { present: "ride", past: "rode", participle: "ridden", type: "irregular", sound: "", sentencePres: "Many kids <b>ride</b> their bikes to school.", sentencePast: "We <b>rode</b> horses on the beach yesterday.", gif: "riding" },
+  { present: "ring", past: "rang", participle: "rung", type: "irregular", sound: "", sentencePres: "Church bells <b>ring</b> every Sunday morning.", sentencePast: "The phone <b>rang</b> three times last night.", gif: "bell" },
+  { present: "rise", past: "rose", participle: "risen", type: "irregular", sound: "", sentencePres: "The sun <b>rises</b> in the east each day.", sentencePast: "Prices <b>rose</b> sharply last month.", gif: "sunrise" },
+  { present: "run", past: "ran", participle: "run", type: "irregular", sound: "", sentencePres: "Athletes <b>run</b> every morning before work.", sentencePast: "I <b>ran</b> five kilometers this morning.", gif: "running" },
+  { present: "say", past: "said", participle: "said", type: "irregular", sound: "", sentencePres: "Please <b>say</b> the word very clearly.", sentencePast: "She <b>said</b> goodbye and left the room.", gif: "talking" },
+  { present: "seek", past: "sought", participle: "sought", type: "irregular", sound: "", sentencePres: "Researchers <b>seek</b> answers to hard questions.", sentencePast: "He <b>sought</b> help from his teacher.", gif: "searching" },
+  { present: "sell", past: "sold", participle: "sold", type: "irregular", sound: "", sentencePres: "Bakeries <b>sell</b> fresh bread every morning.", sentencePast: "We <b>sold</b> our old car last week.", gif: "selling" },
+  { present: "send", past: "sent", participle: "sent", type: "irregular", sound: "", sentencePres: "Companies <b>send</b> emails to their clients.", sentencePast: "She <b>sent</b> a postcard from Italy.", gif: "mail" },
+  { present: "set", past: "set", participle: "set", type: "irregular", sound: "", sentencePres: "Please <b>set</b> the table before dinner.", sentencePast: "He <b>set</b> the alarm for six in the morning.", gif: "setting" },
+  { present: "sew", past: "sewed", participle: "sewn", type: "irregular", sound: "", sentencePres: "Tailors <b>sew</b> beautiful suits by hand.", sentencePast: "She <b>sewed</b> a button on my jacket.", gif: "sewing" },
+  { present: "shake", past: "shook", participle: "shaken", type: "irregular", sound: "", sentencePres: "Always <b>shake</b> the bottle before opening it.", sentencePast: "He <b>shook</b> my hand with a big smile.", gif: "shaking" },
+  { present: "shine", past: "shone", participle: "shone", type: "irregular", sound: "", sentencePres: "Stars <b>shine</b> brightly in the country sky.", sentencePast: "The sun <b>shone</b> all afternoon yesterday.", gif: "shining" },
+  { present: "shoot", past: "shot", participle: "shot", type: "irregular", sound: "", sentencePres: "Photographers <b>shoot</b> hundreds of pictures.", sentencePast: "He <b>shot</b> the ball into the goal.", gif: "shooting" },
+  { present: "show", past: "showed", participle: "shown", type: "irregular", sound: "", sentencePres: "Teachers <b>show</b> examples on the board.", sentencePast: "She <b>showed</b> us her new house.", gif: "showing" },
+  { present: "shrink", past: "shrank", participle: "shrunk", type: "irregular", sound: "", sentencePres: "Wool sweaters often <b>shrink</b> in hot water.", sentencePast: "My T-shirt <b>shrank</b> after one wash.", gif: "shrink" },
+  { present: "shut", past: "shut", participle: "shut", type: "irregular", sound: "", sentencePres: "Please <b>shut</b> the door when you leave.", sentencePast: "She <b>shut</b> her eyes and made a wish.", gif: "closing" },
+  { present: "sink", past: "sank", participle: "sunk", type: "irregular", sound: "", sentencePres: "Heavy stones <b>sink</b> quickly in the water.", sentencePast: "The boat <b>sank</b> during the storm.", gif: "sinking" },
+  { present: "sit", past: "sat", participle: "sat", type: "irregular", sound: "", sentencePres: "Please <b>sit</b> down and relax for a while.", sentencePast: "We <b>sat</b> together during the movie.", gif: "sitting" },
+  { present: "slide", past: "slid", participle: "slid", type: "irregular", sound: "", sentencePres: "Children love to <b>slide</b> in the playground.", sentencePast: "He <b>slid</b> on the icy sidewalk.", gif: "sliding" },
+  { present: "smell", past: "smelt", participle: "smelt", type: "irregular", sound: "", sentencePres: "Dogs can <b>smell</b> things from far away.", sentencePast: "The kitchen <b>smelt</b> like fresh bread.", gif: "smelling" },
+  { present: "sow", past: "sowed", participle: "sown", type: "irregular", sound: "", sentencePres: "Farmers <b>sow</b> seeds in the early spring.", sentencePast: "We <b>sowed</b> tomato seeds last weekend.", gif: "planting" },
+  { present: "speed", past: "sped", participle: "sped", type: "irregular", sound: "", sentencePres: "Cars often <b>speed</b> on this empty highway.", sentencePast: "He <b>sped</b> through the yellow light.", gif: "fast car" },
+  { present: "spell", past: "spelt", participle: "spelt", type: "irregular", sound: "", sentencePres: "Can you <b>spell</b> your last name, please?", sentencePast: "She <b>spelt</b> every word correctly.", gif: "spelling" },
+  { present: "spend", past: "spent", participle: "spent", type: "irregular", sound: "", sentencePres: "I usually <b>spend</b> my weekends at home.", sentencePast: "We <b>spent</b> too much money on dinner.", gif: "money" },
+  { present: "spill", past: "spilt", participle: "spilt", type: "irregular", sound: "", sentencePres: "Be careful, you might <b>spill</b> the coffee.", sentencePast: "He <b>spilt</b> juice on the new carpet.", gif: "spilling" },
+  { present: "spin", past: "spun", participle: "spun", type: "irregular", sound: "", sentencePres: "Tops can <b>spin</b> for a long time.", sentencePast: "She <b>spun</b> the wheel with all her strength.", gif: "spinning" },
+  { present: "spit", past: "spat", participle: "spat", type: "irregular", sound: "", sentencePres: "Please don't <b>spit</b> on the sidewalk.", sentencePast: "The baby <b>spat</b> out the medicine.", gif: "spit" },
+  { present: "split", past: "split", participle: "split", type: "irregular", sound: "", sentencePres: "Friends often <b>split</b> the bill at restaurants.", sentencePast: "We <b>split</b> the cake into eight pieces.", gif: "splitting" },
+  { present: "spoil", past: "spoilt", participle: "spoilt", type: "irregular", sound: "", sentencePres: "Don't <b>spoil</b> the surprise for the kids.", sentencePast: "Bad weather <b>spoilt</b> our picnic plans.", gif: "spoiled" },
+  { present: "spread", past: "spread", participle: "spread", type: "irregular", sound: "", sentencePres: "News can <b>spread</b> very fast online.", sentencePast: "She <b>spread</b> butter on the toast.", gif: "spreading" },
+  { present: "spring", past: "sprang", participle: "sprung", type: "irregular", sound: "", sentencePres: "Cats <b>spring</b> when they see a mouse.", sentencePast: "He <b>sprang</b> out of bed at the alarm.", gif: "jumping" },
+  { present: "stand", past: "stood", participle: "stood", type: "irregular", sound: "", sentencePres: "Soldiers <b>stand</b> straight during the parade.", sentencePast: "We <b>stood</b> in line for an hour.", gif: "standing" },
+  { present: "steal", past: "stole", participle: "stolen", type: "irregular", sound: "", sentencePres: "Thieves sometimes <b>steal</b> from tourists.", sentencePast: "Someone <b>stole</b> my wallet at the station.", gif: "stealing" },
+  { present: "stick", past: "stuck", participle: "stuck", type: "irregular", sound: "", sentencePres: "Glue helps you <b>stick</b> paper together.", sentencePast: "The note <b>stuck</b> to the fridge for weeks.", gif: "sticking" },
+  { present: "sting", past: "stung", participle: "stung", type: "irregular", sound: "", sentencePres: "Bees can <b>sting</b> when they feel threatened.", sentencePast: "A bee <b>stung</b> me on the arm.", gif: "bee" },
+  { present: "stink", past: "stank", participle: "stunk", type: "irregular", sound: "", sentencePres: "Old socks usually <b>stink</b> after a long day.", sentencePast: "The trash <b>stank</b> all weekend.", gif: "stinky" },
+  { present: "stride", past: "strode", participle: "stridden", type: "irregular", sound: "", sentencePres: "Confident people <b>stride</b> down the street.", sentencePast: "He <b>strode</b> into the room with confidence.", gif: "walking" },
+  { present: "strike", past: "struck", participle: "struck", type: "irregular", sound: "", sentencePres: "Lightning may <b>strike</b> the same place twice.", sentencePast: "The clock <b>struck</b> midnight loudly.", gif: "striking" },
+  { present: "swear", past: "swore", participle: "sworn", type: "irregular", sound: "", sentencePres: "Witnesses <b>swear</b> to tell the truth.", sentencePast: "He <b>swore</b> he would never lie again.", gif: "promise" },
+  { present: "sweat", past: "sweat", participle: "sweat", type: "irregular", sound: "", sentencePres: "Athletes <b>sweat</b> during heavy training.", sentencePast: "I <b>sweat</b> a lot in yesterday's class.", gif: "sweating" },
+  { present: "sweep", past: "swept", participle: "swept", type: "irregular", sound: "", sentencePres: "Please <b>sweep</b> the floor after lunch.", sentencePast: "She <b>swept</b> the leaves off the porch.", gif: "sweeping" },
+  { present: "swell", past: "swelled", participle: "swollen", type: "irregular", sound: "", sentencePres: "Ankles often <b>swell</b> after a long flight.", sentencePast: "His knee <b>swelled</b> after the fall.", gif: "swelling" },
+  { present: "swing", past: "swung", participle: "swung", type: "irregular", sound: "", sentencePres: "Kids love to <b>swing</b> in the park.", sentencePast: "He <b>swung</b> the bat and hit the ball.", gif: "swinging" },
+  { present: "teach", past: "taught", participle: "taught", type: "irregular", sound: "", sentencePres: "Good teachers <b>teach</b> with patience.", sentencePast: "My father <b>taught</b> me how to drive.", gif: "teaching" },
+  { present: "tear", past: "tore", participle: "torn", type: "irregular", sound: "", sentencePres: "Be careful, paper can <b>tear</b> easily.", sentencePast: "She <b>tore</b> the letter into pieces.", gif: "tearing" },
+  { present: "tell", past: "told", participle: "told", type: "irregular", sound: "", sentencePres: "Please <b>tell</b> me the truth right now.", sentencePast: "He <b>told</b> a funny story at dinner.", gif: "telling" },
+  { present: "throw", past: "threw", participle: "thrown", type: "irregular", sound: "", sentencePres: "Quarterbacks <b>throw</b> the ball with power.", sentencePast: "She <b>threw</b> the keys across the room.", gif: "throwing" },
+  { present: "thrust", past: "thrust", participle: "thrust", type: "irregular", sound: "", sentencePres: "Boxers <b>thrust</b> their fists with power.", sentencePast: "He <b>thrust</b> the door open in a hurry.", gif: "push" },
+  { present: "tread", past: "trod", participle: "trodden", type: "irregular", sound: "", sentencePres: "Hikers <b>tread</b> carefully on wet rocks.", sentencePast: "I accidentally <b>trod</b> on his foot.", gif: "stepping" },
+  { present: "understand", past: "understood", participle: "understood", type: "irregular", sound: "", sentencePres: "Good listeners <b>understand</b> people quickly.", sentencePast: "I finally <b>understood</b> the math problem.", gif: "thinking" },
+  { present: "undergo", past: "underwent", participle: "undergone", type: "irregular", sound: "", sentencePres: "Patients sometimes <b>undergo</b> long surgeries.", sentencePast: "He <b>underwent</b> a difficult operation.", gif: "hospital" },
+  { present: "undertake", past: "undertook", participle: "undertaken", type: "irregular", sound: "", sentencePres: "Brave teams <b>undertake</b> hard projects.", sentencePast: "She <b>undertook</b> a huge research project.", gif: "work" },
+  { present: "wake", past: "woke", participle: "woken", type: "irregular", sound: "", sentencePres: "I usually <b>wake</b> up before sunrise.", sentencePast: "He <b>woke</b> up late this morning.", gif: "waking up" },
+  { present: "wear", past: "wore", participle: "worn", type: "irregular", sound: "", sentencePres: "Pilots <b>wear</b> uniforms during flights.", sentencePast: "She <b>wore</b> a red dress to the party.", gif: "wearing" },
+  { present: "weave", past: "wove", participle: "woven", type: "irregular", sound: "", sentencePres: "Skilled artisans <b>weave</b> beautiful baskets.", sentencePast: "She <b>wove</b> a colorful blanket by hand.", gif: "weaving" },
+  { present: "weep", past: "wept", participle: "wept", type: "irregular", sound: "", sentencePres: "People sometimes <b>weep</b> at sad movies.", sentencePast: "She <b>wept</b> when she heard the news.", gif: "crying" },
+  { present: "wet", past: "wet", participle: "wet", type: "irregular", sound: "", sentencePres: "Don't <b>wet</b> the books, please.", sentencePast: "The rain <b>wet</b> all our clothes.", gif: "water" },
+  { present: "wind", past: "wound", participle: "wound", type: "irregular", sound: "", sentencePres: "Old clocks <b>wind</b> with a small key.", sentencePast: "The road <b>wound</b> through the mountains.", gif: "winding" },
+  { present: "withdraw", past: "withdrew", participle: "withdrawn", type: "irregular", sound: "", sentencePres: "People <b>withdraw</b> cash from ATMs daily.", sentencePast: "He <b>withdrew</b> a hundred dollars yesterday.", gif: "atm" },
+  { present: "wring", past: "wrung", participle: "wrung", type: "irregular", sound: "", sentencePres: "Please <b>wring</b> the towel before hanging it.", sentencePast: "She <b>wrung</b> the wet shirt over the sink.", gif: "wringing" },
+  { present: "date", past: "dated", participle: "dated", type: "regular", sound: "/id/", sentencePres: "Many couples <b>date</b> for years before marriage.", sentencePast: "They <b>dated</b> for two years in college.", gif: "dating" },
+  { present: "end", past: "ended", participle: "ended", type: "regular", sound: "/id/", sentencePres: "All good things <b>end</b> at some point.", sentencePast: "The class <b>ended</b> ten minutes ago.", gif: "ending" },
+  { present: "expect", past: "expected", participle: "expected", type: "regular", sound: "/id/", sentencePres: "Parents <b>expect</b> the best from their children.", sentencePast: "We <b>expected</b> a much bigger crowd.", gif: "waiting" },
+  { present: "intend", past: "intended", participle: "intended", type: "regular", sound: "/id/", sentencePres: "I <b>intend</b> to study harder this year.", sentencePast: "He <b>intended</b> to call you yesterday.", gif: "thinking" },
+  { present: "plant", past: "planted", participle: "planted", type: "regular", sound: "/id/", sentencePres: "Gardeners <b>plant</b> flowers every spring.", sentencePast: "We <b>planted</b> a tree in the backyard.", gif: "planting" },
+  { present: "point", past: "pointed", participle: "pointed", type: "regular", sound: "/id/", sentencePres: "Don't <b>point</b> at people, it's rude.", sentencePast: "She <b>pointed</b> to the perfect answer.", gif: "pointing" },
+  { present: "rent", past: "rented", participle: "rented", type: "regular", sound: "/id/", sentencePres: "Many students <b>rent</b> small apartments.", sentencePast: "We <b>rented</b> a cabin near the lake.", gif: "house" },
+  { present: "repeat", past: "repeated", participle: "repeated", type: "regular", sound: "/id/", sentencePres: "Could you please <b>repeat</b> the question?", sentencePast: "He <b>repeated</b> the same joke three times.", gif: "repeat" },
+  { present: "resist", past: "resisted", participle: "resisted", type: "regular", sound: "/id/", sentencePres: "It is hard to <b>resist</b> chocolate cake.", sentencePast: "She <b>resisted</b> the temptation to quit.", gif: "no" },
+  { present: "wait", past: "waited", participle: "waited", type: "regular", sound: "/id/", sentencePres: "Please <b>wait</b> in line patiently.", sentencePast: "We <b>waited</b> two hours at the airport.", gif: "waiting" },
+  { present: "dress", past: "dressed", participle: "dressed", type: "regular", sound: "/t/", sentencePres: "I <b>dress</b> nicely for important meetings.", sentencePast: "She <b>dressed</b> up for the wedding.", gif: "dressing" },
+  { present: "erase", past: "erased", participle: "erased", type: "regular", sound: "/t/", sentencePres: "Please <b>erase</b> the board after class.", sentencePast: "He <b>erased</b> the file by mistake.", gif: "erasing" },
+  { present: "jump", past: "jumped", participle: "jumped", type: "regular", sound: "/t/", sentencePres: "Kangaroos <b>jump</b> very far in one bound.", sentencePast: "The cat <b>jumped</b> onto the table.", gif: "jumping" },
+  { present: "like", past: "liked", participle: "liked", type: "regular", sound: "/t/", sentencePres: "Most kids <b>like</b> chocolate ice cream.", sentencePast: "She <b>liked</b> the present I gave her.", gif: "thumbs up" },
+  { present: "miss", past: "missed", participle: "missed", type: "regular", sound: "/t/", sentencePres: "I always <b>miss</b> my family during long trips.", sentencePast: "He <b>missed</b> the bus this morning.", gif: "sad" },
+  { present: "practice", past: "practiced", participle: "practiced", type: "regular", sound: "/t/", sentencePres: "Athletes <b>practice</b> almost every single day.", sentencePast: "She <b>practiced</b> piano for two hours.", gif: "practice" },
+  { present: "push", past: "pushed", participle: "pushed", type: "regular", sound: "/t/", sentencePres: "Please <b>push</b> the door, don't pull.", sentencePast: "He <b>pushed</b> the cart up the hill.", gif: "pushing" },
+  { present: "shop", past: "shopped", participle: "shopped", type: "regular", sound: "/t/", sentencePres: "We usually <b>shop</b> on Saturday mornings.", sentencePast: "They <b>shopped</b> for hours at the mall.", gif: "shopping" },
+  { present: "smoke", past: "smoked", participle: "smoked", type: "regular", sound: "/t/", sentencePres: "Please don't <b>smoke</b> inside the building.", sentencePast: "He <b>smoked</b> for many years before quitting.", gif: "smoke" },
+  { present: "stop", past: "stopped", participle: "stopped", type: "regular", sound: "/t/", sentencePres: "Drivers must <b>stop</b> at every red light.", sentencePast: "The rain finally <b>stopped</b> at noon.", gif: "stop" },
+  { present: "use", past: "used", participle: "used", type: "regular", sound: "/t/", sentencePres: "Most people <b>use</b> their phones every day.", sentencePast: "He <b>used</b> my computer yesterday.", gif: "using" },
+  { present: "wash", past: "washed", participle: "washed", type: "regular", sound: "/t/", sentencePres: "I <b>wash</b> my hands before every meal.", sentencePast: "She <b>washed</b> the dishes after dinner.", gif: "washing" },
+  { present: "wish", past: "wished", participle: "wished", type: "regular", sound: "/t/", sentencePres: "Children <b>wish</b> for new toys at Christmas.", sentencePast: "She <b>wished</b> me good luck on the test.", gif: "wishing" },
+  { present: "arrive", past: "arrived", participle: "arrived", type: "regular", sound: "/d/", sentencePres: "Trains usually <b>arrive</b> right on time.", sentencePast: "We <b>arrived</b> at the hotel very late.", gif: "arriving" },
+  { present: "belong", past: "belonged", participle: "belonged", type: "regular", sound: "/d/", sentencePres: "These books <b>belong</b> to the library.", sentencePast: "That bag <b>belonged</b> to my grandmother.", gif: "belonging" },
+  { present: "change", past: "changed", participle: "changed", type: "regular", sound: "/d/", sentencePres: "Plans often <b>change</b> at the last minute.", sentencePast: "He <b>changed</b> his mind about the trip.", gif: "changing" },
+  { present: "climb", past: "climbed", participle: "climbed", type: "regular", sound: "/d/", sentencePres: "Monkeys can <b>climb</b> trees very quickly.", sentencePast: "We <b>climbed</b> the mountain last summer.", gif: "climbing" },
+  { present: "close", past: "closed", participle: "closed", type: "regular", sound: "/d/", sentencePres: "Please <b>close</b> the window, it's cold.", sentencePast: "The store <b>closed</b> early last night.", gif: "closing" },
+  { present: "consider", past: "considered", participle: "considered", type: "regular", sound: "/d/", sentencePres: "I <b>consider</b> her my best friend.", sentencePast: "He <b>considered</b> moving to another city.", gif: "thinking" },
+  { present: "dare", past: "dared", participle: "dared", type: "regular", sound: "/d/", sentencePres: "Few people <b>dare</b> to speak up in meetings.", sentencePast: "She <b>dared</b> to jump from the high diving board.", gif: "brave" },
+  { present: "deliver", past: "delivered", participle: "delivered", type: "regular", sound: "/d/", sentencePres: "Postmen <b>deliver</b> letters every day.", sentencePast: "They <b>delivered</b> the package this morning.", gif: "delivery" },
+  { present: "enjoy", past: "enjoyed", participle: "enjoyed", type: "regular", sound: "/d/", sentencePres: "I really <b>enjoy</b> long walks in the park.", sentencePast: "We <b>enjoyed</b> the concert very much.", gif: "happy" },
+  { present: "fill", past: "filled", participle: "filled", type: "regular", sound: "/d/", sentencePres: "Please <b>fill</b> the bottle with cold water.", sentencePast: "He <b>filled</b> the form with his details.", gif: "filling" },
+  { present: "follow", past: "followed", participle: "followed", type: "regular", sound: "/d/", sentencePres: "Drivers must <b>follow</b> the traffic rules.", sentencePast: "She <b>followed</b> me to the parking lot.", gif: "following" },
+  { present: "hurry", past: "hurried", participle: "hurried", type: "regular", sound: "/d/", sentencePres: "Please <b>hurry</b> or we will miss the bus.", sentencePast: "He <b>hurried</b> to finish the report.", gif: "running" },
+  { present: "live", past: "lived", participle: "lived", type: "regular", sound: "/d/", sentencePres: "Many artists <b>live</b> in small studios.", sentencePast: "She <b>lived</b> in Paris for five years.", gif: "house" },
+  { present: "name", past: "named", participle: "named", type: "regular", sound: "/d/", sentencePres: "Parents <b>name</b> their babies with care.", sentencePast: "They <b>named</b> the dog Max.", gif: "name tag" },
+  { present: "order", past: "ordered", participle: "ordered", type: "regular", sound: "/d/", sentencePres: "Customers <b>order</b> food on the app.", sentencePast: "He <b>ordered</b> a pizza for dinner.", gif: "ordering" },
+  { present: "plan", past: "planned", participle: "planned", type: "regular", sound: "/d/", sentencePres: "We always <b>plan</b> our vacations carefully.", sentencePast: "They <b>planned</b> a surprise party for him.", gif: "planning" },
+  { present: "rain", past: "rained", participle: "rained", type: "regular", sound: "/d/", sentencePres: "It usually <b>rains</b> a lot in April.", sentencePast: "It <b>rained</b> all weekend long.", gif: "rain" },
+  { present: "remember", past: "remembered", participle: "remembered", type: "regular", sound: "/d/", sentencePres: "I always <b>remember</b> my friends' birthdays.", sentencePast: "She <b>remembered</b> to lock the door.", gif: "memory" },
+  { present: "study", past: "studied", participle: "studied", type: "regular", sound: "/d/", sentencePres: "Good students <b>study</b> a little every day.", sentencePast: "He <b>studied</b> all night for the exam.", gif: "studying" },
+  { present: "travel", past: "traveled", participle: "traveled", type: "regular", sound: "/d/", sentencePres: "Many young people <b>travel</b> after college.", sentencePast: "We <b>traveled</b> across Europe last summer.", gif: "traveling" },
+  { present: "try", past: "tried", participle: "tried", type: "regular", sound: "/d/", sentencePres: "Please <b>try</b> your best on the exam.", sentencePast: "She <b>tried</b> a new recipe for dinner.", gif: "trying" },
+  { present: "turn", past: "turned", participle: "turned", type: "regular", sound: "/d/", sentencePres: "Cars must <b>turn</b> right at the next corner.", sentencePast: "He <b>turned</b> off the lights before bed.", gif: "turning" },
 ];
 
 const GIPHY_KEY = window.GIPHY_KEY || "2axlHmd0ojKiliZf0zstiEFAfdrjDrSd";
@@ -89,6 +244,161 @@ const VERB_MEANINGS_ES = {
   win:"ganar",accept:"aceptar",count:"contar",need:"necesitar",start:"empezar / iniciar",
   want:"querer",ask:"preguntar",dance:"bailar",finish:"terminar",help:"ayudar",look:"mirar",
   answer:"responder",clean:"limpiar",love:"amar",open:"abrir",stay:"quedarse",
+  bid: "pujar / ofertar",
+  bind: "atar / encuadernar",
+  bleed: "sangrar",
+  breed: "criar",
+  broadcast: "transmitir / radiar",
+  build: "construir / edificar",
+  burn: "quemar",
+  burst: "reventar / estallar",
+  cast: "arrojar / lanzar",
+  catch: "atrapar / coger",
+  cling: "agarrarse / aferrarse",
+  cost: "costar",
+  creep: "arrastrarse / acercarse sigilosamente",
+  deal: "tratar / repartir",
+  dig: "cavar / excavar",
+  draw: "dibujar",
+  dream: "soñar",
+  feed: "alimentar",
+  feel: "sentir",
+  fight: "luchar / pelear",
+  flee: "huir",
+  fly: "volar",
+  forbid: "prohibir",
+  forgive: "perdonar",
+  freeze: "congelar / helar",
+  grind: "moler",
+  hang: "colgar",
+  hear: "oír",
+  hide: "esconder / ocultar",
+  hit: "golpear / pegar",
+  hold: "sostener / agarrar",
+  hurt: "herir / doler",
+  keep: "conservar / guardar",
+  kneel: "arrodillarse",
+  knit: "tejer",
+  lay: "poner / colocar",
+  lead: "guiar / liderar",
+  lean: "apoyarse / inclinarse",
+  leap: "saltar / brincar",
+  learn: "aprender",
+  leave: "salir / dejar",
+  lend: "prestar",
+  let: "permitir / dejar",
+  lie: "echarse / yacer",
+  light: "encender / iluminar",
+  mean: "significar",
+  mistake: "equivocar / confundir",
+  overcome: "superar / vencer",
+  pay: "pagar",
+  put: "poner / colocar",
+  ride: "montar / cabalgar",
+  ring: "sonar / llamar",
+  rise: "levantarse / subir",
+  run: "correr",
+  say: "decir",
+  seek: "buscar",
+  sell: "vender",
+  send: "enviar",
+  set: "poner / colocar",
+  sew: "coser",
+  shake: "sacudir / temblar",
+  shine: "brillar",
+  shoot: "disparar",
+  show: "mostrar",
+  shrink: "encogerse",
+  shut: "cerrar",
+  sink: "hundir / hundirse",
+  sit: "sentarse",
+  slide: "deslizar / resbalar",
+  smell: "oler",
+  sow: "sembrar",
+  speed: "acelerar / ir rápido",
+  spell: "deletrear",
+  spend: "gastar / pasar tiempo",
+  spill: "derramar",
+  spin: "girar / hilar",
+  spit: "escupir",
+  split: "dividir / partir",
+  spoil: "estropear / arruinar",
+  spread: "extender / esparcir",
+  spring: "saltar / brotar",
+  stand: "estar de pie",
+  steal: "robar",
+  stick: "pegar / atascarse",
+  sting: "picar",
+  stink: "apestar",
+  stride: "andar a zancadas",
+  strike: "golpear",
+  swear: "jurar",
+  sweat: "sudar",
+  sweep: "barrer",
+  swell: "hinchar",
+  swing: "balancear / columpiarse",
+  teach: "enseñar",
+  tear: "rasgar / romper",
+  tell: "decir / contar",
+  throw: "lanzar / tirar",
+  thrust: "empujar / introducir",
+  tread: "pisar",
+  understand: "entender / comprender",
+  undergo: "sufrir / experimentar",
+  undertake: "emprender / asumir",
+  wake: "despertar",
+  wear: "llevar puesto / vestir",
+  weave: "tejer / entrelazar",
+  weep: "llorar",
+  wet: "mojar",
+  wind: "enrollar / serpentear",
+  withdraw: "retirar",
+  wring: "escurrir / torcer",
+  date: "salir con / fechar",
+  end: "terminar",
+  expect: "esperar / suponer",
+  intend: "intentar / pretender",
+  plant: "plantar / sembrar",
+  point: "señalar / apuntar",
+  rent: "alquilar / rentar",
+  repeat: "repetir",
+  resist: "resistir",
+  wait: "esperar",
+  dress: "vestir / vestirse",
+  erase: "borrar",
+  jump: "saltar",
+  like: "gustar",
+  miss: "extrañar / perder",
+  practice: "practicar",
+  push: "empujar",
+  shop: "comprar / ir de compras",
+  smoke: "fumar",
+  stop: "parar / detener",
+  use: "usar",
+  wash: "lavar",
+  wish: "desear",
+  arrive: "llegar",
+  belong: "pertenecer",
+  change: "cambiar",
+  climb: "escalar / trepar",
+  close: "cerrar",
+  consider: "considerar",
+  dare: "atreverse / desafiar",
+  deliver: "entregar",
+  enjoy: "disfrutar",
+  fill: "llenar",
+  follow: "seguir",
+  hurry: "apurarse / darse prisa",
+  live: "vivir",
+  name: "nombrar",
+  order: "ordenar / pedir",
+  plan: "planear",
+  rain: "llover",
+  remember: "recordar",
+  study: "estudiar",
+  travel: "viajar",
+  try: "intentar / probar",
+  turn: "girar / voltear",
 };
 
 /* ── FLASHCARD STATE ── */
@@ -128,6 +438,84 @@ function hideSwipeGhosts() {
 
 function hideActions() {
   document.getElementById("actions").classList.remove("visible");
+}
+
+/* ── SHARE RESULTS ── */
+function showShareToast(msg) {
+  const toast = document.getElementById("shareToast");
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showShareToast._t);
+  showShareToast._t = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function buildShareText(kind) {
+  const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
+  if (kind === "quiz") {
+    const total = quizQuestions.length || 0;
+    const pct   = total ? Math.round((quizOk / total) * 100) : 0;
+    const emoji = pct >= 90 ? "🏆" : pct >= 70 ? "🎉" : pct >= 50 ? "💪" : "📚";
+    return (
+      `${emoji} Verb Flashcards – Final Quiz\n` +
+      `✅ Correct: ${quizOk}/${total}\n` +
+      `❌ Wrong:   ${quizNo}/${total}\n` +
+      `🎯 Score:   ${pct}%\n` +
+      (url ? `\nTry it: ${url}` : "")
+    );
+  }
+  // round complete (flashcards)
+  const total = deck.length || 0;
+  const pct   = total ? Math.round((correct / total) * 100) : 0;
+  const emoji = pct >= 80 ? "🎉" : pct >= 50 ? "💪" : "📚";
+  return (
+    `${emoji} Verb Flashcards – Round complete!\n` +
+    `📚 Learned: ${correct}/${total}\n` +
+    `⏭️ Skipped: ${skipped}/${total}\n` +
+    `🎯 Mastery: ${pct}%\n` +
+    (url ? `\nTry it: ${url}` : "")
+  );
+}
+
+async function shareResults(kind) {
+  const text  = buildShareText(kind);
+  const title = kind === "quiz" ? "My Final Quiz Results" : "My Flashcards Round";
+  const url   = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : undefined;
+
+  // 1. Try native Web Share API (mobile + some desktops)
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text, url });
+      return;
+    } catch (err) {
+      // user cancelled or share failed; fall through to clipboard
+      if (err && err.name === "AbortError") return;
+    }
+  }
+
+  // 2. Fallback: copy to clipboard
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      showShareToast("Results copied to clipboard ✓");
+      return;
+    }
+  } catch (err) { /* ignore */ }
+
+  // 3. Last-resort fallback: legacy execCommand
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity  = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showShareToast("Results copied to clipboard ✓");
+  } catch (err) {
+    showShareToast("Couldn't share – try selecting and copying manually.");
+  }
 }
 
 /* ── DECK CON PROGRESIÓN DIARIA ── */
@@ -1040,6 +1428,7 @@ function showQuizResults() {
     </div>
     <div class="qresult-btns">
       <button class="restart-btn" onclick="startQuiz()">Retry Quiz 🔄</button>
+      <button class="restart-btn share-btn" onclick="shareResults('quiz')" type="button">Share Results 📤</button>
       <button class="restart-btn quiz-back-btn" onclick="backToCards()">Back to Cards</button>
     </div>
   `;
@@ -1086,6 +1475,11 @@ document.getElementById("restartBtn").addEventListener("click", () => {
   document.getElementById("stage").style.display = "flex";
   renderCard(true);
 });
+
+const shareFinishBtn = document.getElementById("shareFinishBtn");
+if (shareFinishBtn) {
+  shareFinishBtn.addEventListener("click", (e) => { e.stopPropagation(); shareResults("round"); });
+}
 
 document.getElementById("modalClose").addEventListener("click", closeModal);
 document.getElementById("overlay").addEventListener("click", (e) => {
