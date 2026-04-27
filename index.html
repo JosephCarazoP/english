@@ -383,304 +383,116 @@
 
     </div><!-- /onboarding-card -->
   </div>
-
-  Claude terminó la respuesta
-  Dijiste: No me sale el banner de PWA.
-
-  /* ── CONFIGURACIÓN DE INICIO ── */ const START_DATE = new Date(2026, 3, 23); /* ── DATA ── */ const ALL_VERBS = [ {
-  present: "bear", past: "bore", participle: "borne", type: "irregular", sound: "", sentencePres: "Some people cannot
-  <b>bear</b> the cold weather.", sentencePast: "She <b>bore< pasted <!DOCTYPE html>
-      <html lang="en">
-
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png"
-          href="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" />
-        <title>Verb Flashcards - JC
-    </ pasted /* ── RESET & TOKENS ── */ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } * {
-      -webkit-tap-highlight-color: transparent; } @import
-      url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=DM
-      pasted /* ── Verb Flashcards — Service Worker ── */ const CACHE="vfc-v1" ; const PRECACHE=["./", "./index.html"
-      , "./app.js" , "./styles.css" , "./manifest.webmanifest" ]; /* Install: pre-cache shell assets */
-      self.addEventListener("install", e=> {
-    e.waitUntil(
-    caches.open(CACHE)
-    .then(c => c.addAll(PRECACHE))
-    .then(() => self.skipWaiting())
-    );
-    });
-
-    /* Activate: remove old caches */
-    self.addEventListener("activate", e => {
-    e.waitUntil(
-    caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-    .then(() => self.clients.claim())
-    );
-    });
-
-    /* Fetch: cache-first for same-origin, network-first for external (fonts, GIPHY) */
-    self.addEventListener("fetch", e => {
-    const url = new URL(e.request.url);
-    const isSameOrigin = url.origin === self.location.origin;
-
-    if (!isSameOrigin) {
-    /* External: try network, ignore errors */
-    return;
-    }
-
-    e.respondWith(
-    caches.match(e.request).then(cached => {
-    if (cached) return cached;
-    return fetch(e.request).then(res => {
-    /* Cache successful GET responses */
-    if (res && res.status === 200 && e.request.method === "GET") {
-    const clone = res.clone();
-    caches.open(CACHE).then(c => c.put(e.request, clone));
-    }
-    return res;
-    });
-    }).catch(() => {
-    /* Offline fallback for navigation requests */
-    if (e.request.mode === "navigate") {
-    return caches.match("./index.html");
-    }
-    })
-    );
-    });{
-    "name": "Verb Flashcards – JC",
-    "short_name": "Verbos",
-    "description": "Aprende verbos en inglés con flashcards interactivas, quizzes y rachas diarias.",
-    "start_url": "./",
-    "display": "standalone",
-    "orientation": "portrait-primary",
-    "background_color": "#faf8f5",
-    "theme_color": "#ff6b35",
-    "lang": "es",
-    "categories": [
-    "education",
-    "games"
-    ],
-    "icons": [
-    {
-    "src": "https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg",
-    "sizes": "192x192",
-    "type": "image/jpeg",
-    "purpose": "any"
-    },
-    {
-    "src": "https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg",
-    "sizes": "512x512",
-    "type": "image/jpeg",
-    "purpose": "any maskable"
-    }
-    ],
-    "screenshots": [],
-    "shortcuts": [
-    {
-    "name": "Practicar ahora",
-    "short_name": "Practicar",
-    "description": "Ir directo a las flashcards",
-    "url": "./"
-    }
-    ]
-    }
-    No me sale el banner de PWA. En las configuraciones hay cosas inservibles como "volver a ver intro".
-    El banner tiene un mal diseño y funcionamiento.
-    Mostrar menos
-    14:09
-    Claude respondió: Veo dos problemas claros.
-    Veo dos problemas claros. Para el PWA, el beforeinstallprompt tiene requisitos estrictos que probablemente no se
-    están cumpliendo. Y en Settings hay items que no sirven o están mal diseñados.
-
-    Antes de proponer cambios, déjame entender mejor:
-
-    User: Chrome desktop, rediseñar Settings completo
-
-    Dijiste: P: ¿Dónde estás probando la app?
-    P: ¿Dónde estás probando la app?
-    R: safari ios, brave, etc... es app web
-
-    P: ¿Qué quieres hacer con la sección de Settings?
-    R: Quitar solo 'Ver intro' y limpiar lo inservible
-
-    20:13
-    Claude respondió: Entendido.
-    Entendido. Dos cosas a resolver:
-
-    PWA en Safari iOS / Brave: beforeinstallprompt no existe en Safari iOS ni en Brave — Safari usa su propio flujo
-    ("Compartir → Añadir a inicio") y Brave a veces lo bloquea. La sección PWA en Settings debe detectar el contexto y
-    mostrar instrucciones manuales cuando no hay prompt nativo.
-
-    Settings: Quitar "Ver intro", "Confirmar al salir del quiz" (no implementado), y limpiar el diseño.
-
-    Voy a generar los dos archivos corregidos:
-
-
-    Reading frontend skill
-    Reading frontend skill
-    Ahora voy a hacer los cambios quirúrgicos en app.js y el HTML del modal de Settings:
-
-    Los cambios son:
-
-    PWA: Detectar Safari iOS / Brave sin prompt → mostrar instrucciones manuales con pasos visuales
-    Settings: Eliminar "Ver intro", "Confirmar al salir del quiz", y "Verbos por round" (no implementado realmente).
-    Dejar solo lo que funciona: Tema, Animaciones, Velocidad audio, Auto-play, Reset racha, Borrar todo, e instalar PWA
-
-    Se crearon 3 archivos, archivo leído
-    Se crearon 3 archivos, archivo leído
-    Tres archivos con los cambios listos. Esto es lo que hace cada uno:
-
-    settings_patch.html — Reemplaza todo el <div class="settings-overlay"> en tu index.html. Lo que se eliminó:
-
-      "Ver intro" (onboarding)
-      "Verbos por round" (no estaba implementado)
-      "Confirmar al salir del quiz" (no estaba implementado)
-      pwa_styles_patch.css — Pega el contenido al final de tu styles.css. Estilos para la nueva tarjeta de instrucciones
-      PWA.
-
-      app_patch.js — Reemplaza las dos funciones en tu app.js:
-
-      initPWA → detecta Safari iOS, Brave, Chrome. Si no hay beforeinstallprompt (Safari/Brave), muestra pasos manuales
-      "Compartir → Añadir a inicio" al abrir Settings
-      initSettings → versión limpia, sin los items eliminados
-      Lógica PWA:
-
-      Chrome/Edge con prompt → botón "Instalar" normal
-      Safari iOS → instrucciones paso a paso específicas para Safari
-      Brave/Firefox → instrucciones para menú de tres puntos
-      Ya instalada → muestra "✅ App ya instalada"
-
-      Settings patch
-      Código · HTML
-
-      Pwa styles patch
-      Código · CSS
-
-      App patch
-      JS
-
-
-
-
-      Claude es IA y puede cometer errores. Por favor, verifica nuevamente las respuestas.
-      Settings patch · HTML
-      Copiar
-
-      <!-- ── SETTINGS MODAL — reemplazar el bloque completo en index.html ── -->
-      <!-- ── SETTINGS MODAL — reemplazar el bloque completo en index.html ── -->
-      <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración"
-        style="display:none;">
-        <div class="settings-card">
-          <div class="settings-header">
-            <h2 class="settings-title">⚙️ Configuración</h2>
-            <button class="settings-close" id="settingsClose" type="button" aria-label="Cerrar">✕</button>
-          </div>
-          <div class="settings-body">
-
-            <!-- APARIENCIA -->
-            <section class="settings-section">
-              <h3 class="settings-section-title">🎨 Apariencia</h3>
-              <div class="settings-row">
-                <label class="settings-label">Tema</label>
-                <select id="settingTheme" class="settings-select">
-                  <option value="auto">Auto (sistema)</option>
-                  <option value="dark">Oscuro</option>
-                  <option value="light">Claro</option>
-                </select>
-              </div>
-              <div class="settings-row">
-                <label class="settings-label">Animaciones</label>
-                <button class="settings-toggle" id="settingAnimations" data-val="on" type="button" aria-pressed="true">
-                  <span class="toggle-knob"></span>
-                </button>
-              </div>
-            </section>
-
-            <!-- AUDIO -->
-            <section class="settings-section">
-              <h3 class="settings-section-title">🔊 Audio</h3>
-              <div class="settings-row">
-                <label class="settings-label">Velocidad por defecto</label>
-                <select id="settingAudioSpeed" class="settings-select">
-                  <option value="0.7">Lento</option>
-                  <option value="1" selected>Normal</option>
-                  <option value="1.2">Rápido</option>
-                </select>
-              </div>
-              <div class="settings-row">
-                <label class="settings-label">Auto-play al abrir ✦</label>
-                <button class="settings-toggle" id="settingAutoPlay" data-val="off" type="button" aria-pressed="false">
-                  <span class="toggle-knob"></span>
-                </button>
-              </div>
-            </section>
-
-            <!-- INSTALAR APP -->
-            <section class="settings-section" id="pwaSection">
-              <h3 class="settings-section-title">📲 Instalar app</h3>
-
-              <!-- Estado A: prompt nativo disponible (Chrome/Edge) -->
-              <div id="pwaPromptRow" class="settings-row" style="display:none;">
-                <span class="settings-label">Agregar a pantalla de inicio</span>
-                <button class="settings-pwa-btn" id="pwaInstallBtn" type="button">Instalar</button>
-              </div>
-
-              <!-- Estado B: ya instalada -->
-              <div id="pwaInstalledRow" class="settings-row" style="display:none;">
-                <span class="settings-label">✅ App ya instalada</span>
-              </div>
-
-              <!-- Estado C: instrucciones manuales (Safari iOS / Brave / Firefox) -->
-              <div id="pwaManualRow" class="pwa-manual-card" style="display:none;">
-                <div class="pwa-manual-title">Agrega esta app a tu pantalla de inicio</div>
-
-                <!-- Safari iOS -->
-                <div class="pwa-manual-os" id="pwaIosSteps">
-                  <div class="pwa-manual-badge">Safari iOS</div>
-                  <ol class="pwa-manual-steps">
-                    <li><span class="pwa-step-icon">⬆️</span> Toca el botón <strong>Compartir</strong> en la barra
-                      inferior</li>
-                    <li><span class="pwa-step-icon">➕</span> Elige <strong>"Añadir a pantalla de inicio"</strong></li>
-                    <li><span class="pwa-step-icon">✅</span> Presiona <strong>"Añadir"</strong> en la esquina superior
-                      derecha</li>
-                  </ol>
-                </div>
-
-                <!-- Brave / otros -->
-                <div class="pwa-manual-os" id="pwaBraveSteps" style="display:none;">
-                  <div class="pwa-manual-badge">Brave / Chrome</div>
-                  <ol class="pwa-manual-steps">
-                    <li><span class="pwa-step-icon">⋮</span> Abre el <strong>menú</strong> (tres puntos, arriba a la
-                      derecha)</li>
-                    <li><span class="pwa-step-icon">➕</span> Elige <strong>"Añadir a pantalla de inicio"</strong></li>
-                    <li><span class="pwa-step-icon">✅</span> Confirma tocando <strong>"Añadir"</strong></li>
-                  </ol>
-                </div>
-              </div>
-
-            </section>
-
-            <!-- DATOS -->
-            <section class="settings-section settings-section-danger">
-              <h3 class="settings-section-title">🗂️ Datos</h3>
-              <div class="settings-row">
-                <span class="settings-label">Resetear racha diaria</span>
-                <button class="settings-danger-btn" id="settingResetStreak" type="button">Resetear</button>
-              </div>
-              <div class="settings-row">
-                <span class="settings-label">Borrar todo el progreso</span>
-                <button class="settings-danger-btn settings-danger-btn-red" id="settingResetAll" type="button">Borrar
-                  todo</button>
-              </div>
-            </section>
-
-          </div>
-        </div>
+  <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración"
+    style="display:none;">
+    <div class="settings-card">
+      <div class="settings-header">
+        <h2 class="settings-title">⚙️ Configuración</h2>
+        <button class="settings-close" id="settingsClose" type="button" aria-label="Cerrar">✕</button>
       </div>
+      <div class="settings-body">
 
-      <script src="app.js"></script>
+        <!-- APARIENCIA -->
+        <section class="settings-section">
+          <h3 class="settings-section-title">🎨 Apariencia</h3>
+          <div class="settings-row">
+            <label class="settings-label">Tema</label>
+            <select id="settingTheme" class="settings-select">
+              <option value="auto">Auto (sistema)</option>
+              <option value="dark">Oscuro</option>
+              <option value="light">Claro</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label">Animaciones</label>
+            <button class="settings-toggle" id="settingAnimations" data-val="on" type="button" aria-pressed="true">
+              <span class="toggle-knob"></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- AUDIO -->
+        <section class="settings-section">
+          <h3 class="settings-section-title">🔊 Audio</h3>
+          <div class="settings-row">
+            <label class="settings-label">Velocidad por defecto</label>
+            <select id="settingAudioSpeed" class="settings-select">
+              <option value="0.7">Lento</option>
+              <option value="1" selected>Normal</option>
+              <option value="1.2">Rápido</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label">Auto-play al abrir ✦</label>
+            <button class="settings-toggle" id="settingAutoPlay" data-val="off" type="button" aria-pressed="false">
+              <span class="toggle-knob"></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- INSTALAR APP -->
+        <section class="settings-section" id="pwaSection">
+          <h3 class="settings-section-title">📲 Instalar app</h3>
+
+          <!-- Estado A: prompt nativo disponible (Chrome/Edge) -->
+          <div id="pwaPromptRow" class="settings-row" style="display:none;">
+            <span class="settings-label">Agregar a pantalla de inicio</span>
+            <button class="settings-pwa-btn" id="pwaInstallBtn" type="button">Instalar</button>
+          </div>
+
+          <!-- Estado B: ya instalada -->
+          <div id="pwaInstalledRow" class="settings-row" style="display:none;">
+            <span class="settings-label">✅ App ya instalada</span>
+          </div>
+
+          <!-- Estado C: instrucciones manuales (Safari iOS / Brave / Firefox) -->
+          <div id="pwaManualRow" class="pwa-manual-card" style="display:none;">
+            <div class="pwa-manual-title">Agrega esta app a tu pantalla de inicio</div>
+
+            <!-- Safari iOS -->
+            <div class="pwa-manual-os" id="pwaIosSteps">
+              <div class="pwa-manual-badge">Safari iOS</div>
+              <ol class="pwa-manual-steps">
+                <li><span class="pwa-step-icon">⬆️</span> Toca el botón <strong>Compartir</strong> en la barra
+                  inferior</li>
+                <li><span class="pwa-step-icon">➕</span> Elige <strong>"Añadir a pantalla de inicio"</strong></li>
+                <li><span class="pwa-step-icon">✅</span> Presiona <strong>"Añadir"</strong> en la esquina superior
+                  derecha</li>
+              </ol>
+            </div>
+
+            <!-- Brave / otros -->
+            <div class="pwa-manual-os" id="pwaBraveSteps" style="display:none;">
+              <div class="pwa-manual-badge">Brave / Chrome</div>
+              <ol class="pwa-manual-steps">
+                <li><span class="pwa-step-icon">⋮</span> Abre el <strong>menú</strong> (tres puntos, arriba a la
+                  derecha)</li>
+                <li><span class="pwa-step-icon">➕</span> Elige <strong>"Añadir a pantalla de inicio"</strong></li>
+                <li><span class="pwa-step-icon">✅</span> Confirma tocando <strong>"Añadir"</strong></li>
+              </ol>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- DATOS -->
+        <section class="settings-section settings-section-danger">
+          <h3 class="settings-section-title">🗂️ Datos</h3>
+          <div class="settings-row">
+            <span class="settings-label">Resetear racha diaria</span>
+            <button class="settings-danger-btn" id="settingResetStreak" type="button">Resetear</button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Borrar todo el progreso</span>
+            <button class="settings-danger-btn settings-danger-btn-red" id="settingResetAll" type="button">Borrar
+              todo</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
 </body>
 
 </html>
