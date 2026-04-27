@@ -2933,43 +2933,84 @@ function applyVFCSettings(s) {
 })();
 
 
-/* ════════════════════════════════════════════════════════════════
-   PWA — beforeinstallprompt + service worker
-   ════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   PWA — beforeinstallprompt + instrucciones manuales
+   REEMPLAZA la función initPWA existente en app.js
+   ══════════════════════════════════════════════════════════════════ */
 (function initPWA() {
   let deferredPrompt = null;
-  const pwaSection = document.getElementById("pwaSection");
-  const pwaBtn = document.getElementById("pwaInstallBtn");
 
-  /* Capture the install prompt so we can trigger it later */
+  const promptRow = document.getElementById("pwaPromptRow");
+  const installedRow = document.getElementById("pwaInstalledRow");
+  const manualRow = document.getElementById("pwaManualRow");
+  const installBtn = document.getElementById("pwaInstallBtn");
+  const iosSteps = document.getElementById("pwaIosSteps");
+  const braveSteps = document.getElementById("pwaBraveSteps");
+
+  /* ── Detección de entorno ── */
+  const ua = navigator.userAgent || "";
+  const isIOS = /iP(hone|ad|od)/.test(ua);
+  const isSafari = isIOS && /WebKit/.test(ua) && !/CriOS|FxiOS|OPiOS/.test(ua);
+  const isStandalone = ("standalone" in navigator && navigator.standalone) ||
+    window.matchMedia("(display-mode: standalone)").matches;
+
+  function _showManual() {
+    if (!manualRow) return;
+    manualRow.style.display = "";
+    // Mostrar instrucciones correctas según contexto
+    if (iosSteps) iosSteps.style.display = (isSafari || isIOS) ? "" : "none";
+    if (braveSteps) braveSteps.style.display = (isSafari || isIOS) ? "none" : "";
+  }
+
+  /* ── Ya instalada ── */
+  if (isStandalone) {
+    if (installedRow) installedRow.style.display = "";
+    return;
+  }
+
+  /* ── Prompt nativo (Chrome/Edge desktop & Android) ── */
   window.addEventListener("beforeinstallprompt", e => {
     e.preventDefault();
     deferredPrompt = e;
-    if (pwaSection) pwaSection.style.display = "";  // show Settings install row
+    if (promptRow) promptRow.style.display = "";
+    // Ocultar manual si teníamos uno visible
+    if (manualRow) manualRow.style.display = "none";
   });
 
-  /* Shared install trigger */
+  /* ── Fallback: sin prompt → instrucciones manuales ── */
+  // Se activa cuando el settings se abre y no hay prompt nativo
+  function _maybeShowManual() {
+    if (deferredPrompt) return;      // hay prompt → no necesario
+    if (isStandalone) return;      // ya instalada
+    _showManual();
+  }
+
+  // Exponer para que initSettings lo llame al abrir el panel
+  window._pwaMaybeShowManual = _maybeShowManual;
+
+  /* ── Botón instalar (cuando hay prompt nativo) ── */
   async function triggerInstall() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null;
     if (outcome === "accepted") {
-      if (pwaSection) pwaSection.style.display = "none";
+      if (promptRow) promptRow.style.display = "none";
+      if (installedRow) installedRow.style.display = "";
       if (typeof showShareToast === "function") showShareToast("¡App instalada! 📲");
     }
   }
+  if (installBtn) installBtn.addEventListener("click", triggerInstall);
 
-  /* Settings row button */
-  if (pwaBtn) pwaBtn.addEventListener("click", triggerInstall);
-
-  /* Already installed */
+  /* ── Ya instalada (evento) ── */
   window.addEventListener("appinstalled", () => {
     deferredPrompt = null;
-    if (pwaSection) pwaSection.style.display = "none";
+    if (promptRow) promptRow.style.display = "none";
+    if (manualRow) manualRow.style.display = "none";
+    if (installedRow) installedRow.style.display = "";
   });
 
-  /* Register service worker */
+  /* ── Registrar Service Worker ── */
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js")
       .then(reg => console.log("[PWA] SW registered", reg.scope))
@@ -2978,6 +3019,103 @@ function applyVFCSettings(s) {
 })();
 
 
+/* ══════════════════════════════════════════════════════════════════
+   SETTINGS — solo lo que funciona
+   REEMPLAZA la función initSettings existente en app.js
+   ══════════════════════════════════════════════════════════════════ */
+(function initSettings() {
+  const overlay = document.getElementById("settingsOverlay");
+  const openBtn = document.getElementById("settingsBtn");
+  const closeBtn = document.getElementById("settingsClose");
+  if (!overlay || !openBtn) return;
+
+  let s = loadVFCSettings();
+  applyVFCSettings(s);
+
+  function _syncToggle(id, isOn) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.dataset.val = isOn ? "on" : "off";
+    btn.setAttribute("aria-pressed", String(isOn));
+    btn.classList.toggle("is-on", isOn);
+  }
+
+  function syncControls() {
+    const tEl = document.getElementById("settingTheme");
+    const aEl = document.getElementById("settingAudioSpeed");
+    if (tEl) tEl.value = s.theme;
+    if (aEl) aEl.value = s.audioSpeed;
+    _syncToggle("settingAnimations", s.animations === "on");
+    _syncToggle("settingAutoPlay", s.autoPlay === "on");
+  }
+
+  /* Selects */
+  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"]].forEach(([id, key]) => {
+    document.getElementById(id)?.addEventListener("change", e => {
+      s[key] = e.target.value;
+      saveVFCSettings(s);
+      applyVFCSettings(s);
+    });
+  });
+
+  /* Toggles */
+  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"]].forEach(([id, key]) => {
+    document.getElementById(id)?.addEventListener("click", () => {
+      const isOn = document.getElementById(id).dataset.val !== "on";
+      s[key] = isOn ? "on" : "off";
+      saveVFCSettings(s);
+      _syncToggle(id, isOn);
+      applyVFCSettings(s);
+    });
+  });
+
+  /* Reset racha */
+  document.getElementById("settingResetStreak")?.addEventListener("click", () => {
+    if (!confirm("¿Resetear tu racha diaria?")) return;
+    try {
+      localStorage.removeItem(STREAK_KEY);
+      localStorage.removeItem(STREAK_DATE_KEY);
+    } catch { }
+    _setStreakNumText(0);
+    if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
+  });
+
+  /* Borrar todo */
+  document.getElementById("settingResetAll")?.addEventListener("click", () => {
+    if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
+    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY,
+      ONBOARDING_KEY, "vfc_speed"].forEach(k => {
+        try { localStorage.removeItem(k); } catch { }
+      });
+    if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
+    setTimeout(() => location.reload(), 900);
+  });
+
+  /* Abrir */
+  function openSettings() {
+    s = loadVFCSettings();
+    syncControls();
+    overlay.style.display = "flex";
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+    // Mostrar instrucciones PWA si aplica
+    if (typeof window._pwaMaybeShowManual === "function") {
+      window._pwaMaybeShowManual();
+    }
+  }
+
+  /* Cerrar */
+  function closeSettings() {
+    overlay.classList.remove("is-open");
+    setTimeout(() => { overlay.style.display = "none"; }, 290);
+  }
+
+  openBtn.addEventListener("click", openSettings);
+  closeBtn.addEventListener("click", closeSettings);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeSettings(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.style.display !== "none") closeSettings();
+  });
+})();
 /* ════════════════════════════════════════════════════════════════
    RETENCIÓN — mensaje en finish screen
    ════════════════════════════════════════════════════════════════ */
