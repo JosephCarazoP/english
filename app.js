@@ -2311,9 +2311,18 @@ function backToCards() {
 /* ── THEME ── */
 let dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 applyTheme();
+
+function getThemeIconSvg(nextMode) {
+  if (nextMode === "light") {
+    return '<span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.76 4.84 5.35 3.43 3.93 4.85l1.41 1.41Zm10.48 0 1.41-1.41-1.41-1.42-1.42 1.42ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5Zm0-4.5h-1v3h1ZM12 19h-1v3h1Zm10-8h-3v1h3ZM5 11H2v1h3Zm13.07 8.15 1.41 1.42 1.42-1.42-1.42-1.41Zm-12.14 0-1.41 1.42 1.41 1.42 1.42-1.42Z"/></svg></span>';
+  }
+  return '<span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M21 14.45A8.5 8.5 0 0 1 9.55 3a9 9 0 1 0 11.45 11.45Z"/></svg></span>';
+}
+
 function applyTheme() {
   document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-  document.getElementById("themeToggle").textContent = dark ? "☀︎" : "☾";
+  const themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) themeBtn.innerHTML = getThemeIconSvg(dark ? "light" : "dark");
 }
 
 /* ════════════════════════════════════════════════════════
@@ -2494,6 +2503,17 @@ function addExp(amount) {
   }
 }
 
+function getLevelIconSvg(levelNum) {
+  const icons = {
+    1: '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 2c3.6 0 6.5 2.9 6.5 6.5 0 5.4-6.5 13.5-6.5 13.5S5.5 13.9 5.5 8.5C5.5 4.9 8.4 2 12 2Zm0 3.1a3.4 3.4 0 1 0 3.4 3.4A3.4 3.4 0 0 0 12 5.1Z"/></svg>',
+    2: '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 2 4 7v5c0 5 3.4 9.6 8 10 4.6-.4 8-5 8-10V7Zm0 2.3 5.7 3.6V12c0 3.8-2.4 7.2-5.7 8.1-3.3-.9-5.7-4.3-5.7-8.1V7.9Z"/></svg>',
+    3: '<svg viewBox="0 0 24 24" focusable="false"><path d="M13.5 2s1.5 2.6-.6 5.2c-1.3 1.6-1.2 3.8.2 5.1 2.2-1.2 3.7-3.7 3.7-6.6 0-1.1-.2-2-.6-2.9 2.7 1.6 4.5 4.6 4.5 8 0 5-3.9 9.2-8.9 9.2S3 15.8 3 10.8c0-3.4 1.8-6.4 4.5-8-.3.9-.5 1.8-.5 2.9 0 2.8 1.4 5.2 3.5 6.4-.2-1.7.3-3.6 1.7-5.1C14.4 4.6 13.5 2 13.5 2Z"/></svg>',
+    4: '<svg viewBox="0 0 24 24" focusable="false"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.9 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg>',
+    5: '<svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14v4a7 7 0 0 1-5 6.7V18h3v2H7v-2h3v-3.3A7 7 0 0 1 5 8Zm2 2v2a5 5 0 0 0 10 0V6Zm-3 1h1v2a4 4 0 0 1-4 4v-2a2 2 0 0 0 2-2Zm19 0h-1v2a4 4 0 0 0 4 4v-2a2 2 0 0 1-2-2Z"/></svg>'
+  };
+  return icons[levelNum] || icons[1];
+}
+
 /** Renderiza el badge de nivel en el header */
 function updateLevelBadge(totalExp) {
   totalExp = totalExp ?? _readExp();
@@ -2510,7 +2530,7 @@ function updateLevelBadge(totalExp) {
   const fillEl  = document.getElementById("lvBarFill");
   const numsEl  = document.getElementById("lvExpNums");
 
-  if (iconEl)  iconEl.textContent  = lv.icon;
+  if (iconEl)  iconEl.innerHTML  = getLevelIconSvg(lv.n);
   if (nameEl)  nameEl.textContent  = lv.name;
   if (fillEl)  { fillEl.style.width = pct + "%"; fillEl.style.background = lv.color; }
   if (numsEl) {
@@ -2957,7 +2977,8 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     slides[current].classList.add("active");
     dots[current].classList.add("active");
     dots[current].setAttribute("aria-selected", "true");
-    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnBack.style.visibility = "visible";
+    btnBack.textContent = current === 0 ? "Skip" : "Back";
     btnNext.style.display = current < slides.length - 1 ? "inline-flex" : "none";
     btnStart.style.display = current === slides.length - 1 ? "inline-flex" : "none";
     // Update progress bar
@@ -2968,7 +2989,10 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   }
 
   btnNext.addEventListener("click", () => { if (current < slides.length - 1) goTo(current + 1); });
-  btnBack.addEventListener("click", () => { if (current > 0) goTo(current - 1); });
+  btnBack.addEventListener("click", () => {
+    if (current === 0) return closeOnboarding();
+    goTo(current - 1);
+  });
   btnStart.addEventListener("click", closeOnboarding);
   dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
 
