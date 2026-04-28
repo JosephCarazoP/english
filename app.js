@@ -2943,7 +2943,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const isCustom = isDaily && s.verbsPerDay === "custom";
     if (perDayRow) perDayRow.style.display = isDaily ? "" : "none";
     if (customRow) customRow.style.display = isCustom ? "" : "none";
-    if (applyRow) applyRow.style.display = isDaily ? "" : "none";
+    if (applyRow) applyRow.style.display = "";
     if (applyBtn) {
       applyBtn.disabled = !hasPendingVerbChanges;
       applyBtn.classList.toggle("is-pending", hasPendingVerbChanges);
@@ -3003,7 +3003,6 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
       s.dailyStartDate = _todayIsoLocal();
     }
     saveVFCSettings(s);
-    _syncVerbUI();
     _markPendingVerbChanges();
   });
 
@@ -3011,7 +3010,6 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   document.getElementById("settingVerbsPerDay")?.addEventListener("change", e => {
     s.verbsPerDay = e.target.value;
     saveVFCSettings(s);
-    _syncVerbUI();
     _markPendingVerbChanges();
   });
 
@@ -3021,6 +3019,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const v = isNaN(raw) ? 10 : Math.max(1, Math.min(ALL_VERBS.length, raw));
     s.verbsPerDayCustom = String(v);
     saveVFCSettings(s);
+    _markPendingVerbChanges();
     _updateDeckInfo();
   });
   document.getElementById("settingVerbsPerDayCustom")?.addEventListener("change", () => {
