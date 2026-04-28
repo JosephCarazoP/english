@@ -97,6 +97,12 @@ body {
   gap: 8px;
 }
 
+.app-header-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .header-row {
   display: flex;
   align-items: center;
