@@ -383,6 +383,7 @@
 
     </div><!-- /onboarding-card -->
   </div>
+  <!-- Reemplaza todo el <div class="settings-overlay" id="settingsOverlay"> en index.html -->
   <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración"
     style="display:none;">
     <div class="settings-card">
@@ -430,38 +431,57 @@
           </div>
         </section>
 
+        <!-- VERBOS (nuevo) -->
+        <section class="settings-section">
+          <h3 class="settings-section-title">📖 Verbos</h3>
+          <div class="settings-row">
+            <label class="settings-label" for="settingVerbMode">Modo de acceso</label>
+            <select id="settingVerbMode" class="settings-select">
+              <option value="all">Todos desbloqueados</option>
+              <option value="daily">Revelar por día</option>
+            </select>
+          </div>
+          <div class="settings-row" id="settingPerDayRow" style="display:none;">
+            <label class="settings-label" for="settingVerbsPerDay">Verbos por día</label>
+            <select id="settingVerbsPerDay" class="settings-select">
+              <option value="10">10 por día</option>
+              <option value="20">20 por día</option>
+              <option value="30">30 por día</option>
+              <option value="custom">Personalizado…</option>
+            </select>
+          </div>
+          <div class="settings-row" id="settingCustomRow" style="display:none;">
+            <label class="settings-label" for="settingVerbsPerDayCustom">
+              Cantidad exacta
+            </label>
+            <input id="settingVerbsPerDayCustom" type="number" min="1" max="200" value="10"
+              class="settings-number-input" placeholder="10" />
+          </div>
+          <div class="settings-deck-info" id="settingDeckInfo">Cargando…</div>
+        </section>
+
         <!-- INSTALAR APP -->
         <section class="settings-section" id="pwaSection">
           <h3 class="settings-section-title">📲 Instalar app</h3>
-
-          <!-- Estado A: prompt nativo disponible (Chrome/Edge) -->
           <div id="pwaPromptRow" class="settings-row" style="display:none;">
             <span class="settings-label">Agregar a pantalla de inicio</span>
             <button class="settings-pwa-btn" id="pwaInstallBtn" type="button">Instalar</button>
           </div>
-
-          <!-- Estado B: ya instalada -->
           <div id="pwaInstalledRow" class="settings-row" style="display:none;">
             <span class="settings-label">✅ App ya instalada</span>
           </div>
-
-          <!-- Estado C: instrucciones manuales (Safari iOS / Brave / Firefox) -->
           <div id="pwaManualRow" class="pwa-manual-card" style="display:none;">
             <div class="pwa-manual-title">Agrega esta app a tu pantalla de inicio</div>
-
-            <!-- Safari iOS -->
             <div class="pwa-manual-os" id="pwaIosSteps">
               <div class="pwa-manual-badge">Safari iOS</div>
               <ol class="pwa-manual-steps">
-                <li><span class="pwa-step-icon">⬆️</span> Toca el botón <strong>Compartir</strong> en la barra
-                  inferior</li>
+                <li><span class="pwa-step-icon">⬆️</span> Toca el botón <strong>Compartir</strong> en la barra inferior
+                </li>
                 <li><span class="pwa-step-icon">➕</span> Elige <strong>"Añadir a pantalla de inicio"</strong></li>
                 <li><span class="pwa-step-icon">✅</span> Presiona <strong>"Añadir"</strong> en la esquina superior
                   derecha</li>
               </ol>
             </div>
-
-            <!-- Brave / otros -->
             <div class="pwa-manual-os" id="pwaBraveSteps" style="display:none;">
               <div class="pwa-manual-badge">Brave / Chrome</div>
               <ol class="pwa-manual-steps">
@@ -472,7 +492,6 @@
               </ol>
             </div>
           </div>
-
         </section>
 
         <!-- DATOS -->

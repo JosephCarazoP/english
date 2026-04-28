@@ -4511,3 +4511,87 @@ body {
 [data-theme="dark"] .pwa-manual-card {
   background: color-mix(in srgb, var(--accent) 10%, var(--bg));
 }
+
+
+/* ══════════════════════════════════════════════════════════
+   VERB PROGRESSION — settings UI
+   Añadir al final de styles.css (junto con el resto de patches)
+   ══════════════════════════════════════════════════════════ */
+
+/* Number input */
+.settings-number-input {
+  background: var(--surface-offset, rgba(255, 255, 255, .07));
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: .6rem;
+  color: var(--text);
+  padding: .38rem .7rem;
+  font-size: .83rem;
+  font-family: "DM Mono", monospace;
+  font-weight: 600;
+  width: 80px;
+  text-align: center;
+  cursor: text;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+  -moz-appearance: textfield;
+}
+
+.settings-number-input::-webkit-inner-spin-button,
+.settings-number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.settings-number-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Hint text inside label */
+.settings-label-hint {
+  display: inline-block;
+  font-family: "DM Mono", monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--subtext);
+  margin-left: .35rem;
+  opacity: .75;
+}
+
+/* Dynamic deck info chip */
+.settings-deck-info {
+  margin-top: .35rem;
+  padding: .55rem .85rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  font-family: "DM Mono", monospace;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .02em;
+  line-height: 1.45;
+  transition: opacity .2s;
+}
+
+[data-theme="dark"] .settings-deck-info {
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+}
+
+/* Animate row show/hide */
+#settingPerDayRow,
+#settingCustomRow {
+  animation: settingsRowIn .22s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes settingsRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

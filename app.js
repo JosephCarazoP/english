@@ -1062,11 +1062,23 @@ async function shareResults(kind) {
 
 /* ── DECK CON PROGRESIÓN DIARIA ── */
 function updateDeck() {
+  const s = loadVFCSettings();
+  const mode = s.verbMode || "all";
+
+  if (mode === "all") {
+    deck = ALL_VERBS.slice();
+    return;
+  }
+
+  let perDay = parseInt(s.verbsPerDay, 10) || 10;
+  if (s.verbsPerDay === "custom") {
+    perDay = Math.max(1, Math.min(ALL_VERBS.length, parseInt(s.verbsPerDayCustom, 10) || 10));
+  }
+
   const today = new Date();
-  const timeDiff = today - START_DATE;
-  const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-  const verbsToUnlock = Math.max(10, (daysDiff + 1) * 10);
-  deck = ALL_VERBS.slice(0, Math.min(verbsToUnlock, ALL_VERBS.length));
+  const daysDiff = Math.max(0, Math.floor((today - START_DATE) / (1000 * 60 * 60 * 24)));
+  const verbsToUnlock = Math.min(ALL_VERBS.length, (daysDiff + 1) * perDay);
+  deck = ALL_VERBS.slice(0, verbsToUnlock);
 }
 
 function buildDeck() {
@@ -1395,13 +1407,28 @@ function buildQuiz(verbPool) {
 /* ── Start quiz ── */
 function startQuiz() {
   if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
-  updateDeck();
-  const base = currentFilter === "all"
-    ? ALL_VERBS.slice(0, deck.length)
-    : ALL_VERBS.slice(0, deck.length).filter(v => v.type === currentFilter);
 
-  quizQuestions = buildQuiz(base);
-  quizIdx = 0; quizOk = 0; quizNo = 0; quizLocked = false;
+  updateDeck();
+  const s = loadVFCSettings();
+  const mode = s.verbMode || "all";
+
+  const fullPool = currentFilter === "all"
+    ? deck
+    : deck.filter(v => v.type === currentFilter);
+
+  const QUIZ_CAP = 30;
+  let verbPool;
+  if (mode === "all") {
+    verbPool = shuffle(fullPool).slice(0, QUIZ_CAP);
+  } else {
+    verbPool = fullPool;
+  }
+
+  quizQuestions = buildQuiz(verbPool);
+  quizIdx = 0;
+  quizOk = 0;
+  quizNo = 0;
+  quizLocked = false;
   quizFailedSet = new Set();
   quizPracticeMode = false;
   quizOriginalTotal = quizQuestions.length;
@@ -2805,7 +2832,15 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
    SETTINGS — configuración persistida en vfc_settings
    ════════════════════════════════════════════════════════════════ */
 const SETTINGS_KEY = "vfc_settings";
-const DEFAULT_SETTINGS = { theme: "auto", animations: "on", audioSpeed: "1", autoPlay: "off", roundSize: "10", quizConfirm: "on" };
+const DEFAULT_SETTINGS = {
+  theme: "auto",
+  animations: "on",
+  audioSpeed: "1",
+  autoPlay: "off",
+  verbMode: "all",
+  verbsPerDay: "10",
+  verbsPerDayCustom: "10"
+};
 
 function loadVFCSettings() {
   try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
@@ -2832,6 +2867,11 @@ function applyVFCSettings(s) {
   }
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   REEMPLAZA COMPLETA LA FUNCIÓN initSettings() EN app.js
+   (el IIFE completo desde "(function initSettings()" hasta el cierre ")()")
+   ══════════════════════════════════════════════════════════════════ */
+
 (function initSettings() {
   const overlay = document.getElementById("settingsOverlay");
   const openBtn = document.getElementById("settingsBtn");
@@ -2841,6 +2881,7 @@ function applyVFCSettings(s) {
   let s = loadVFCSettings();
   applyVFCSettings(s);
 
+  /* ── Toggle helper ── */
   function _syncToggle(id, isOn) {
     const btn = document.getElementById(id);
     if (!btn) return;
@@ -2849,20 +2890,60 @@ function applyVFCSettings(s) {
     btn.classList.toggle("is-on", isOn);
   }
 
+  /* ── Deck info chip ── */
+  function _updateDeckInfo() {
+    const el = document.getElementById("settingDeckInfo");
+    if (!el) return;
+    const vm = s.verbMode || "all";
+    const filter = window.currentFilter || "all";
+    const base = filter === "all" ? ALL_VERBS : ALL_VERBS.filter(v => v.type === filter);
+
+    if (vm === "all") {
+      el.textContent = `${base.length} verbos disponibles · Quiz: 30 preguntas aleatorias`;
+    } else {
+      let pd = parseInt(s.verbsPerDay, 10) || 10;
+      if (s.verbsPerDay === "custom") {
+        pd = Math.max(1, Math.min(ALL_VERBS.length, parseInt(s.verbsPerDayCustom, 10) || 10));
+      }
+      const today = new Date();
+      const days = Math.max(0, Math.floor((today - START_DATE) / 86400000));
+      const unlocked = Math.min(base.length, (days + 1) * pd);
+      el.textContent = `${unlocked} de ${base.length} verbos desbloqueados · +${pd}/día`;
+    }
+  }
+
+  /* ── Verb mode UI sync ── */
+  function _syncVerbUI() {
+    const verbModeEl = document.getElementById("settingVerbMode");
+    const perDayEl = document.getElementById("settingVerbsPerDay");
+    const customEl = document.getElementById("settingVerbsPerDayCustom");
+    const perDayRow = document.getElementById("settingPerDayRow");
+    const customRow = document.getElementById("settingCustomRow");
+
+    if (verbModeEl) verbModeEl.value = s.verbMode || "all";
+    if (perDayEl) perDayEl.value = s.verbsPerDay || "10";
+    if (customEl) customEl.value = s.verbsPerDayCustom || "10";
+
+    const isDaily = s.verbMode === "daily";
+    const isCustom = isDaily && s.verbsPerDay === "custom";
+    if (perDayRow) perDayRow.style.display = isDaily ? "" : "none";
+    if (customRow) customRow.style.display = isCustom ? "" : "none";
+    _updateDeckInfo();
+  }
+
+  /* ── Sync all controls ── */
   function syncControls() {
     const tEl = document.getElementById("settingTheme");
     const aEl = document.getElementById("settingAudioSpeed");
-    const rEl = document.getElementById("settingRoundSize");
     if (tEl) tEl.value = s.theme;
     if (aEl) aEl.value = s.audioSpeed;
-    if (rEl) rEl.value = s.roundSize;
     _syncToggle("settingAnimations", s.animations === "on");
     _syncToggle("settingAutoPlay", s.autoPlay === "on");
-    _syncToggle("settingQuizConfirm", s.quizConfirm === "on");
+    _syncVerbUI();
   }
 
-  // Selects
-  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"], ["settingRoundSize", "roundSize"]].forEach(([id, key]) => {
+  /* ── Selects: tema y velocidad de audio ── */
+  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"]].forEach(([id, key]) => {
     document.getElementById(id)?.addEventListener("change", e => {
       s[key] = e.target.value;
       saveVFCSettings(s);
@@ -2870,8 +2951,8 @@ function applyVFCSettings(s) {
     });
   });
 
-  // Toggles
-  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"], ["settingQuizConfirm", "quizConfirm"]].forEach(([id, key]) => {
+  /* ── Toggles ── */
+  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"]].forEach(([id, key]) => {
     document.getElementById(id)?.addEventListener("click", () => {
       const isOn = document.getElementById(id).dataset.val !== "on";
       s[key] = isOn ? "on" : "off";
@@ -2881,50 +2962,73 @@ function applyVFCSettings(s) {
     });
   });
 
-  // Volver a ver intro
-  document.getElementById("settingResetOnboarding")?.addEventListener("click", () => {
-    localStorage.removeItem(ONBOARDING_KEY);
-    const overlay = document.getElementById("onboardingOverlay");
-    if (!overlay) return;
-    // Cerrar settings primero
-    closeSettings();
-    setTimeout(() => {
-      overlay.style.display = "flex";
-      requestAnimationFrame(() => overlay.classList.add("visible"));
-    }, 320);
+  /* ── Verb mode select ── */
+  document.getElementById("settingVerbMode")?.addEventListener("change", e => {
+    s.verbMode = e.target.value;
+    saveVFCSettings(s);
+    _syncVerbUI();
+    // Rebuild deck immediately so the card count updates
+    if (typeof buildDeck === "function") buildDeck();
   });
 
-  // Reset racha
+  /* ── Verbos por día select ── */
+  document.getElementById("settingVerbsPerDay")?.addEventListener("change", e => {
+    s.verbsPerDay = e.target.value;
+    saveVFCSettings(s);
+    _syncVerbUI();
+    if (typeof buildDeck === "function") buildDeck();
+  });
+
+  /* ── Custom number input ── */
+  document.getElementById("settingVerbsPerDayCustom")?.addEventListener("input", e => {
+    const raw = parseInt(e.target.value, 10);
+    const v = isNaN(raw) ? 10 : Math.max(1, Math.min(ALL_VERBS.length, raw));
+    s.verbsPerDayCustom = String(v);
+    saveVFCSettings(s);
+    _updateDeckInfo();
+  });
+  document.getElementById("settingVerbsPerDayCustom")?.addEventListener("change", () => {
+    if (typeof buildDeck === "function") buildDeck();
+  });
+
+  /* ── Reset racha ── */
   document.getElementById("settingResetStreak")?.addEventListener("click", () => {
     if (!confirm("¿Resetear tu racha diaria?")) return;
-    try { localStorage.removeItem(STREAK_KEY); localStorage.removeItem(STREAK_DATE_KEY); } catch { }
+    try {
+      localStorage.removeItem(STREAK_KEY);
+      localStorage.removeItem(STREAK_DATE_KEY);
+    } catch { }
     _setStreakNumText(0);
     if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
   });
 
-  // Borrar todo
+  /* ── Borrar todo ── */
   document.getElementById("settingResetAll")?.addEventListener("click", () => {
     if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
-    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY, ONBOARDING_KEY, "vfc_speed"].forEach(k => {
-      try { localStorage.removeItem(k); } catch { }
-    });
+    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY,
+      ONBOARDING_KEY, "vfc_speed"].forEach(k => {
+        try { localStorage.removeItem(k); } catch { }
+      });
     if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
     setTimeout(() => location.reload(), 900);
   });
 
-  // Abrir
-  openBtn.addEventListener("click", () => {
+  /* ── Abrir ── */
+  function openSettings() {
     s = loadVFCSettings();
     syncControls();
     overlay.style.display = "flex";
     requestAnimationFrame(() => overlay.classList.add("is-open"));
-  });
+    if (typeof window._pwaMaybeShowManual === "function") window._pwaMaybeShowManual();
+  }
 
-  // Cerrar
+  /* ── Cerrar ── */
   function closeSettings() {
     overlay.classList.remove("is-open");
     setTimeout(() => { overlay.style.display = "none"; }, 290);
   }
+
+  openBtn.addEventListener("click", openSettings);
   closeBtn.addEventListener("click", closeSettings);
   overlay.addEventListener("click", e => { if (e.target === overlay) closeSettings(); });
   document.addEventListener("keydown", e => {
