@@ -1,6 +1,3 @@
-/* ── CONFIGURACIÓN DE INICIO ── */
-const START_DATE = new Date(2026, 3, 23);
-
 /* ── DATA ── */
 const ALL_VERBS = [
   { present: "bear", past: "bore", participle: "borne", type: "irregular", sound: "", sentencePres: "Some people cannot <b>bear</b> the cold weather.", sentencePast: "She <b>bore</b> the pain with great courage.", gif: "bear heavy" },
@@ -1069,7 +1066,8 @@ const DEFAULT_SETTINGS = {
   autoPlay: "off",
   verbMode: "all",
   verbsPerDay: "10",
-  verbsPerDayCustom: "10"
+  verbsPerDayCustom: "10",
+  dailyStartDate: ""
 };
 
 function loadVFCSettings() {
@@ -1077,6 +1075,30 @@ function loadVFCSettings() {
   catch { return { ...DEFAULT_SETTINGS }; }
 }
 function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { } }
+
+function _todayIsoLocal() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function _dailyProgressStartDate(s, persistIfMissing = false) {
+  const raw = (s && typeof s.dailyStartDate === "string") ? s.dailyStartDate : "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+    const [y, m, d] = raw.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  const todayIso = _todayIsoLocal();
+  if (persistIfMissing && s) {
+    s.dailyStartDate = todayIso;
+    saveVFCSettings(s);
+  }
+  const [y, m, d] = todayIso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
 
 function applyVFCSettings(s) {
   // Tema
@@ -1113,7 +1135,8 @@ function updateDeck() {
   }
 
   const today = new Date();
-  const daysDiff = Math.max(0, Math.floor((today - START_DATE) / (1000 * 60 * 60 * 24)));
+  const startDate = _dailyProgressStartDate(s, true);
+  const daysDiff = Math.max(0, Math.floor((today - startDate) / (1000 * 60 * 60 * 24)));
   const verbsToUnlock = Math.min(ALL_VERBS.length, (daysDiff + 1) * perDay);
   deck = ALL_VERBS.slice(0, verbsToUnlock);
 }
@@ -2868,6 +2891,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
   let s = loadVFCSettings();
   applyVFCSettings(s);
+  let hasPendingVerbChanges = false;
 
   /* ── Toggle helper ── */
   function _syncToggle(id, isOn) {
@@ -2894,7 +2918,8 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
         pd = Math.max(1, Math.min(ALL_VERBS.length, parseInt(s.verbsPerDayCustom, 10) || 10));
       }
       const today = new Date();
-      const days = Math.max(0, Math.floor((today - START_DATE) / 86400000));
+      const startDate = _dailyProgressStartDate(s, true);
+      const days = Math.max(0, Math.floor((today - startDate) / 86400000));
       const unlocked = Math.min(base.length, (days + 1) * pd);
       el.textContent = `${unlocked} de ${base.length} verbos desbloqueados · +${pd}/día`;
     }
@@ -2907,6 +2932,8 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const customEl = document.getElementById("settingVerbsPerDayCustom");
     const perDayRow = document.getElementById("settingPerDayRow");
     const customRow = document.getElementById("settingCustomRow");
+    const applyRow = document.getElementById("settingApplyRow");
+    const applyBtn = document.getElementById("settingApplyVerbChanges");
 
     if (verbModeEl) verbModeEl.value = s.verbMode || "all";
     if (perDayEl) perDayEl.value = s.verbsPerDay || "10";
@@ -2916,7 +2943,25 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const isCustom = isDaily && s.verbsPerDay === "custom";
     if (perDayRow) perDayRow.style.display = isDaily ? "" : "none";
     if (customRow) customRow.style.display = isCustom ? "" : "none";
+    if (applyRow) applyRow.style.display = isDaily ? "" : "none";
+    if (applyBtn) {
+      applyBtn.disabled = !hasPendingVerbChanges;
+      applyBtn.classList.toggle("is-pending", hasPendingVerbChanges);
+    }
     _updateDeckInfo();
+  }
+
+  function _markPendingVerbChanges() {
+    hasPendingVerbChanges = true;
+    _syncVerbUI();
+  }
+
+  function _applyVerbChanges() {
+    if (typeof buildDeck === "function") buildDeck();
+    if (typeof renderCard === "function" && Array.isArray(deck) && deck.length > 0) renderCard(true);
+    hasPendingVerbChanges = false;
+    _syncVerbUI();
+    if (typeof showShareToast === "function") showShareToast("Cambios aplicados ✅");
   }
 
   /* ── Sync all controls ── */
@@ -2952,11 +2997,14 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
   /* ── Verb mode select ── */
   document.getElementById("settingVerbMode")?.addEventListener("change", e => {
+    const prevMode = s.verbMode || "all";
     s.verbMode = e.target.value;
+    if (s.verbMode === "daily" && prevMode !== "daily" && !s.dailyStartDate) {
+      s.dailyStartDate = _todayIsoLocal();
+    }
     saveVFCSettings(s);
     _syncVerbUI();
-    // Rebuild deck immediately so the card count updates
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
 
   /* ── Verbos por día select ── */
@@ -2964,7 +3012,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     s.verbsPerDay = e.target.value;
     saveVFCSettings(s);
     _syncVerbUI();
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
 
   /* ── Custom number input ── */
@@ -2976,8 +3024,9 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     _updateDeckInfo();
   });
   document.getElementById("settingVerbsPerDayCustom")?.addEventListener("change", () => {
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
+  document.getElementById("settingApplyVerbChanges")?.addEventListener("click", _applyVerbChanges);
 
   /* ── Reset racha ── */
   document.getElementById("settingResetStreak")?.addEventListener("click", () => {
@@ -3004,6 +3053,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   /* ── Abrir ── */
   function openSettings() {
     s = loadVFCSettings();
+    hasPendingVerbChanges = false;
     syncControls();
     overlay.style.display = "flex";
     requestAnimationFrame(() => overlay.classList.add("is-open"));
