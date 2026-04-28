@@ -2915,96 +2915,10 @@ if (_origRenderGoalsList) {
   };
 }
 
-// Tracking detalles ✦ — capture=true para correr antes del handler existente
-document.getElementById("btnDetail")?.addEventListener("click", () => {
-  const s = _gReadStats();
-  s.details = (s.details || 0) + 1;
-  _gWriteStats(s);
-  checkGoals({ silent: false });
-}, true);
-
-// Tracking skip total acumulado
-document.getElementById("btnSkip")?.addEventListener("click", () => {
-  const s = _gReadStats();
-  s.skipped_total = (s.skipped_total || 0) + 1;
-  _gWriteStats(s);
-  checkGoals({ silent: false });
-}, true);
-
-// Tracking velocidades usadas
-document.querySelectorAll(".speed-chip").forEach(chip => {
-  chip.addEventListener("click", () => {
-    const v = parseFloat(chip.dataset.speed);
-    const s = _gReadStats();
-    if (v <= 0.7) s.usedSlow = true;
-    if (v >= 1.2) s.usedFast = true;
-    _gWriteStats(s);
-    checkGoals({ silent: false });
-  });
-});
-
-
 /* ════════════════════════════════════════════════════════════════
    ONBOARDING — primera visita
    ════════════════════════════════════════════════════════════════ */
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
-
-
-
-(function initOnboarding() {
-  const _forceOnboarding = new URLSearchParams(location.search).has('preview');
-  if (!_forceOnboarding && localStorage.getItem(ONBOARDING_KEY)) return;
-  const overlay = document.getElementById("onboardingOverlay");
-  if (!overlay) return;
-
-  overlay.style.display = "flex";
-  overlay.style.opacity = "0";
-  requestAnimationFrame(() => { overlay.style.opacity = "1"; });
-
-  let current = 0;
-  const slides = overlay.querySelectorAll(".onboarding-slide");
-  const dots = overlay.querySelectorAll(".ob-dot");
-  const btnBack = document.getElementById("obBack");
-  const btnNext = document.getElementById("obNext");
-  const btnStart = document.getElementById("obStart");
-  const progFill = document.getElementById("obProgressFill");
-
-  function goTo(n) {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-    dots[current].setAttribute("aria-selected", "false");
-    current = n;
-    slides[current].classList.add("active");
-    dots[current].classList.add("active");
-    dots[current].setAttribute("aria-selected", "true");
-    btnBack.style.visibility = "visible";
-    btnBack.textContent = current === 0 ? "Skip" : "Back";
-    btnNext.style.display = current < slides.length - 1 ? "inline-flex" : "none";
-    btnStart.style.display = current === slides.length - 1 ? "inline-flex" : "none";
-    // Update progress bar
-    if (progFill) {
-      const pct = Math.round(((current + 1) / slides.length) * 100);
-      progFill.style.width = pct + "%";
-    }
-  }
-
-  btnNext.addEventListener("click", () => { if (current < slides.length - 1) goTo(current + 1); });
-  btnBack.addEventListener("click", () => {
-    if (current === 0) return closeOnboarding();
-    goTo(current - 1);
-  });
-  btnStart.addEventListener("click", closeOnboarding);
-  dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
-
-  // Set initial progress
-  goTo(0);
-
-  function closeOnboarding() {
-    localStorage.setItem(ONBOARDING_KEY, "1");
-    overlay.style.opacity = "0";
-    setTimeout(() => { overlay.style.display = "none"; }, 350);
-  }
-})();
 
 
 (function initSettings() {
