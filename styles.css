@@ -3749,6 +3749,37 @@ body {
   font-size: 1.1rem;
 }
 
+.settings-row-apply {
+  border-bottom: none;
+  padding-top: .8rem;
+}
+
+.settings-apply-btn {
+  background: color-mix(in srgb, var(--accent) 70%, #fff);
+  color: #111;
+  font-weight: 800;
+  font-size: .82rem;
+  padding: .45rem .95rem;
+  border-radius: .65rem;
+  border: none;
+  cursor: pointer;
+  transition: transform .14s ease, opacity .14s ease, filter .14s ease;
+}
+
+.settings-apply-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.settings-apply-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.settings-apply-btn.is-pending {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
 
 /* ══════════════════════════════════════════════════════════
    RETENCIÓN — finish screen
