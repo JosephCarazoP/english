@@ -82,6 +82,58 @@ body {
   overflow-x: hidden;
 }
 
+<<<<<<< HEAD
+=======
+/* ── HEADER ── */
+.app-header {
+  padding: 10px 16px 8px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.compact-top {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.compact-bottom {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.logo-pill {
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 3px 8px 3px 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.logo-pill-text {
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--subtext);
+  text-transform: uppercase;
+}
+>>>>>>> parent of 2d049ad (Merge pull request #14 from JosephCarazoP/codex/redesign-header-to-match-app-ui-0sl6df)
 
 .logo-web {
   height: 40px;
@@ -90,20 +142,213 @@ body {
   border-radius: 50%;
   border: 2px solid var(--accent);
   display: block;
+<<<<<<< HEAD
   cursor: pointer;
   flex-shrink: 0;
   box-shadow: 0 0 0 4px var(--accent-soft);
   transition: box-shadow 0.2s, transform 0.2s;
+=======
+  flex-shrink: 0;
+}
+
+.header-stats-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.header-icon-actions,
+.header-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-wrap {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrap svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.goals-btn {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.goals-btn-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b35, #f43f5e);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 8px rgba(244, 63, 94, 0.6);
+}
+
+.goals-btn-dot[hidden] { display: none; }
+
+.filter-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.filter-group .filter-btn {
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0;
+}
+
+.filter-btn {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--subtext);
+  cursor: pointer;
+  transition: all 0.2s;
+>>>>>>> parent of 2d049ad (Merge pull request #14 from JosephCarazoP/codex/redesign-header-to-match-app-ui-0sl6df)
 }
 
 .logo-web:hover {
   box-shadow: 0 0 0 7px var(--accent-soft);
   transform: scale(1.05);
 }
+<<<<<<< HEAD
 
 .logo {
   display: flex;
   align-items: center;
+=======
+
+.filter-btn[data-filter="irregular"].active,
+.filter-btn[data-filter="irregular"]:hover {
+  border-color: var(--accent-2);
+  background: var(--accent-2);
+}
+
+.filter-btn[data-filter="regular"].active,
+.filter-btn[data-filter="regular"]:hover {
+  border-color: var(--accent-3);
+  background: var(--accent-3);
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--subtext);
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  padding: 14px 28px 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--progress-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.progress-label {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--subtext);
+  white-space: nowrap;
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ── SCORES ── */
+.score-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 4px 28px 18px;
+}
+
+.score-item {
+  text-align: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 8px 20px;
+  min-width: 72px;
+  box-shadow: var(--shadow);
+}
+
+.score-val {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  display: block;
+  line-height: 1;
+}
+
+.score-lbl {
+  font-family: "DM Mono", monospace;
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtext);
+  margin-top: 2px;
+}
+
+.score-correct .score-val {
+  color: var(--quiz-ok);
+}
+
+.score-skip .score-val {
+  color: var(--subtext);
+>>>>>>> parent of 2d049ad (Merge pull request #14 from JosephCarazoP/codex/redesign-header-to-match-app-ui-0sl6df)
 }
 
 /* ── STAGE ── */
@@ -3615,6 +3860,149 @@ body {
   transition-duration: 0.01ms !important;
 }
 
+<<<<<<< HEAD
+=======
+
+/* ══════════════════════════════════════════════════════════════════
+   ONBOARDING OVERLAY — modern cards
+   ══════════════════════════════════════════════════════════════════ */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: color-mix(in srgb, var(--bg) 25%, #000 75%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.onboarding-card {
+  width: min(100%, 390px);
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,.28);
+}
+
+.ob-progress-track { height: 4px; background: color-mix(in srgb, var(--text) 10%, transparent); }
+.ob-progress-fill {
+  height: 100%;
+  width: 33.33%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width .35s ease;
+}
+
+.onboarding-slide { display: none; }
+.onboarding-slide.active { display: block; }
+
+.ob-hero {
+  position: relative;
+  min-height: 180px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ob-wave {
+  position: absolute;
+  inset: auto -8% -42% -8%;
+  height: 72%;
+  border-radius: 100% 100% 0 0;
+  background: var(--surface);
+}
+.ob-hero-0 { background: linear-gradient(135deg, #8f8dff, #6d74ff); }
+.ob-hero-1 { background: linear-gradient(135deg, #69a7ff, #4d7fff); }
+.ob-hero-2 { background: linear-gradient(135deg, #66d2c2, #63d86f); }
+[data-theme="dark"] .ob-hero-0 { background: linear-gradient(135deg, #403da2, #3440b8); }
+[data-theme="dark"] .ob-hero-1 { background: linear-gradient(135deg, #24589e, #2b4ea0); }
+[data-theme="dark"] .ob-hero-2 { background: linear-gradient(135deg, #1f7f73, #23783e); }
+
+.ob-illu { position: relative; z-index: 2; }
+.ob-illu-cards { display: flex; gap: 10px; }
+.ob-cube {
+  width: 38px; height: 48px; border-radius: 12px;
+  background: linear-gradient(160deg, #fff, #dcd8ff);
+  box-shadow: 0 10px 20px rgba(0,0,0,.16);
+}
+.ob-cube:nth-child(2){ transform: translateY(-10px); }
+
+.ob-illu-actions { display: grid; gap: 8px; }
+.ob-pill {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255,255,255,.9);
+  color: #1a1916;
+}
+.ob-pill.ok { color: #0a7f58; }
+.ob-pill.no { color: #8a3340; }
+.ob-pill.dt { color: #4a3ecf; }
+
+.ob-illu-streak { display: flex; gap: 10px; }
+.ob-stat {
+  background: rgba(255,255,255,.92);
+  border-radius: 14px;
+  padding: 10px 12px;
+  min-width: 96px;
+  text-align: left;
+}
+.ob-stat b { display:block; font-size: 20px; color: #1a1916; }
+.ob-stat small { font-size: 11px; color: #5e5b56; }
+
+.ob-body { padding: 18px 18px 14px; display: grid; gap: 10px; }
+.onboarding-title { font-size: 35px; font-size: clamp(26px,4.5vw,38px); font-weight: 800; line-height: 1.02; letter-spacing: -.03em; }
+.ob-desc { font-size: 14px; color: var(--subtext); line-height: 1.45; }
+
+.onboarding-steps { list-style: none; display: grid; gap: 8px; }
+.onboarding-steps li { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.ob-num { width: 20px; height: 20px; border-radius: 50%; background: var(--text); color: var(--bg); display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+
+.onboarding-actions-list { display: grid; gap: 8px; }
+.ob-action { display:flex; align-items:center; gap:9px; padding: 9px 10px; border:1px solid var(--border); border-radius: 12px; background: var(--bg); }
+.ob-action b { font-size: 13px; }
+.ob-action span { font-size: 11px; color: var(--subtext); }
+.ob-action-pip { width: 9px; height: 9px; border-radius: 50%; }
+.ob-pip-ok { background:#10b981; }
+.ob-pip-no { background:#f43f5e; }
+
+.onboarding-tip { font-size: 12px; color: var(--subtext); padding: 9px 10px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
+
+.ob-footer {
+  padding: 10px 16px 16px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 10px;
+}
+.onboarding-dots { display:flex; justify-content:center; gap: 6px; }
+.ob-dot { width: 7px; height: 7px; border-radius: 999px; border:0; background: color-mix(in srgb, var(--text) 20%, transparent); }
+.ob-dot.active { width: 22px; background: var(--text); }
+
+.onboarding-nav { display:flex; align-items:center; justify-content:space-between; gap: 8px; }
+.ob-btn { border:0; background: transparent; color: var(--subtext); font-size: 13px; font-weight:700; padding: 10px 12px; border-radius: 10px; cursor:pointer; }
+.ob-btn-next,.ob-btn-start { margin-left:auto; color:#fff; background: var(--text); min-width: 92px; justify-content:center; display:inline-flex; }
+.ob-btn-start { background: var(--accent-3); color: #052119; }
+
+@media (max-width: 640px) {
+  .compact-top { flex-wrap: wrap; }
+  .logo-pill { order: 1; }
+  .header-icon-actions { order: 2; margin-left: auto; }
+  .header-stats-strip { order: 3; width: 100%; }
+}
+
+@media (max-width: 460px) {
+  .onboarding-overlay { padding: 0; align-items: flex-end; }
+  .onboarding-card { width: 100%; border-radius: 22px 22px 0 0; border-bottom: 0; }
+  .ob-hero { min-height: 155px; }
+  .onboarding-title { font-size: clamp(24px, 8vw, 30px); }
+  .ob-body { padding: 14px 14px 12px; }
+  .ob-footer { padding: 8px 12px 12px; }
+}
+>>>>>>> parent of 2d049ad (Merge pull request #14 from JosephCarazoP/codex/redesign-header-to-match-app-ui-0sl6df)
 /* ══════════════════════════════════════════════════════════
    PWA MANUAL INSTALL CARD
    Añadir al final de styles.css
