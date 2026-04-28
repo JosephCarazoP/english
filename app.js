@@ -2311,18 +2311,9 @@ function backToCards() {
 /* ── THEME ── */
 let dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 applyTheme();
-
-function getThemeIconSvg(nextMode) {
-  if (nextMode === "light") {
-    return '<span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.76 4.84 5.35 3.43 3.93 4.85l1.41 1.41Zm10.48 0 1.41-1.41-1.41-1.42-1.42 1.42ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5Zm0-4.5h-1v3h1ZM12 19h-1v3h1Zm10-8h-3v1h3ZM5 11H2v1h3Zm13.07 8.15 1.41 1.42 1.42-1.42-1.42-1.41Zm-12.14 0-1.41 1.42 1.41 1.42 1.42-1.42Z"/></svg></span>';
-  }
-  return '<span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M21 14.45A8.5 8.5 0 0 1 9.55 3a9 9 0 1 0 11.45 11.45Z"/></svg></span>';
-}
-
 function applyTheme() {
   document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-  const themeBtn = document.getElementById("themeToggle");
-  if (themeBtn) themeBtn.innerHTML = getThemeIconSvg(dark ? "light" : "dark");
+  document.getElementById("themeToggle").textContent = dark ? "☀︎" : "☾";
 }
 
 /* ════════════════════════════════════════════════════════
@@ -2503,17 +2494,6 @@ function addExp(amount) {
   }
 }
 
-function getLevelIconSvg(levelNum) {
-  const icons = {
-    1: '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 2c3.6 0 6.5 2.9 6.5 6.5 0 5.4-6.5 13.5-6.5 13.5S5.5 13.9 5.5 8.5C5.5 4.9 8.4 2 12 2Zm0 3.1a3.4 3.4 0 1 0 3.4 3.4A3.4 3.4 0 0 0 12 5.1Z"/></svg>',
-    2: '<svg viewBox="0 0 24 24" focusable="false"><path d="M12 2 4 7v5c0 5 3.4 9.6 8 10 4.6-.4 8-5 8-10V7Zm0 2.3 5.7 3.6V12c0 3.8-2.4 7.2-5.7 8.1-3.3-.9-5.7-4.3-5.7-8.1V7.9Z"/></svg>',
-    3: '<svg viewBox="0 0 24 24" focusable="false"><path d="M13.5 2s1.5 2.6-.6 5.2c-1.3 1.6-1.2 3.8.2 5.1 2.2-1.2 3.7-3.7 3.7-6.6 0-1.1-.2-2-.6-2.9 2.7 1.6 4.5 4.6 4.5 8 0 5-3.9 9.2-8.9 9.2S3 15.8 3 10.8c0-3.4 1.8-6.4 4.5-8-.3.9-.5 1.8-.5 2.9 0 2.8 1.4 5.2 3.5 6.4-.2-1.7.3-3.6 1.7-5.1C14.4 4.6 13.5 2 13.5 2Z"/></svg>',
-    4: '<svg viewBox="0 0 24 24" focusable="false"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.9 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg>',
-    5: '<svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14v4a7 7 0 0 1-5 6.7V18h3v2H7v-2h3v-3.3A7 7 0 0 1 5 8Zm2 2v2a5 5 0 0 0 10 0V6Zm-3 1h1v2a4 4 0 0 1-4 4v-2a2 2 0 0 0 2-2Zm19 0h-1v2a4 4 0 0 0 4 4v-2a2 2 0 0 1-2-2Z"/></svg>'
-  };
-  return icons[levelNum] || icons[1];
-}
-
 /** Renderiza el badge de nivel en el header */
 function updateLevelBadge(totalExp) {
   totalExp = totalExp ?? _readExp();
@@ -2530,7 +2510,7 @@ function updateLevelBadge(totalExp) {
   const fillEl  = document.getElementById("lvBarFill");
   const numsEl  = document.getElementById("lvExpNums");
 
-  if (iconEl)  iconEl.innerHTML  = getLevelIconSvg(lv.n);
+  if (iconEl)  iconEl.textContent  = lv.icon;
   if (nameEl)  nameEl.textContent  = lv.name;
   if (fillEl)  { fillEl.style.width = pct + "%"; fillEl.style.background = lv.color; }
   if (numsEl) {
@@ -2891,6 +2871,287 @@ if (_origRenderGoalsList) {
   };
 }
 
+<<<<<<< HEAD
+=======
+// Tracking detalles ✦ — capture=true para correr antes del handler existente
+document.getElementById("btnDetail")?.addEventListener("click", () => {
+  const s = _gReadStats();
+  s.details = (s.details || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}, true);
+
+// Tracking skip total acumulado
+document.getElementById("btnSkip")?.addEventListener("click", () => {
+  const s = _gReadStats();
+  s.skipped_total = (s.skipped_total || 0) + 1;
+  _gWriteStats(s);
+  checkGoals({ silent: false });
+}, true);
+
+// Tracking velocidades usadas
+document.querySelectorAll(".speed-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    const v = parseFloat(chip.dataset.speed);
+    const s = _gReadStats();
+    if (v <= 0.7) s.usedSlow = true;
+    if (v >= 1.2) s.usedFast = true;
+    _gWriteStats(s);
+    checkGoals({ silent: false });
+  });
+});
+
+
+/* ════════════════════════════════════════════════════════════════
+   ONBOARDING — primera visita
+   ════════════════════════════════════════════════════════════════ */
+const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
+
+
+
+(function initOnboarding() {
+  const _forceOnboarding = new URLSearchParams(location.search).has('preview');
+  if (!_forceOnboarding && localStorage.getItem(ONBOARDING_KEY)) return;
+  const overlay = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+
+  overlay.style.display = "flex";
+  overlay.style.opacity = "0";
+  requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+
+  let current = 0;
+  const slides = overlay.querySelectorAll(".onboarding-slide");
+  const dots = overlay.querySelectorAll(".ob-dot");
+  const btnBack = document.getElementById("obBack");
+  const btnNext = document.getElementById("obNext");
+  const btnStart = document.getElementById("obStart");
+  const progFill = document.getElementById("obProgressFill");
+
+  function goTo(n) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+    dots[current].setAttribute("aria-selected", "false");
+    current = n;
+    slides[current].classList.add("active");
+    dots[current].classList.add("active");
+    dots[current].setAttribute("aria-selected", "true");
+    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnNext.style.display = current < slides.length - 1 ? "inline-flex" : "none";
+    btnStart.style.display = current === slides.length - 1 ? "inline-flex" : "none";
+    // Update progress bar
+    if (progFill) {
+      const pct = Math.round(((current + 1) / slides.length) * 100);
+      progFill.style.width = pct + "%";
+    }
+  }
+
+  btnNext.addEventListener("click", () => { if (current < slides.length - 1) goTo(current + 1); });
+  btnBack.addEventListener("click", () => { if (current > 0) goTo(current - 1); });
+  btnStart.addEventListener("click", closeOnboarding);
+  dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
+
+  // Set initial progress
+  goTo(0);
+
+  function closeOnboarding() {
+    localStorage.setItem(ONBOARDING_KEY, "1");
+    overlay.style.opacity = "0";
+    setTimeout(() => { overlay.style.display = "none"; }, 350);
+  }
+})();
+
+
+(function initSettings() {
+  const overlay = document.getElementById("settingsOverlay");
+  const openBtn = document.getElementById("settingsBtn");
+  const closeBtn = document.getElementById("settingsClose");
+  if (!overlay || !openBtn) return;
+
+  let s = loadVFCSettings();
+  applyVFCSettings(s);
+  let hasPendingVerbChanges = false;
+
+  /* ── Toggle helper ── */
+  function _syncToggle(id, isOn) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.dataset.val = isOn ? "on" : "off";
+    btn.setAttribute("aria-pressed", String(isOn));
+    btn.classList.toggle("is-on", isOn);
+  }
+
+  /* ── Deck info chip ── */
+  function _updateDeckInfo() {
+    const el = document.getElementById("settingDeckInfo");
+    if (!el) return;
+    const vm = s.verbMode || "all";
+    const filter = window.currentFilter || "all";
+    const base = filter === "all" ? ALL_VERBS : ALL_VERBS.filter(v => v.type === filter);
+
+    if (vm === "all") {
+      el.textContent = `${base.length} verbos disponibles · Quiz: 30 preguntas aleatorias`;
+    } else {
+      let pd = parseInt(s.verbsPerDay, 10) || 10;
+      if (s.verbsPerDay === "custom") {
+        pd = Math.max(1, Math.min(ALL_VERBS.length, parseInt(s.verbsPerDayCustom, 10) || 10));
+      }
+      const today = new Date();
+      const startDate = _dailyProgressStartDate(s, true);
+      const days = Math.max(0, Math.floor((today - startDate) / 86400000));
+      const unlocked = Math.min(base.length, (days + 1) * pd);
+      el.textContent = `${unlocked} de ${base.length} verbos desbloqueados · +${pd}/día`;
+    }
+  }
+
+  /* ── Verb mode UI sync ── */
+  function _syncVerbUI() {
+    const verbModeEl = document.getElementById("settingVerbMode");
+    const perDayEl = document.getElementById("settingVerbsPerDay");
+    const customEl = document.getElementById("settingVerbsPerDayCustom");
+    const perDayRow = document.getElementById("settingPerDayRow");
+    const customRow = document.getElementById("settingCustomRow");
+    const applyRow = document.getElementById("settingApplyRow");
+    const applyBtn = document.getElementById("settingApplyVerbChanges");
+
+    if (verbModeEl) verbModeEl.value = s.verbMode || "all";
+    if (perDayEl) perDayEl.value = s.verbsPerDay || "10";
+    if (customEl) customEl.value = s.verbsPerDayCustom || "10";
+
+    const isDaily = s.verbMode === "daily";
+    const isCustom = isDaily && s.verbsPerDay === "custom";
+    if (perDayRow) perDayRow.style.display = isDaily ? "" : "none";
+    if (customRow) customRow.style.display = isCustom ? "" : "none";
+    if (applyRow) applyRow.style.display = "";
+    if (applyBtn) {
+      applyBtn.disabled = !hasPendingVerbChanges;
+      applyBtn.classList.toggle("is-pending", hasPendingVerbChanges);
+    }
+    _updateDeckInfo();
+  }
+
+  function _markPendingVerbChanges() {
+    hasPendingVerbChanges = true;
+    _syncVerbUI();
+  }
+
+  function _applyVerbChanges() {
+    if (typeof buildDeck === "function") buildDeck();
+    if (typeof renderCard === "function" && Array.isArray(deck) && deck.length > 0) renderCard(true);
+    hasPendingVerbChanges = false;
+    _syncVerbUI();
+    if (typeof showShareToast === "function") showShareToast("Cambios aplicados ✅");
+  }
+
+  /* ── Sync all controls ── */
+  function syncControls() {
+    const tEl = document.getElementById("settingTheme");
+    const aEl = document.getElementById("settingAudioSpeed");
+    if (tEl) tEl.value = s.theme;
+    if (aEl) aEl.value = s.audioSpeed;
+    _syncToggle("settingAnimations", s.animations === "on");
+    _syncToggle("settingAutoPlay", s.autoPlay === "on");
+    _syncVerbUI();
+  }
+
+  /* ── Selects: tema y velocidad de audio ── */
+  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"]].forEach(([id, key]) => {
+    document.getElementById(id)?.addEventListener("change", e => {
+      s[key] = e.target.value;
+      saveVFCSettings(s);
+      applyVFCSettings(s);
+    });
+  });
+
+  /* ── Toggles ── */
+  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"]].forEach(([id, key]) => {
+    document.getElementById(id)?.addEventListener("click", () => {
+      const isOn = document.getElementById(id).dataset.val !== "on";
+      s[key] = isOn ? "on" : "off";
+      saveVFCSettings(s);
+      _syncToggle(id, isOn);
+      applyVFCSettings(s);
+    });
+  });
+
+  /* ── Verb mode select ── */
+  document.getElementById("settingVerbMode")?.addEventListener("change", e => {
+    const prevMode = s.verbMode || "all";
+    s.verbMode = e.target.value;
+    if (s.verbMode === "daily" && prevMode !== "daily" && !s.dailyStartDate) {
+      s.dailyStartDate = _todayIsoLocal();
+    }
+    saveVFCSettings(s);
+    _markPendingVerbChanges();
+  });
+
+  /* ── Verbos por día select ── */
+  document.getElementById("settingVerbsPerDay")?.addEventListener("change", e => {
+    s.verbsPerDay = e.target.value;
+    saveVFCSettings(s);
+    _markPendingVerbChanges();
+  });
+
+  /* ── Custom number input ── */
+  document.getElementById("settingVerbsPerDayCustom")?.addEventListener("input", e => {
+    const raw = parseInt(e.target.value, 10);
+    const v = isNaN(raw) ? 10 : Math.max(1, Math.min(ALL_VERBS.length, raw));
+    s.verbsPerDayCustom = String(v);
+    saveVFCSettings(s);
+    _markPendingVerbChanges();
+    _updateDeckInfo();
+  });
+  document.getElementById("settingVerbsPerDayCustom")?.addEventListener("change", () => {
+    _markPendingVerbChanges();
+  });
+  document.getElementById("settingApplyVerbChanges")?.addEventListener("click", _applyVerbChanges);
+
+  /* ── Reset racha ── */
+  document.getElementById("settingResetStreak")?.addEventListener("click", () => {
+    if (!confirm("¿Resetear tu racha diaria?")) return;
+    try {
+      localStorage.removeItem(STREAK_KEY);
+      localStorage.removeItem(STREAK_DATE_KEY);
+    } catch { }
+    _setStreakNumText(0);
+    if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
+  });
+
+  /* ── Borrar todo ── */
+  document.getElementById("settingResetAll")?.addEventListener("click", () => {
+    if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
+    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY,
+      ONBOARDING_KEY, "vfc_speed"].forEach(k => {
+        try { localStorage.removeItem(k); } catch { }
+      });
+    if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
+    setTimeout(() => location.reload(), 900);
+  });
+
+  /* ── Abrir ── */
+  function openSettings() {
+    s = loadVFCSettings();
+    hasPendingVerbChanges = false;
+    syncControls();
+    overlay.style.display = "flex";
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+    if (typeof window._pwaMaybeShowManual === "function") window._pwaMaybeShowManual();
+  }
+
+  /* ── Cerrar ── */
+  function closeSettings() {
+    overlay.classList.remove("is-open");
+    setTimeout(() => { overlay.style.display = "none"; }, 290);
+  }
+
+  openBtn.addEventListener("click", openSettings);
+  closeBtn.addEventListener("click", closeSettings);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeSettings(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.style.display !== "none") closeSettings();
+  });
+})();
+
+>>>>>>> parent of 9ab8346 (Merge branch 'main' of https://github.com/JosephCarazoP/english)
 
 /* ══════════════════════════════════════════════════════════════════
    PWA — beforeinstallprompt + instrucciones manuales
