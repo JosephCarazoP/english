@@ -1060,6 +1060,43 @@ async function shareResults(kind) {
   }
 }
 
+
+const SETTINGS_KEY = "vfc_settings";
+const DEFAULT_SETTINGS = {
+  theme: "auto",
+  animations: "on",
+  audioSpeed: "1",
+  autoPlay: "off",
+  verbMode: "all",
+  verbsPerDay: "10",
+  verbsPerDayCustom: "10"
+};
+
+function loadVFCSettings() {
+  try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
+  catch { return { ...DEFAULT_SETTINGS }; }
+}
+function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { } }
+
+function applyVFCSettings(s) {
+  // Tema
+  if (s.theme === "dark") { dark = true; applyTheme(); }
+  else if (s.theme === "light") { dark = false; applyTheme(); }
+  // Animaciones
+  if (s.animations === "off") document.documentElement.classList.add("no-animations");
+  else document.documentElement.classList.remove("no-animations");
+  // Audio speed
+  const v = parseFloat(s.audioSpeed || "1");
+  if (!isNaN(v) && v > 0) {
+    currentSpeed = v;
+    document.querySelectorAll(".speed-chip").forEach(chip => {
+      const active = Math.abs(parseFloat(chip.dataset.speed) - v) < 0.01;
+      chip.classList.toggle("active", active);
+      chip.setAttribute("aria-checked", String(active));
+    });
+  }
+}
+
 /* ── DECK CON PROGRESIÓN DIARIA ── */
 function updateDeck() {
   const s = loadVFCSettings();
@@ -2821,43 +2858,6 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     setTimeout(() => { overlay.style.display = "none"; }, 350);
   }
 })();
-
-
-const SETTINGS_KEY = "vfc_settings";
-const DEFAULT_SETTINGS = {
-  theme: "auto",
-  animations: "on",
-  audioSpeed: "1",
-  autoPlay: "off",
-  verbMode: "all",
-  verbsPerDay: "10",
-  verbsPerDayCustom: "10"
-};
-
-function loadVFCSettings() {
-  try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
-  catch { return { ...DEFAULT_SETTINGS }; }
-}
-function saveVFCSettings(s) { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { } }
-
-function applyVFCSettings(s) {
-  // Tema
-  if (s.theme === "dark") { dark = true; applyTheme(); }
-  else if (s.theme === "light") { dark = false; applyTheme(); }
-  // Animaciones
-  if (s.animations === "off") document.documentElement.classList.add("no-animations");
-  else document.documentElement.classList.remove("no-animations");
-  // Audio speed
-  const v = parseFloat(s.audioSpeed || "1");
-  if (!isNaN(v) && v > 0) {
-    currentSpeed = v;
-    document.querySelectorAll(".speed-chip").forEach(chip => {
-      const active = Math.abs(parseFloat(chip.dataset.speed) - v) < 0.01;
-      chip.classList.toggle("active", active);
-      chip.setAttribute("aria-checked", String(active));
-    });
-  }
-}
 
 
 (function initSettings() {
