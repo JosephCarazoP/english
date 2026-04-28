@@ -34,6 +34,18 @@
         </div>
       </button>
 
+      <button class="level-badge" id="levelBadge" type="button" title="Tu nivel actual"
+        aria-label="Nivel de experiencia" onclick="openGoalsModal()" style="display:none;">
+        <span class="lv-badge-icon" id="lvIcon">🌱</span>
+        <div class="lv-badge-body">
+          <span class="lv-badge-name" id="lvName">Novato</span>
+          <div class="lv-badge-track">
+            <div class="lv-badge-fill" id="lvBarFill"></div>
+          </div>
+        </div>
+        <span class="lv-badge-nums" id="lvExpNums">100 EXP para subir</span>
+      </button>
+
       <button class="icon-btn goals-btn" id="goalsBtn" title="Objetivos" aria-label="Objetivos" type="button">
         <span class="goals-btn-icon" aria-hidden="true">🎯</span>
         <span class="goals-btn-dot" id="goalsBtnDot" hidden></span>
@@ -252,6 +264,7 @@
         <h2 class="goals-title">Objetivos</h2>
         <p class="goals-sub">Cumple metas usando la app: aprende verbos, mantén tu racha y supera quizzes.</p>
         <div class="goals-summary" id="goalsSummary">0 / 0 completados</div>
+        <div class="goals-level-info" id="goalsLevelInfo">🌱 Novato · 0 EXP</div>
       </div>
       <div class="goals-list" id="goalsList"></div>
     </div>
@@ -263,6 +276,7 @@
     <div class="goal-toast-body">
       <div class="goal-toast-title" id="goalToastTitle">¡Objetivo desbloqueado!</div>
       <div class="goal-toast-name" id="goalToastName">—</div>
+      <div class="goal-toast-exp" id="goalToastExp">+10 EXP</div>
     </div>
   </div>
 
@@ -509,6 +523,18 @@
         </section>
 
       </div>
+    </div>
+  </div>
+
+  <div class="level-up-overlay" id="levelUpOverlay" role="dialog" aria-modal="true" aria-label="¡Subiste de nivel!">
+    <div class="lu-bg"></div>
+    <div class="lu-card">
+      <div class="lu-rings"><span></span><span></span></div>
+      <div class="lu-icon" id="luIcon">👑</div>
+      <div class="lu-num" id="luNum">Nivel 2</div>
+      <div class="lu-name" id="luName">Aprendiz</div>
+      <p class="lu-msg">¡Felicidades! Seguí así.</p>
+      <button class="lu-btn" id="luCloseBtn" type="button">¡A seguir! 💪</button>
     </div>
   </div>
   <script src="app.js"></script>

@@ -4595,3 +4595,370 @@ body {
     transform: translateY(0);
   }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   E X P   /   L E V E L   S Y S T E M   —  CSS
+   Pega esto al FINAL de styles.css
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── LEVEL BADGE (header) ── */
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #eeedfe 0%, #ddd9fc 100%);
+  color: #26215c;
+  cursor: pointer;
+  user-select: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 200px;
+  box-shadow: 0 3px 12px rgba(83, 74, 183, 0.18);
+  transition: transform 0.18s ease, box-shadow 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+  font-family: "DM Sans", sans-serif;
+}
+
+.level-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(83, 74, 183, 0.28);
+}
+
+.level-badge:active {
+  transform: scale(0.98);
+}
+
+[data-theme="dark"] .level-badge {
+  background: linear-gradient(135deg, #1e1630 0%, #2a1f4a 100%);
+  color: #c4b5fd;
+  box-shadow: 0 3px 14px rgba(83, 74, 183, 0.35);
+}
+
+.lv-badge-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(83, 74, 183, 0.35));
+}
+
+.lv-badge-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.lv-badge-name {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #3c3489;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="dark"] .lv-badge-name {
+  color: #c4b5fd;
+}
+
+.lv-badge-track {
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(83, 74, 183, 0.18);
+  overflow: hidden;
+}
+
+.lv-badge-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: #534ab7;
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 6px rgba(83, 74, 183, 0.5);
+}
+
+.lv-badge-nums {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: #534ab7;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  align-self: center;
+  flex-shrink: 0;
+  display: none; /* oculto en móvil, visible en desktop */
+}
+
+@media (min-width: 520px) {
+  .lv-badge-nums { display: block; }
+}
+
+/* ── LEVEL-UP OVERLAY ── */
+.level-up-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.level-up-overlay.show {
+  display: flex;
+  animation: streakOverlayIn 0.3s ease;
+}
+
+.lu-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(83, 74, 183, 0.5), transparent 55%),
+    rgba(10, 8, 20, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+}
+
+.lu-card {
+  position: relative;
+  width: min(400px, 100%);
+  padding: 36px 28px 28px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #f5f3ff 0%, #e8e4ff 100%);
+  box-shadow:
+    0 24px 60px rgba(83, 74, 183, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  overflow: hidden;
+  animation: streakCardIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] .lu-card {
+  background: linear-gradient(180deg, #1e1630 0%, #2a1f4a 100%);
+  box-shadow:
+    0 24px 60px rgba(83, 74, 183, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.lu-rings {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+}
+
+.lu-rings span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 2.5px solid rgba(83, 74, 183, 0.45);
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: streakRingExpand 2.4s ease-out infinite;
+}
+
+.lu-rings span:nth-child(2) {
+  width: 80px;
+  height: 80px;
+  animation-delay: 0.65s;
+  border-color: rgba(124, 92, 252, 0.4);
+}
+
+.lu-rings span:nth-child(1) {
+  width: 55px;
+  height: 55px;
+}
+
+.lu-icon {
+  font-size: 80px;
+  line-height: 1;
+  margin: 10px 0 14px;
+  filter: drop-shadow(0 10px 22px rgba(83, 74, 183, 0.5));
+  animation: ob-float 2.8s ease-in-out infinite;
+  position: relative;
+}
+
+.lu-num {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #534ab7;
+  margin-bottom: 4px;
+}
+
+[data-theme="dark"] .lu-num { color: #a78bfa; }
+
+.lu-name {
+  font-family: "DM Sans", sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #26215c;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .lu-name { color: #c4b5fd; }
+
+.lu-msg {
+  font-size: 15px;
+  color: #534ab7;
+  margin-bottom: 24px;
+  line-height: 1.45;
+}
+
+[data-theme="dark"] .lu-msg { color: #a78bfa; }
+
+.lu-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #534ab7, #7c5cfc);
+  color: #fff;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(83, 74, 183, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.18s ease;
+}
+
+.lu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(83, 74, 183, 0.52);
+}
+
+.lu-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── GOALS MODAL — ajustes para EXP badge ── */
+.goals-level-info {
+  display: inline-block;
+  margin-top: 8px;
+  margin-bottom: 2px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--accent-2-soft);
+  color: var(--accent-2);
+  letter-spacing: -0.01em;
+}
+
+/* ── GOAL ITEM — columna derecha con EXP ── */
+.goal-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.goal-exp-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.goal-exp-badge.earned {
+  background: color-mix(in srgb, #0dbfa0 16%, var(--bg));
+  color: #0a8d75;
+}
+
+[data-theme="dark"] .goal-exp-badge.earned {
+  color: #34d9be;
+}
+
+/* ── GOAL TIER COLORS (reemplaza los genéricos) ── */
+.goal-tier-inicio     { background: var(--accent-3-soft);  color: #0a8d75; }
+.goal-tier-bronce     { background: #faeeda; color: #854f0b; }
+.goal-tier-plata      { background: #e6f1fb; color: #185fa5; }
+.goal-tier-oro        { background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; }
+.goal-tier-legendario { background: var(--accent-2-soft); color: #3c3489; }
+.goal-tier-epico      { background: #fbeaf0; color: #72243e; }
+
+[data-theme="dark"] .goal-tier-bronce  { background: #2a1a05; color: #fbbf24; }
+[data-theme="dark"] .goal-tier-plata   { background: #0a2040; color: #60a5fa; }
+[data-theme="dark"] .goal-tier-oro     { background: #2a1e05; color: #fcd34d; border-color: #92400e; }
+[data-theme="dark"] .goal-tier-legendario { background: #1e1630; color: #c4b5fd; }
+[data-theme="dark"] .goal-tier-epico   { background: #2d0a1e; color: #f9a8d4; }
+
+/* ── GOAL TOAST — fila de EXP ── */
+.goal-toast-exp {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #0dbfa0;
+  margin-top: 1px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .level-badge {
+    padding: 5px 10px 5px 7px;
+    gap: 6px;
+    border-radius: 12px;
+    max-width: 160px;
+  }
+
+  .lv-badge-icon {
+    font-size: 16px;
+  }
+
+  .lv-badge-name {
+    font-size: 11px;
+  }
+
+  .lu-card {
+    padding: 28px 20px 22px;
+    border-radius: 22px;
+  }
+
+  .lu-icon {
+    font-size: 64px;
+    margin: 6px 0 10px;
+  }
+
+  .lu-name {
+    font-size: 26px;
+  }
+
+  .lu-btn {
+    padding: 12px 28px;
+    font-size: 14px;
+  }
+
+  .goal-item {
+    gap: 8px;
+  }
+
+  .goal-right-col {
+    gap: 3px;
+  }
+
+  .goal-exp-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
