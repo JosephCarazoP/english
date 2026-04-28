@@ -2868,6 +2868,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
   let s = loadVFCSettings();
   applyVFCSettings(s);
+  let hasPendingVerbChanges = false;
 
   /* ── Toggle helper ── */
   function _syncToggle(id, isOn) {
@@ -2907,6 +2908,8 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const customEl = document.getElementById("settingVerbsPerDayCustom");
     const perDayRow = document.getElementById("settingPerDayRow");
     const customRow = document.getElementById("settingCustomRow");
+    const applyRow = document.getElementById("settingApplyRow");
+    const applyBtn = document.getElementById("settingApplyVerbChanges");
 
     if (verbModeEl) verbModeEl.value = s.verbMode || "all";
     if (perDayEl) perDayEl.value = s.verbsPerDay || "10";
@@ -2916,7 +2919,25 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const isCustom = isDaily && s.verbsPerDay === "custom";
     if (perDayRow) perDayRow.style.display = isDaily ? "" : "none";
     if (customRow) customRow.style.display = isCustom ? "" : "none";
+    if (applyRow) applyRow.style.display = isDaily ? "" : "none";
+    if (applyBtn) {
+      applyBtn.disabled = !hasPendingVerbChanges;
+      applyBtn.classList.toggle("is-pending", hasPendingVerbChanges);
+    }
     _updateDeckInfo();
+  }
+
+  function _markPendingVerbChanges() {
+    hasPendingVerbChanges = true;
+    _syncVerbUI();
+  }
+
+  function _applyVerbChanges() {
+    if (typeof buildDeck === "function") buildDeck();
+    if (typeof renderCard === "function" && Array.isArray(deck) && deck.length > 0) renderCard(true);
+    hasPendingVerbChanges = false;
+    _syncVerbUI();
+    if (typeof showShareToast === "function") showShareToast("Cambios aplicados ✅");
   }
 
   /* ── Sync all controls ── */
@@ -2955,8 +2976,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     s.verbMode = e.target.value;
     saveVFCSettings(s);
     _syncVerbUI();
-    // Rebuild deck immediately so the card count updates
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
 
   /* ── Verbos por día select ── */
@@ -2964,7 +2984,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     s.verbsPerDay = e.target.value;
     saveVFCSettings(s);
     _syncVerbUI();
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
 
   /* ── Custom number input ── */
@@ -2976,8 +2996,9 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     _updateDeckInfo();
   });
   document.getElementById("settingVerbsPerDayCustom")?.addEventListener("change", () => {
-    if (typeof buildDeck === "function") buildDeck();
+    _markPendingVerbChanges();
   });
+  document.getElementById("settingApplyVerbChanges")?.addEventListener("click", _applyVerbChanges);
 
   /* ── Reset racha ── */
   document.getElementById("settingResetStreak")?.addEventListener("click", () => {
@@ -3004,6 +3025,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   /* ── Abrir ── */
   function openSettings() {
     s = loadVFCSettings();
+    hasPendingVerbChanges = false;
     syncControls();
     overlay.style.display = "flex";
     requestAnimationFrame(() => overlay.classList.add("is-open"));
