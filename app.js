@@ -2977,7 +2977,8 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     slides[current].classList.add("active");
     dots[current].classList.add("active");
     dots[current].setAttribute("aria-selected", "true");
-    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnBack.style.visibility = "visible";
+    btnBack.textContent = current === 0 ? "Skip" : "Back";
     btnNext.style.display = current < slides.length - 1 ? "inline-flex" : "none";
     btnStart.style.display = current === slides.length - 1 ? "inline-flex" : "none";
     // Update progress bar
@@ -2988,7 +2989,10 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   }
 
   btnNext.addEventListener("click", () => { if (current < slides.length - 1) goTo(current + 1); });
-  btnBack.addEventListener("click", () => { if (current > 0) goTo(current - 1); });
+  btnBack.addEventListener("click", () => {
+    if (current === 0) return closeOnboarding();
+    goTo(current - 1);
+  });
   btnStart.addEventListener("click", closeOnboarding);
   dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
 
