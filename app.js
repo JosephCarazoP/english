@@ -3313,3 +3313,140 @@ function showRetentionMessage() {
   });
   obs.observe(fsEl, { attributes: true, attributeFilter: ["class"] });
 })();
+
+/* ═══════════════════════════════════════════════════════════════
+   PATCH JS — agrega al final de app.js
+   Conecta los nuevos elementos del header y onboarding redesign.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. hdr-filter-btn (segmented control del nuevo header) ──
+   Funciona igual que los .filter-btn anteriores.              */
+(function wireNewHeader() {
+  document.querySelectorAll(".hdr-filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".hdr-filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentFilter = btn.dataset.filter;
+      document.querySelector(".score-correct .score-lbl").textContent = "Learned";
+      document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
+      isFlipped = false;
+      buildDeck();
+      document.getElementById("finishScreen").classList.remove("show");
+      document.getElementById("quizScreen").style.display = "none";
+      document.getElementById("stage").style.display = "flex";
+      renderCard(true);
+      hideActions();
+    });
+  });
+})();
+
+
+/* ── 2. Nuevo onboarding (ob2-*) ──
+   Los IDs obBack / obNext / obStart son idénticos al JS anterior,
+   pero el selector de dots cambió de .ob-dot → .ob2-dot.
+   Reemplaza la función initOnboarding() completa con esta versión. */
+(function initOnboarding() {
+  const _force = new URLSearchParams(location.search).has("preview");
+  if (!_force && localStorage.getItem(ONBOARDING_KEY)) return;
+
+  const overlay  = document.getElementById("onboardingOverlay");
+  if (!overlay) return;
+
+  overlay.style.display = "flex";
+  overlay.style.opacity = "0";
+  requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+
+  let current = 0;
+  const slides  = overlay.querySelectorAll(".ob2-slide");
+  const dots    = overlay.querySelectorAll(".ob2-dot");
+  const btnBack  = document.getElementById("obBack");
+  const btnNext  = document.getElementById("obNext");
+  const btnStart = document.getElementById("obStart");
+
+  function goTo(n) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+    dots[current].setAttribute("aria-selected", "false");
+    current = n;
+    slides[current].classList.add("active");
+    dots[current].classList.add("active");
+    dots[current].setAttribute("aria-selected", "true");
+    btnBack.style.visibility = current === 0 ? "hidden" : "visible";
+    btnNext.style.display    = current < slides.length - 1 ? "inline-flex" : "none";
+    btnStart.style.display   = current === slides.length - 1 ? "inline-flex" : "none";
+  }
+
+  btnNext.addEventListener("click",  () => { if (current < slides.length - 1) goTo(current + 1); });
+  btnBack.addEventListener("click",  () => { if (current > 0) goTo(current - 1); });
+  btnStart.addEventListener("click", closeOnboarding);
+  dots.forEach(d => d.addEventListener("click", () => goTo(+d.dataset.target)));
+
+  goTo(0);  // estado inicial
+
+  function closeOnboarding() {
+    localStorage.setItem(ONBOARDING_KEY, "1");
+    overlay.style.opacity = "0";
+    setTimeout(() => { overlay.style.display = "none"; }, 350);
+  }
+})();
+
+
+/* ── 3. Streak badge — nuevo selector para el header compacto ──
+   El badge de racha ahora tiene id="streakBadge" igual que antes,
+   pero también necesita mostrar el valor en #streakNum.
+   Los IDs son idénticos → el JS de renderStreakBadge() sigue igual.
+   
+   Adicionalmente: en el header nuevo NO hay streakProgressFill ni
+   streakTarget, así que los neutralizamos para evitar errores.      */
+(function patchStreakForNewHeader() {
+  // Parchar _setStreakNumText para que funcione sin los elementos
+  // del header anterior que ya no existen (streakProgressFill, streakTarget)
+  const _origSetStreak = typeof _setStreakNumText === "function"
+    ? _setStreakNumText
+    : null;
+
+  // Re-definir solo los elementos que existen en el nuevo header
+  window._setStreakNumText = function(n) {
+    const el = document.getElementById("streakNum");
+    if (el) el.textContent = String(n);
+
+    // Badge antiguo (por si aún está en DOM, compatibilidad)
+    const badge = document.getElementById("streakBadge");
+    if (badge) {
+      const lbl = n === 1 ? "1 día seguido" : `${n} días seguidos`;
+      badge.setAttribute("aria-label", lbl);
+      badge.title = lbl;
+    }
+
+    // El nuevo header no tiene barra de progreso interna —
+    // esos elementos ya no existen, así que los silenciamos.
+    const fill = document.getElementById("streakProgressFill");
+    if (fill) {
+      const info = typeof _streakMilestoneInfo === "function" ? _streakMilestoneInfo(n) : null;
+      if (info) fill.style.width = info.pct + "%";
+    }
+    const tgt = document.getElementById("streakTarget");
+    if (tgt) {
+      const info = typeof _streakMilestoneInfo === "function" ? _streakMilestoneInfo(n) : null;
+      if (info) tgt.textContent = `→ ${info.nextMs}`;
+    }
+  };
+})();
+
+
+/* ── 4. Level badge — sincronizar el nuevo hdr-badge con el sistema EXP ── */
+(function patchLevelBadgeForNewHeader() {
+  // El nuevo badge usa #levelBadge (mismo ID), #lvIcon y #lvName (mismos IDs).
+  // No tiene barra de progreso interna.
+  // updateLevelBadge() ya gestiona esos IDs → funciona sin cambios.
+  // Solo aseguramos que el elemento sea visible cuando corresponda.
+  const lvBadge = document.getElementById("levelBadge");
+  if (lvBadge) {
+    // updateLevelBadge() llama badge.style.display = "inline-flex"
+    // el nuevo .hdr-badge ya tiene display:inline-flex nativo → OK.
+    // Quitamos el display:none inicial con un call a updateLevelBadge()
+    if (typeof updateLevelBadge === "function") {
+      updateLevelBadge();
+    }
+  }
+})();
