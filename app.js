@@ -2769,13 +2769,7 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
    ════════════════════════════════════════════════════════════════ */
 const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
 
-/*
-  In app.js, replace the entire initOnboarding IIFE with this version.
-  Key additions:
-    - Progress bar fill
-    - Smoother visual sync
-    - Fixed "see intro" button in Settings (was calling classList.add("visible"), now uses opacity)
-*/
+
 
 (function initOnboarding() {
   const _forceOnboarding = new URLSearchParams(location.search).has('preview');
@@ -2828,9 +2822,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   }
 })();
 
-/* ════════════════════════════════════════════════════════════════
-   SETTINGS — configuración persistida en vfc_settings
-   ════════════════════════════════════════════════════════════════ */
+
 const SETTINGS_KEY = "vfc_settings";
 const DEFAULT_SETTINGS = {
   theme: "auto",
@@ -2867,10 +2859,6 @@ function applyVFCSettings(s) {
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   REEMPLAZA COMPLETA LA FUNCIÓN initSettings() EN app.js
-   (el IIFE completo desde "(function initSettings()" hasta el cierre ")()")
-   ══════════════════════════════════════════════════════════════════ */
 
 (function initSettings() {
   const overlay = document.getElementById("settingsOverlay");
@@ -3123,103 +3111,6 @@ function applyVFCSettings(s) {
 })();
 
 
-/* ══════════════════════════════════════════════════════════════════
-   SETTINGS — solo lo que funciona
-   REEMPLAZA la función initSettings existente en app.js
-   ══════════════════════════════════════════════════════════════════ */
-(function initSettings() {
-  const overlay = document.getElementById("settingsOverlay");
-  const openBtn = document.getElementById("settingsBtn");
-  const closeBtn = document.getElementById("settingsClose");
-  if (!overlay || !openBtn) return;
-
-  let s = loadVFCSettings();
-  applyVFCSettings(s);
-
-  function _syncToggle(id, isOn) {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.dataset.val = isOn ? "on" : "off";
-    btn.setAttribute("aria-pressed", String(isOn));
-    btn.classList.toggle("is-on", isOn);
-  }
-
-  function syncControls() {
-    const tEl = document.getElementById("settingTheme");
-    const aEl = document.getElementById("settingAudioSpeed");
-    if (tEl) tEl.value = s.theme;
-    if (aEl) aEl.value = s.audioSpeed;
-    _syncToggle("settingAnimations", s.animations === "on");
-    _syncToggle("settingAutoPlay", s.autoPlay === "on");
-  }
-
-  /* Selects */
-  [["settingTheme", "theme"], ["settingAudioSpeed", "audioSpeed"]].forEach(([id, key]) => {
-    document.getElementById(id)?.addEventListener("change", e => {
-      s[key] = e.target.value;
-      saveVFCSettings(s);
-      applyVFCSettings(s);
-    });
-  });
-
-  /* Toggles */
-  [["settingAnimations", "animations"], ["settingAutoPlay", "autoPlay"]].forEach(([id, key]) => {
-    document.getElementById(id)?.addEventListener("click", () => {
-      const isOn = document.getElementById(id).dataset.val !== "on";
-      s[key] = isOn ? "on" : "off";
-      saveVFCSettings(s);
-      _syncToggle(id, isOn);
-      applyVFCSettings(s);
-    });
-  });
-
-  /* Reset racha */
-  document.getElementById("settingResetStreak")?.addEventListener("click", () => {
-    if (!confirm("¿Resetear tu racha diaria?")) return;
-    try {
-      localStorage.removeItem(STREAK_KEY);
-      localStorage.removeItem(STREAK_DATE_KEY);
-    } catch { }
-    _setStreakNumText(0);
-    if (typeof showShareToast === "function") showShareToast("Racha reseteada 🔄");
-  });
-
-  /* Borrar todo */
-  document.getElementById("settingResetAll")?.addEventListener("click", () => {
-    if (!confirm("¿Borrar TODO el progreso? Esta acción no se puede deshacer.")) return;
-    [STREAK_KEY, STREAK_DATE_KEY, GOALS_KEY, GOALS_STATS, SETTINGS_KEY,
-      ONBOARDING_KEY, "vfc_speed"].forEach(k => {
-        try { localStorage.removeItem(k); } catch { }
-      });
-    if (typeof showShareToast === "function") showShareToast("Progreso borrado 🗑️");
-    setTimeout(() => location.reload(), 900);
-  });
-
-  /* Abrir */
-  function openSettings() {
-    s = loadVFCSettings();
-    syncControls();
-    overlay.style.display = "flex";
-    requestAnimationFrame(() => overlay.classList.add("is-open"));
-    // Mostrar instrucciones PWA si aplica
-    if (typeof window._pwaMaybeShowManual === "function") {
-      window._pwaMaybeShowManual();
-    }
-  }
-
-  /* Cerrar */
-  function closeSettings() {
-    overlay.classList.remove("is-open");
-    setTimeout(() => { overlay.style.display = "none"; }, 290);
-  }
-
-  openBtn.addEventListener("click", openSettings);
-  closeBtn.addEventListener("click", closeSettings);
-  overlay.addEventListener("click", e => { if (e.target === overlay) closeSettings(); });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && overlay.style.display !== "none") closeSettings();
-  });
-})();
 /* ════════════════════════════════════════════════════════════════
    RETENCIÓN — mensaje en finish screen
    ════════════════════════════════════════════════════════════════ */
