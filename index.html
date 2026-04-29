@@ -16,45 +16,56 @@
 <body>
 
   <header class="app-header">
-    <div class="hdr-row">
+    <div class="header-row header-row-top">
+      <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" alt="Logo" class="logo-web"
+        onclick="location.reload()" title="Restart">
 
-      <img src="https://i.pinimg.com/1200x/35/db/c0/35dbc007fac3ca49de68ecd77f690d27.jpg" alt="Logo" class="hdr-logo"
-        onclick="location.reload()" title="Reiniciar">
-
-      <div class="hdr-badges">
-
-        <button class="hdr-badge hdr-streak" id="streakBadge" aria-label="Tu racha diaria" type="button">
-          <span class="hdr-badge-icon">🔥</span>
-          <span class="hdr-badge-val" id="streakNum">0</span>
-        </button>
-
-        <button class="hdr-badge hdr-level" id="levelBadge" type="button" onclick="openGoalsModal()"
-          aria-label="Tu nivel" style="display:none;">
-          <span class="hdr-badge-icon" id="lvIcon">🌱</span>
-          <span class="hdr-badge-val" id="lvName">Novato</span>
-        </button>
-
-      </div>
-
-      <div class="hdr-actions">
-
-        <div class="hdr-filter" role="tablist" aria-label="Filtro de verbos">
-          <button class="hdr-filter-btn active" data-filter="all">All</button>
-          <button class="hdr-filter-btn" data-filter="irregular">Irr</button>
-          <button class="hdr-filter-btn" data-filter="regular">Reg</button>
+      <button class="streak-progress" id="streakBadge" aria-label="Tu racha diaria" type="button">
+        <span class="streak-flame" aria-hidden="true">🔥</span>
+        <div class="streak-progress-body">
+          <div class="streak-progress-top">
+            <span class="streak-progress-num"><b id="streakNum">0</b><span
+                class="streak-progress-day">días</span></span>
+            <span class="streak-progress-target" id="streakTarget">→ 3</span>
+          </div>
+          <div class="streak-progress-track">
+            <div class="streak-progress-fill" id="streakProgressFill"></div>
+          </div>
         </div>
+      </button>
 
-        <button class="hdr-icon-btn" id="goalsBtn" title="Objetivos" aria-label="Objetivos" type="button">
-          🎯
-          <span class="hdr-dot" id="goalsBtnDot" hidden></span>
-        </button>
+      <button class="level-badge" id="levelBadge" type="button" title="Tu nivel actual"
+        aria-label="Nivel de experiencia" onclick="openGoalsModal()" style="display:none;">
+        <span class="lv-badge-icon" id="lvIcon">🌱</span>
+        <div class="lv-badge-body">
+          <span class="lv-badge-name" id="lvName">Novato</span>
+          <div class="lv-badge-track">
+            <div class="lv-badge-fill" id="lvBarFill"></div>
+          </div>
+        </div>
+        <span class="lv-badge-nums" id="lvExpNums">100 EXP para subir</span>
+      </button>
 
-        <button class="hdr-icon-btn" id="shuffleBtn" title="Mezclar" aria-label="Mezclar">⇄</button>
+      <button class="icon-btn goals-btn" id="goalsBtn" title="Objetivos" aria-label="Objetivos" type="button">
+        <span class="goals-btn-icon" aria-hidden="true">🎯</span>
+        <span class="goals-btn-dot" id="goalsBtnDot" hidden></span>
+      </button>
 
-        <button class="hdr-icon-btn" id="themeToggle" title="Tema" aria-label="Cambiar tema">☀︎</button>
+      <button class="icon-btn settings-btn" id="settingsBtn" title="Configuración" aria-label="Configuración"
+        type="button">
+        ⚙️
+      </button>
+    </div>
 
-        <button class="hdr-icon-btn" id="settingsBtn" title="Ajustes" aria-label="Ajustes" type="button">⚙️</button>
-
+    <div class="header-row header-row-bottom">
+      <div class="filter-group" role="tablist" aria-label="Verb filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="irregular">Irregular</button>
+        <button class="filter-btn" data-filter="regular">Regular</button>
+      </div>
+      <div class="header-tools">
+        <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-label="Shuffle">⇄</button>
+        <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">☀︎</button>
       </div>
     </div>
   </header>

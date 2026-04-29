@@ -82,11 +82,12 @@ body {
   overflow-x: hidden;
 }
 
-<<<<<<< HEAD
-=======
-/* ── HEADER ── */
+/* ── HEADER (2 rows) ── */
 .app-header {
-  padding: 10px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 28px 12px;
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(18px);
@@ -94,9 +95,6 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .header-row {
@@ -105,33 +103,19 @@ body {
   min-width: 0;
 }
 
-.compact-top {
-  justify-content: space-between;
-  gap: 8px;
+.header-row-top {
+  gap: 14px;
 }
 
-.compact-bottom {
+.header-row-bottom {
+  gap: 10px;
   justify-content: space-between;
-  gap: 8px;
 }
 
-.logo-pill {
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  border-radius: 999px;
-  padding: 3px 8px 3px 3px;
+.header-tools {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  cursor: pointer;
-}
-
-.logo-pill-text {
-  font-family: "DM Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  color: var(--subtext);
-  text-transform: uppercase;
+  gap: 8px;
 }
 >>>>>>> parent of 2d049ad (Merge pull request #14 from JosephCarazoP/codex/redesign-header-to-match-app-ui-0sl6df)
 
@@ -142,7 +126,6 @@ body {
   border-radius: 50%;
   border: 2px solid var(--accent);
   display: block;
-<<<<<<< HEAD
   cursor: pointer;
   flex-shrink: 0;
   box-shadow: 0 0 0 4px var(--accent-soft);
@@ -151,38 +134,41 @@ body {
   flex-shrink: 0;
 }
 
-.header-stats-strip {
-  display: inline-flex;
+.logo-web:hover {
+  box-shadow: 0 0 0 7px var(--accent-soft);
+  transform: scale(1.05);
+}
+
+.logo {
+  display: flex;
   align-items: center;
-  gap: 6px;
+}
+
+/* legacy aliases (still referenced by older code) */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   min-width: 0;
-  flex: 1;
 }
 
-.header-icon-actions,
-.header-tools {
-  display: inline-flex;
+.header-right {
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-.icon-wrap {
-  width: 16px;
-  height: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-wrap svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-}
-
+/* ── Goals button (header) ── */
 .goals-btn {
   position: relative;
   flex-shrink: 0;
+}
+
+.goals-btn-icon {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .goals-btn-dot {
@@ -196,7 +182,23 @@ body {
   box-shadow: 0 0 0 2px var(--bg), 0 0 8px rgba(244, 63, 94, 0.6);
 }
 
-.goals-btn-dot[hidden] { display: none; }
+.goals-btn-dot[hidden] {
+  display: none;
+}
+
+@keyframes goalsDotPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
 
 .filter-group {
   display: inline-flex;
@@ -263,6 +265,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 16px;
   color: var(--subtext);
   transition: all 0.2s;
 }
@@ -270,6 +273,8 @@ body {
 .icon-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 22%, transparent);
+  transform: rotate(22deg);
 }
 
 /* ── PROGRESS ── */
