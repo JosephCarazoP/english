@@ -154,17 +154,19 @@
     </div>
   </div>
 
-  <!-- ── DETAIL MODAL ── -->
+  <!-- ── DETAIL MODAL (redesigned) ── -->
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="modal-handle"></div>
       <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
 
+      <!-- Header strip: badge + spanish meaning chip -->
       <div class="modal-header-row">
         <span class="modal-badge" id="modalBadge"></span>
         <span class="modal-meaning-chip" id="modalMeaningChip"></span>
       </div>
 
+      <!-- Hero: two pronunciation cards side by side -->
       <div class="pron-grid">
         <article class="pron-card pron-present">
           <div class="pron-tag">Present</div>
@@ -193,6 +195,7 @@
         </article>
       </div>
 
+      <!-- Velocidad de audio (3 chips, una sola configuración para verbos y oraciones) -->
       <div class="speed-bar" role="radiogroup" aria-label="Velocidad del audio">
         <span class="speed-bar-lbl">Velocidad</span>
         <div class="speed-chips" id="speedPresets">
@@ -208,6 +211,7 @@
         </div>
       </div>
 
+      <!-- Examples -->
       <div class="ex-block">
         <div class="ex-card ex-pres">
           <div class="ex-head">
@@ -226,6 +230,7 @@
         </div>
       </div>
 
+      <!-- GIF -->
       <div class="modal-gif" id="modalGif">
         <span class="gif-msg">Loading…</span>
       </div>
@@ -282,129 +287,117 @@
     <p>Made by <b>Joseph Carazo</b> 🫡</p>
   </footer>
 
-  <!-- ── ONBOARDING ── -->
-  <!-- FIX: el </div> de ob2-slides estaba fuera de ob2-card, roto la estructura -->
-  <div class="ob2-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida"
+
+  <!-- ── ONBOARDING OVERLAY ── -->
+  <!--
+    REPLACE the entire <div class="onboarding-overlay" ...> block in index.html with this.
+    Everything else in index.html stays the same.
+  -->
+
+  <!-- ── ONBOARDING OVERLAY ── -->
+  <div class="onboarding-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Bienvenida"
     style="display:none;">
+    <div class="onboarding-card">
 
-    <div class="ob2-card">
-
-      <div class="ob2-dots" role="tablist" aria-label="Progreso">
-        <button class="ob2-dot active" data-target="0" aria-selected="true"></button>
-        <button class="ob2-dot" data-target="1" aria-selected="false"></button>
-        <button class="ob2-dot" data-target="2" aria-selected="false"></button>
+      <!-- Progress bar -->
+      <div class="ob-progress-track">
+        <div class="ob-progress-fill" id="obProgressFill"></div>
       </div>
 
-      <div class="ob2-slides">
+      <!-- Slides -->
+      <div class="onboarding-slides">
 
-        <!-- ─── Slide 0 ─── -->
-        <div class="ob2-slide active" data-slide="0">
-          <div class="ob2-art ob2-art-0">
-            <div class="ob2-art-circle"></div>
-            <div class="ob2-art-emoji">📚</div>
-            <span class="ob2-art-chip ob2-chip-a">Irregular</span>
-            <span class="ob2-art-chip ob2-chip-b">Regular</span>
+        <!-- Slide 0: Cómo funciona -->
+        <div class="onboarding-slide active" data-slide="0">
+          <div class="ob-hero ob-hero-0" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">📚</div>
+            <div class="ob-hero-chip ob-chip-irr">Irregular</div>
+            <div class="ob-hero-chip ob-chip-reg">Regular</div>
           </div>
-          <div class="ob2-content">
-            <h2 class="ob2-title">Aprende verbos en inglés</h2>
-            <p class="ob2-desc">
-              Domina los tiempos verbales paso a paso con tarjetas interactivas,
-              audio y quizzes.
-            </p>
-            <ul class="ob2-steps">
-              <li><span class="ob2-step-num">1</span>Ve el verbo en <strong>presente</strong></li>
-              <li><span class="ob2-step-num">2</span>Toca para ver el <strong>pasado</strong></li>
-              <li><span class="ob2-step-num">3</span>Decide si lo sabías o no</li>
-              <li><span class="ob2-step-num">4</span>Revisa tu resultado final</li>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Así funciona</h2>
+            <p class="ob-desc">Aprende verbos irregulares y regulares en inglés paso a paso.</p>
+            <ul class="onboarding-steps">
+              <li><span class="ob-num">1</span><span>Ve el verbo en <b>presente</b></span></li>
+              <li><span class="ob-num">2</span><span>Toca la tarjeta para ver el <b>pasado</b></span></li>
+              <li><span class="ob-num">3</span><span>Decide si lo sabías o no</span></li>
+              <li><span class="ob-num">4</span><span>Al final revisa tu <b>resultado</b></span></li>
             </ul>
           </div>
         </div>
 
-        <!-- ─── Slide 1 ─── -->
-        <div class="ob2-slide" data-slide="1">
-          <div class="ob2-art ob2-art-1">
-            <div class="ob2-art-circle"></div>
-            <div class="ob2-art-emoji">🎮</div>
-            <span class="ob2-btn-demo ob2-btn-ok">✓ I know it</span>
-            <span class="ob2-btn-demo ob2-btn-no">✗ Don't know</span>
+        <!-- Slide 1: Las acciones -->
+        <div class="onboarding-slide" data-slide="1">
+          <div class="ob-hero ob-hero-1" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">🎮</div>
+            <div class="ob-hero-btn-demo ob-demo-ok">✔ I know it</div>
+            <div class="ob-hero-btn-demo ob-demo-no">✘ Don't know</div>
           </div>
-          <div class="ob2-content">
-            <h2 class="ob2-title">Tres acciones simples</h2>
-            <p class="ob2-desc">Después de ver la respuesta, elige honestamente.</p>
-            <div class="ob2-actions-list">
-              <div class="ob2-action">
-                <span class="ob2-pip ob2-pip-ok"></span>
-                <div>
-                  <strong>I know it</strong>
-                  <span>Ya dominas ese verbo ✓</span>
-                </div>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Las acciones</h2>
+            <p class="ob-desc">Después de ver la respuesta, usa uno de los tres botones.</p>
+            <div class="onboarding-actions-list">
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-ok"></span>
+                <div><b>I know it</b><span>Ya dominas ese verbo</span></div>
               </div>
-              <div class="ob2-action">
-                <span class="ob2-pip ob2-pip-no"></span>
-                <div>
-                  <strong>I don't know</strong>
-                  <span>Lo seguirás practicando</span>
-                </div>
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-no"></span>
+                <div><b>I don't know</b><span>Seguirás practicándolo</span></div>
               </div>
-              <div class="ob2-action">
-                <span class="ob2-pip ob2-pip-pu"></span>
-                <div>
-                  <strong>✦ Detalles</strong>
-                  <span>IPA, audio y ejemplos</span>
-                </div>
+              <div class="ob-action">
+                <span class="ob-action-pip ob-pip-pu"></span>
+                <div><b>✦ Detalles</b><span>IPA, ejemplos y audio</span></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ─── Slide 2 ─── -->
-        <div class="ob2-slide" data-slide="2">
-          <div class="ob2-art ob2-art-2">
-            <div class="ob2-art-circle"></div>
-            <div class="ob2-art-emoji">🏆</div>
-            <div class="ob2-streak-pill">
+        <!-- Slide 2: Quizzes -->
+        <div class="onboarding-slide" data-slide="2">
+          <div class="ob-hero ob-hero-2" aria-hidden="true">
+            <div class="ob-hero-rings"><span></span><span></span></div>
+            <div class="ob-hero-icon">🏆</div>
+            <div class="ob-streak-demo">
               <span>🔥</span>
-              <strong>7</strong>
-              <span class="ob2-streak-lbl">días</span>
+              <span class="ob-streak-num">7</span>
+              <span class="ob-streak-lbl">días</span>
             </div>
           </div>
-          <div class="ob2-content">
-            <h2 class="ob2-title">Quiz, racha y logros</h2>
-            <p class="ob2-desc">
-              Completa rondas, mantén tu racha diaria y desbloquea objetivos
-              para ganar EXP y subir de nivel.
-            </p>
-            <div class="ob2-features">
-              <div class="ob2-feat"><span>✏️</span><span>Escribe el pasado</span></div>
-              <div class="ob2-feat"><span>🫧</span><span>Revienta la burbuja correcta</span></div>
-              <div class="ob2-feat"><span>🔥</span><span>Racha diaria de práctica</span></div>
-              <div class="ob2-feat"><span>🎯</span><span>Objetivos y niveles de EXP</span></div>
+          <div class="ob-body">
+            <h2 class="onboarding-title">Quizzes &amp; racha</h2>
+            <p class="ob-desc">Pon a prueba lo aprendido y mantén tu racha diaria.</p>
+            <div class="onboarding-quiz-features">
+              <div class="ob-quiz-feat"><span>✏️</span><span>Escribe la forma en pasado</span></div>
+              <div class="ob-quiz-feat"><span>🫧</span><span>Revienta la burbuja correcta</span></div>
+              <div class="ob-quiz-feat"><span>🔥</span><span>Racha diaria para mantenerte activo</span></div>
             </div>
-            <p class="ob2-tip">
-              💡 <strong>Tip:</strong> el quiz usa los verbos de tu ronda actual.
-            </p>
+            <p class="onboarding-tip">💡 <b>Tip:</b> el quiz usa los verbos de la ronda actual.</p>
           </div>
         </div>
 
-      </div><!-- /ob2-slides — FIX: ahora correctamente DENTRO de ob2-card -->
+      </div><!-- /onboarding-slides -->
 
-      <!-- Navegación — FIX: también correctamente dentro de ob2-card -->
-      <div class="ob2-nav">
-        <button class="ob2-btn-skip" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
-        <button class="ob2-btn-next" id="obNext" type="button">Siguiente →</button>
-        <button class="ob2-btn-start" id="obStart" type="button" style="display:none;">🚀 ¡Empezar!</button>
+      <!-- Bottom: dots + nav -->
+      <div class="ob-footer">
+        <div class="onboarding-dots" role="tablist" aria-label="Progreso del tutorial">
+          <button class="ob-dot active" data-target="0" role="tab" aria-selected="true"
+            aria-label="Paso 1 de 3"></button>
+          <button class="ob-dot" data-target="1" role="tab" aria-selected="false" aria-label="Paso 2 de 3"></button>
+          <button class="ob-dot" data-target="2" role="tab" aria-selected="false" aria-label="Paso 3 de 3"></button>
+        </div>
+        <div class="onboarding-nav">
+          <button class="ob-btn ob-btn-back" id="obBack" type="button" style="visibility:hidden;">← Atrás</button>
+          <button class="ob-btn ob-btn-next" id="obNext" type="button">Siguiente →</button>
+          <button class="ob-btn ob-btn-start" id="obStart" type="button" style="display:none;">🚀 ¡Empezar!</button>
+        </div>
       </div>
 
-    </div><!-- /ob2-card -->
-<<<<<<< HEAD
-
-  </div><!-- /ob2-overlay -->
-
-  <!-- ── SETTINGS ── -->
-=======
+    </div><!-- /onboarding-card -->
   </div>
   <!-- Reemplaza todo el <div class="settings-overlay" id="settingsOverlay"> en index.html -->
->>>>>>> parent of 9ab8346 (Merge branch 'main' of https://github.com/JosephCarazoP/english)
   <div class="settings-overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-label="Configuración"
     style="display:none;">
     <div class="settings-card">
@@ -414,6 +407,7 @@
       </div>
       <div class="settings-body">
 
+        <!-- APARIENCIA -->
         <section class="settings-section">
           <h3 class="settings-section-title">🎨 Apariencia</h3>
           <div class="settings-row">
@@ -432,6 +426,7 @@
           </div>
         </section>
 
+        <!-- AUDIO -->
         <section class="settings-section">
           <h3 class="settings-section-title">🔊 Audio</h3>
           <div class="settings-row">
@@ -450,6 +445,7 @@
           </div>
         </section>
 
+        <!-- VERBOS (nuevo) -->
         <section class="settings-section">
           <h3 class="settings-section-title">📖 Verbos</h3>
           <div class="settings-row">
@@ -469,7 +465,9 @@
             </select>
           </div>
           <div class="settings-row" id="settingCustomRow" style="display:none;">
-            <label class="settings-label" for="settingVerbsPerDayCustom">Cantidad exacta</label>
+            <label class="settings-label" for="settingVerbsPerDayCustom">
+              Cantidad exacta
+            </label>
             <input id="settingVerbsPerDayCustom" type="number" min="1" max="200" value="10"
               class="settings-number-input" placeholder="10" />
           </div>
@@ -480,6 +478,7 @@
           </div>
         </section>
 
+        <!-- INSTALAR APP -->
         <section class="settings-section" id="pwaSection">
           <h3 class="settings-section-title">📲 Instalar app</h3>
           <div id="pwaPromptRow" class="settings-row" style="display:none;">
@@ -513,6 +512,7 @@
           </div>
         </section>
 
+        <!-- DATOS -->
         <section class="settings-section settings-section-danger">
           <h3 class="settings-section-title">🗂️ Datos</h3>
           <div class="settings-row">
@@ -530,7 +530,6 @@
     </div>
   </div>
 
-  <!-- ── LEVEL UP OVERLAY ── -->
   <div class="level-up-overlay" id="levelUpOverlay" role="dialog" aria-modal="true" aria-label="¡Subiste de nivel!">
     <div class="lu-bg"></div>
     <div class="lu-card">
@@ -542,7 +541,6 @@
       <button class="lu-btn" id="luCloseBtn" type="button">¡A seguir! 💪</button>
     </div>
   </div>
-
   <script src="app.js"></script>
 </body>
 

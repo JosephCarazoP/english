@@ -2793,6 +2793,30 @@ function closeGoalsModal() {
     if (e.target?.id === "luCloseBtn" || e.target?.classList?.contains("lu-bg")) closeLevelUp();
   });
 
+  // Tracking: detail opens
+  document.getElementById("btnDetail")?.addEventListener("click", () => {
+    const s = _gReadStats(); s.details = (s.details || 0) + 1; _gWriteStats(s);
+    checkGoals({ silent: false });
+  }, true);
+
+  // Tracking: skip total
+  document.getElementById("btnSkip")?.addEventListener("click", () => {
+    const s = _gReadStats(); s.skipped_total = (s.skipped_total || 0) + 1; _gWriteStats(s);
+    checkGoals({ silent: false });
+  }, true);
+
+  // Tracking: audio speed
+  document.querySelectorAll(".speed-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const v = parseFloat(chip.dataset.speed);
+      const s = _gReadStats();
+      if (v <= 0.7) s.usedSlow = true;
+      if (v >= 1.2) s.usedFast = true;
+      _gWriteStats(s);
+      checkGoals({ silent: false });
+    });
+  });
+
   // Init: render level badge + check existing goals silently
   updateLevelBadge();
   try { checkGoals({ silent: true }); } catch {}
@@ -2871,8 +2895,6 @@ if (_origRenderGoalsList) {
   };
 }
 
-<<<<<<< HEAD
-=======
 // Tracking detalles ✦ — capture=true para correr antes del handler existente
 document.getElementById("btnDetail")?.addEventListener("click", () => {
   const s = _gReadStats();
@@ -3151,7 +3173,6 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
   });
 })();
 
->>>>>>> parent of 9ab8346 (Merge branch 'main' of https://github.com/JosephCarazoP/english)
 
 /* ══════════════════════════════════════════════════════════════════
    PWA — beforeinstallprompt + instrucciones manuales
