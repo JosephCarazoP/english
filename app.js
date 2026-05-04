@@ -932,6 +932,66 @@ function colorIdx(verb) { return ALL_VERBS.indexOf(verb) % 10; }
 
 /* Audio playback speed (1 = normal). Persisted across the session. */
 let currentSpeed = 1;
+let preferredEnglishVoice = null;
+
+function refreshSpeechVoices() {
+  if (!("speechSynthesis" in window)) return [];
+  const voices = window.speechSynthesis.getVoices() || [];
+  preferredEnglishVoice = chooseEnglishVoice(voices);
+  return voices;
+}
+
+function chooseEnglishVoice(voices) {
+  const englishVoices = voices.filter(voice => /^en([-_]|$)/i.test(voice.lang || ""));
+  if (!englishVoices.length) return null;
+
+  const preferredNameParts = [
+    "natural", "neural", "premium", "enhanced",
+    "google us english", "google uk english",
+    "microsoft jenny", "microsoft aria", "microsoft guy",
+    "samantha", "alex", "daniel", "karen"
+  ];
+
+  return englishVoices
+    .map(voice => {
+      const name = (voice.name || "").toLowerCase();
+      const lang = (voice.lang || "").toLowerCase();
+      let score = 0;
+      preferredNameParts.forEach((part, idx) => {
+        if (name.includes(part)) score += 50 - idx;
+      });
+      if (lang === "en-us") score += 18;
+      if (lang.startsWith("en-us")) score += 12;
+      if (lang.startsWith("en-gb")) score += 8;
+      if (voice.localService === false) score += 5;
+      if (name.includes("zira") || name.includes("david")) score -= 8;
+      return { voice, score };
+    })
+    .sort((a, b) => b.score - a.score)[0].voice;
+}
+
+if ("speechSynthesis" in window) {
+  refreshSpeechVoices();
+  window.speechSynthesis.onvoiceschanged = refreshSpeechVoices;
+}
+
+function resolveSpeechRate(speedValue, kind) {
+  const speed = parseFloat(speedValue);
+  const isSentence = kind === "sentence";
+  if (speed <= 0.75) return isSentence ? 0.62 : 0.54;
+  if (speed >= 1.15) return isSentence ? 1.08 : 1.12;
+  return isSentence ? 0.9 : 0.92;
+}
+
+function prepareSpeechText(text, kind) {
+  const cleaned = String(text || "")
+    .replace(/\s*\/\s*/g, " or ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleaned) return "";
+  if (kind === "sentence" || /[.!?]$/.test(cleaned)) return cleaned;
+  return `${cleaned}.`;
+}
 
 /**
  * Speak a phrase using the Web Speech API.
@@ -940,25 +1000,36 @@ let currentSpeed = 1;
  *  - opts.lang: BCP-47 (defaults to en-US)
  */
 function speakVerb(text, opts) {
-  if (!("speechSynthesis" in window) || !text) return;
+  if (!("speechSynthesis" in window) || !text) return null;
   opts = opts || {};
+  const kind = opts.kind || "word";
+  const speechText = prepareSpeechText(text, kind);
+  if (!speechText) return null;
+
   let rate;
   if (typeof opts.rate === "number") {
     rate = opts.rate;
   } else if (opts.rate === "slow") {
-    rate = Math.max(0.35, currentSpeed * 0.55);
+    rate = kind === "sentence" ? 0.56 : 0.48;
   } else {
-    rate = currentSpeed;
+    rate = resolveSpeechRate(currentSpeed, kind);
   }
   // Web Speech rate is clamped 0.1–2. Stay in safe range.
   rate = Math.min(2, Math.max(0.3, rate));
 
-  const utter = new SpeechSynthesisUtterance(text);
+  const utter = new SpeechSynthesisUtterance(speechText);
   utter.lang = opts.lang || "en-US";
   utter.rate = rate;
-  utter.pitch = 1;
+  utter.pitch = kind === "sentence" ? 1.02 : 1.04;
+  utter.volume = 1;
+
+  const voice = preferredEnglishVoice || refreshSpeechVoices().find(v => /^en([-_]|$)/i.test(v.lang || ""));
+  if (voice) utter.voice = voice;
+
   window.speechSynthesis.cancel();
+  window.speechSynthesis.resume();
   window.speechSynthesis.speak(utter);
+  return utter;
 }
 
 /* Strip simple HTML to get clean text for TTS (removes <b>, etc.) */
@@ -1323,6 +1394,19 @@ async function openDetail(verbOverride) {
   document.getElementById("modalSentencePres").innerHTML = verb.sentencePres;
   document.getElementById("modalSentencePast").innerHTML = verb.sentencePast;
 
+  function playDetailAudio(btn, text, kind) {
+    document.querySelectorAll(".pron-btn, .ex-mini-play").forEach(el => el.classList.remove("is-playing"));
+    btn.classList.add("is-playing");
+    const utter = speakVerb(text, { kind });
+    if (!utter) {
+      btn.classList.remove("is-playing");
+      return;
+    }
+    const stop = () => btn.classList.remove("is-playing");
+    utter.onend = stop;
+    utter.onerror = stop;
+  }
+
   // Pronunciation: a single "Escuchar" button per card. Rate is taken from currentSpeed.
   const presWord = verb.present;
   const pastWord = verb.past.split("/")[0].trim();
@@ -1331,21 +1415,18 @@ async function openDetail(verbOverride) {
     btn.onclick = (e) => {
       e.stopPropagation();
       const text = form === "pres" ? presWord : pastWord;
-      // Visual feedback while playing
-      btn.classList.add("is-playing");
-      setTimeout(() => btn.classList.remove("is-playing"), 800);
-      speakVerb(text);
+      playDetailAudio(btn, text, "word");
     };
   });
 
   // Sentence play buttons
   document.getElementById("playSentencePres").onclick = (e) => {
     e.stopPropagation();
-    speakVerb(stripHtml(verb.sentencePres));
+    playDetailAudio(e.currentTarget, stripHtml(verb.sentencePres), "sentence");
   };
   document.getElementById("playSentencePast").onclick = (e) => {
     e.stopPropagation();
-    speakVerb(stripHtml(verb.sentencePast));
+    playDetailAudio(e.currentTarget, stripHtml(verb.sentencePast), "sentence");
   };
 
   // Badge with phonetic sound tag for regular verbs

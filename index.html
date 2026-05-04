@@ -167,12 +167,29 @@
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="modal-handle"></div>
-      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
 
       <!-- Header strip: badge + spanish meaning chip -->
       <div class="modal-header-row">
+        <div class="modal-title-block">
+          <span class="modal-title-icon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path>
+              <path d="M8 7h8"></path>
+              <path d="M8 11h6"></path>
+            </svg>
+          </span>
+          <div class="modal-title-copy">
+            <span class="modal-title">Verb details</span>
+            <span class="modal-meaning-chip" id="modalMeaningChip"></span>
+          </div>
+        </div>
         <span class="modal-badge" id="modalBadge"></span>
-        <span class="modal-meaning-chip" id="modalMeaningChip"></span>
       </div>
 
       <!-- Hero: two pronunciation cards side by side -->
@@ -184,12 +201,21 @@
           <div class="pron-actions">
             <button class="pron-btn pron-btn-single" data-form="pres" type="button"
               aria-label="Reproducir verbo en presente">
-              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
+              <svg class="ui-icon pron-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              </svg>
+              <span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
         </article>
 
-        <div class="pron-arrow" aria-hidden="true">→</div>
+        <div class="pron-arrow" aria-hidden="true">
+          <svg class="ui-icon" viewBox="0 0 24 24">
+            <path d="M5 12h14"></path>
+            <path d="m13 6 6 6-6 6"></path>
+          </svg>
+        </div>
 
         <article class="pron-card pron-past">
           <div class="pron-tag">Past</div>
@@ -198,7 +224,11 @@
           <div class="pron-actions">
             <button class="pron-btn pron-btn-single" data-form="past" type="button"
               aria-label="Reproducir verbo en pasado">
-              <span class="pron-btn-icon">▶</span><span class="pron-btn-lbl">Escuchar</span>
+              <svg class="ui-icon pron-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              </svg>
+              <span class="pron-btn-lbl">Escuchar</span>
             </button>
           </div>
         </article>
@@ -206,7 +236,16 @@
 
       <!-- Velocidad de audio (3 chips, una sola configuración para verbos y oraciones) -->
       <div class="speed-bar" role="radiogroup" aria-label="Velocidad del audio">
-        <span class="speed-bar-lbl">Velocidad</span>
+        <span class="speed-bar-lbl">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 19V5"></path>
+            <path d="M8 17V7"></path>
+            <path d="M12 15V9"></path>
+            <path d="M16 13v-2"></path>
+            <path d="M20 12h0"></path>
+          </svg>
+          Velocidad
+        </span>
         <div class="speed-chips" id="speedPresets">
           <button type="button" class="speed-chip" role="radio" aria-checked="false" data-speed="0.7">
             <span class="speed-chip-lbl">Lento</span>
@@ -226,14 +265,24 @@
           <div class="ex-head">
             <span class="ex-tag">Present</span>
             <button class="ex-mini-play" id="playSentencePres" type="button"
-              aria-label="Play present sentence">▶</button>
+              aria-label="Play present sentence">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              </svg>
+            </button>
           </div>
           <div id="modalSentencePres" class="ex-text"></div>
         </div>
         <div class="ex-card ex-past">
           <div class="ex-head">
             <span class="ex-tag">Past</span>
-            <button class="ex-mini-play" id="playSentencePast" type="button" aria-label="Play past sentence">▶</button>
+            <button class="ex-mini-play" id="playSentencePast" type="button" aria-label="Play past sentence">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              </svg>
+            </button>
           </div>
           <div id="modalSentencePast" class="ex-text"></div>
         </div>
