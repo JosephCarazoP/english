@@ -1304,8 +1304,9 @@ function showFinish() {
 }
 
 /* ── DETAIL MODAL ── */
-async function openDetail() {
-  const verb = deck[cursor];
+async function openDetail(verbOverride) {
+  const verb = verbOverride || deck[cursor];
+  if (!verb) return;
   const ipa = VERB_IPA[verb.present] || { pres: "", past: "" };
 
   // Hero words
@@ -1392,6 +1393,131 @@ function closeModal() {
   document.body.style.overflow = "";
   // Stop any in-progress speech when the user closes the modal
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+/* ── VOCABULARY LIBRARY ── */
+let vocabFilter = "all";
+let vocabQuery = "";
+
+function vocabIconSvg(type) {
+  if (type === "regular") {
+    return (
+      '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M20 6 9 17l-5-5"></path>' +
+      '<path d="M4 19h16"></path>' +
+      '</svg>'
+    );
+  }
+  return (
+    '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M12 3 4 7l8 4 8-4-8-4Z"></path>' +
+    '<path d="M4 11l8 4 8-4"></path>' +
+    '<path d="M4 15l8 4 8-4"></path>' +
+    '</svg>'
+  );
+}
+
+function vocabArrowSvg() {
+  return (
+    '<svg class="ui-icon vocab-open-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M5 12h14"></path>' +
+    '<path d="m13 6 6 6-6 6"></path>' +
+    '</svg>'
+  );
+}
+
+function getVocabularyMatches() {
+  const q = vocabQuery.trim().toLowerCase();
+  return ALL_VERBS.filter(verb => {
+    if (vocabFilter !== "all" && verb.type !== vocabFilter) return false;
+    if (!q) return true;
+    const meaning = VERB_MEANINGS_ES[verb.present] || "";
+    return [
+      verb.present,
+      verb.past,
+      verb.participle,
+      verb.type,
+      verb.sound,
+      meaning
+    ].some(value => String(value || "").toLowerCase().includes(q));
+  });
+}
+
+function renderVocabularyLibrary() {
+  const grid = document.getElementById("vocabGrid");
+  const count = document.getElementById("vocabCount");
+  const empty = document.getElementById("vocabEmpty");
+  if (!grid || !count || !empty) return;
+
+  const matches = getVocabularyMatches();
+  count.textContent = `${matches.length} ${matches.length === 1 ? "word" : "words"}`;
+  grid.innerHTML = "";
+  empty.hidden = matches.length > 0;
+
+  matches.forEach(verb => {
+    const meaning = VERB_MEANINGS_ES[verb.present] || "Sin traducción disponible";
+    const card = document.createElement("button");
+    card.className = "vocab-card";
+    card.type = "button";
+    card.dataset.type = verb.type;
+    card.setAttribute("aria-label", `Open details for ${verb.present}`);
+
+    const icon = document.createElement("span");
+    icon.className = "vocab-card-icon";
+    icon.innerHTML = vocabIconSvg(verb.type);
+
+    const main = document.createElement("span");
+    main.className = "vocab-card-main";
+
+    const title = document.createElement("span");
+    title.className = "vocab-card-title";
+
+    const present = document.createElement("span");
+    present.className = "vocab-present";
+    present.textContent = verb.present;
+
+    const past = document.createElement("span");
+    past.className = "vocab-past";
+    past.textContent = verb.past;
+
+    const meaningEl = document.createElement("span");
+    meaningEl.className = "vocab-meaning";
+    meaningEl.textContent = meaning;
+
+    title.append(present, past);
+    main.append(title, meaningEl);
+
+    const meta = document.createElement("span");
+    meta.className = "vocab-card-meta";
+    const dot = document.createElement("span");
+    dot.className = "vocab-type-dot";
+    const arrow = document.createElement("span");
+    arrow.innerHTML = vocabArrowSvg();
+    meta.append(dot, arrow);
+
+    card.append(icon, main, meta);
+    card.addEventListener("click", () => {
+      closeVocabularyLibrary();
+      openDetail(verb);
+    });
+    grid.appendChild(card);
+  });
+}
+
+function openVocabularyLibrary() {
+  const overlay = document.getElementById("vocabOverlay");
+  if (!overlay) return;
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  renderVocabularyLibrary();
+  setTimeout(() => document.getElementById("vocabSearch")?.focus(), 80);
+}
+
+function closeVocabularyLibrary() {
+  const overlay = document.getElementById("vocabOverlay");
+  if (!overlay) return;
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
 }
 
 /* ── SPEED CONTROL (3 chips only: 0.7 / 1 / 1.2) ── */
@@ -2371,6 +2497,27 @@ document.getElementById("overlay").addEventListener("click", (e) => {
   if (e.target === document.getElementById("overlay")) closeModal();
 });
 
+document.getElementById("vocabBtn")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  openVocabularyLibrary();
+});
+document.getElementById("vocabClose")?.addEventListener("click", closeVocabularyLibrary);
+document.getElementById("vocabOverlay")?.addEventListener("click", (e) => {
+  if (e.target === document.getElementById("vocabOverlay")) closeVocabularyLibrary();
+});
+document.getElementById("vocabSearch")?.addEventListener("input", (e) => {
+  vocabQuery = e.target.value || "";
+  renderVocabularyLibrary();
+});
+document.querySelectorAll(".vocab-filter").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".vocab-filter").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    vocabFilter = btn.dataset.vocabFilter || "all";
+    renderVocabularyLibrary();
+  });
+});
+
 // Speed selector chips (3 options: lento / normal / rápido)
 document.querySelectorAll(".speed-chip, .speed-preset").forEach(btn => {
   btn.addEventListener("click", (e) => {
@@ -2423,7 +2570,15 @@ document.addEventListener("touchend", qDragEnd);
 
 /* Keyboard shortcuts */
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") { closeModal(); return; }
+  if (e.key === "Escape") {
+    if (document.getElementById("vocabOverlay")?.classList.contains("open")) {
+      closeVocabularyLibrary();
+      return;
+    }
+    closeModal();
+    return;
+  }
+  if (document.getElementById("vocabOverlay")?.classList.contains("open")) return;
   if (document.getElementById("overlay").classList.contains("open")) return;
   if (document.getElementById("finishScreen").classList.contains("show")) return;
   if (document.getElementById("quizScreen").style.display !== "none") return;
