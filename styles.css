@@ -912,6 +912,7 @@ body {
   z-index: 200;
   align-items: flex-end;
   justify-content: center;
+  padding-top: max(16px, env(safe-area-inset-top));
 }
 
 .overlay.open {
@@ -924,6 +925,11 @@ body {
   padding: 28px 28px 40px;
   width: 100%;
   max-width: 480px;
+  max-height: calc(100vh - max(16px, env(safe-area-inset-top)));
+  max-height: calc(100dvh - max(16px, env(safe-area-inset-top)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   position: relative;
   animation: modalUp 0.38s cubic-bezier(0.34, 1.2, 0.64, 1) both;
   border-top: 1px solid var(--border);
@@ -1885,7 +1891,21 @@ body {
   }
 
   .modal {
-    padding: 20px 16px 32px;
+    border-radius: 22px 22px 0 0;
+    padding: 14px 14px max(18px, calc(18px + env(safe-area-inset-bottom)));
+    max-height: calc(100vh - max(10px, env(safe-area-inset-top)));
+    max-height: calc(100dvh - max(10px, env(safe-area-inset-top)));
+  }
+
+  .modal-handle {
+    margin-bottom: 14px;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
   }
 
   .act-btn {
@@ -1895,29 +1915,46 @@ body {
   .modal-header-row {
     flex-wrap: wrap;
     gap: 8px;
+    padding-right: 38px;
+    margin-bottom: 12px;
+  }
+
+  .modal-badge {
+    font-size: 9px;
+    padding: 4px 10px;
   }
 
   .modal-meaning-chip {
-    font-size: 13px;
-    padding: 5px 10px;
+    flex: 1 1 100%;
+    margin-left: 0;
+    font-size: 12.5px;
+    line-height: 1.25;
+    padding: 6px 10px;
+    white-space: normal;
   }
 
   .pron-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
   .pron-arrow {
     transform: rotate(90deg);
     justify-self: center;
+    font-size: 16px;
+    line-height: 1;
+    margin: -2px 0;
   }
 
   .pron-card {
-    padding: 12px 12px 14px;
+    border-radius: 14px;
+    padding: 10px 10px 12px;
+    gap: 6px;
   }
 
   .pron-word {
-    font-size: 22px;
+    font-size: 21px;
   }
 
   .pron-ipa {
@@ -1929,34 +1966,61 @@ body {
   }
 
   .pron-btn {
+    min-height: 34px;
     padding: 7px 10px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
-  .speed-row {
-    padding: 12px 12px 14px;
+  .speed-bar {
+    align-items: stretch;
+    gap: 8px;
+    padding: 9px 10px;
+    margin-bottom: 12px;
   }
 
-  .speed-presets {
-    gap: 6px;
+  .speed-bar-lbl {
+    width: 100%;
+    line-height: 1;
   }
 
-  .speed-preset {
-    padding: 6px 10px;
-    font-size: 12px;
+  .speed-chips {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .speed-chip {
+    min-width: 0;
+    padding: 7px 6px;
+    font-size: 11px;
   }
 
   .ex-card {
-    padding: 12px 12px 14px;
+    border-radius: 12px;
+    padding: 10px 10px 12px;
+  }
+
+  .ex-block {
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
   .ex-text {
-    font-size: 14px;
+    font-size: 13.5px;
+    line-height: 1.45;
   }
 
   .ex-mini-play {
     width: 24px;
     height: 24px;
+  }
+
+  .modal-gif {
+    min-height: 118px;
+    border-radius: 12px;
+  }
+
+  .modal-gif img {
+    max-height: 150px;
   }
 
   .quiz-stage {
