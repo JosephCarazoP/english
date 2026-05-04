@@ -928,9 +928,9 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 200;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding-top: max(16px, env(safe-area-inset-top));
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
 }
 
 .overlay.open {
@@ -939,50 +939,61 @@ body {
 
 .modal {
   background: color-mix(in srgb, var(--surface) 96%, var(--bg));
-  border-radius: 28px 28px 0 0;
-  padding: 22px 24px 34px;
+  border-radius: 28px;
+  padding: 24px;
   width: 100%;
-  max-width: 540px;
+  max-width: 820px;
   max-height: calc(100vh - max(16px, env(safe-area-inset-top)));
   max-height: calc(100dvh - max(16px, env(safe-area-inset-top)));
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.92fr);
+  grid-template-areas:
+    "handle handle"
+    "header header"
+    "pron speed"
+    "examples gif";
+  gap: 16px;
   animation: modalUp 0.38s cubic-bezier(0.34, 1.2, 0.64, 1) both;
   border: 1px solid var(--border);
-  border-bottom: 0;
-  box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
 }
 
 @keyframes modalUp {
   from {
-    transform: translateY(100%);
+    transform: translateY(18px) scale(0.98);
     opacity: 0;
   }
 
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
 .modal-handle {
+  grid-area: handle;
   width: 42px;
   height: 4px;
   background: var(--border);
   border-radius: 4px;
-  margin: 0 auto 18px;
+  margin: -4px auto 0;
 }
 
 /* ── HEADER ROW: badge + meaning chip ── */
 .modal-header-row {
+  grid-area: header;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
   padding-right: 42px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
 }
 
 .modal-title-block {
@@ -993,11 +1004,11 @@ body {
 }
 
 .modal-title-icon {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: 16px;
   color: var(--accent-2);
   background: var(--accent-2-soft);
   border: 1px solid color-mix(in srgb, var(--accent-2) 20%, var(--border));
@@ -1010,7 +1021,7 @@ body {
 
 .modal-title {
   display: block;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -1047,17 +1058,18 @@ body {
 
 /* ── HERO: pron-grid (Present + arrow + Past) ── */
 .pron-grid {
+  grid-area: pron;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
   align-items: stretch;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .pron-card {
   position: relative;
-  padding: 18px 16px 15px;
-  border-radius: 20px;
+  padding: 20px;
+  border-radius: 22px;
   border: 1px solid var(--border);
   background: var(--bg);
   display: flex;
@@ -1069,7 +1081,7 @@ body {
 }
 
 .pron-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
@@ -1106,7 +1118,7 @@ body {
 
 .pron-word {
   font-family: "DM Sans", sans-serif;
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 800;
   letter-spacing: 0;
   color: var(--text);
@@ -1199,9 +1211,10 @@ body {
 }
 
 .pron-arrow {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   align-self: center;
+  justify-self: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1209,19 +1222,22 @@ body {
   color: var(--subtext);
   background: var(--surface);
   border: 1px solid var(--border);
+  transform: rotate(90deg);
 }
 
 /* ── UNIFIED SPEED SELECTOR (3 chips) ── */
 .speed-bar {
+  grid-area: speed;
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  align-self: start;
   gap: 12px;
-  padding: 11px 12px;
-  margin-bottom: 16px;
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--accent-2) 7%, var(--bg));
+  padding: 16px;
+  margin-bottom: 0;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--accent-2) 8%, var(--bg));
   border: 1px solid var(--border);
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .speed-bar-lbl {
@@ -1244,8 +1260,8 @@ body {
 
 .speed-chips {
   display: flex;
-  gap: 6px;
-  flex: 1;
+  gap: 8px;
+  flex: 0 0 auto;
   background: var(--bg);
   padding: 4px;
   border-radius: 999px;
@@ -1300,15 +1316,16 @@ body {
 
 /* ── EXAMPLES ── */
 .ex-block {
+  grid-area: examples;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .ex-card {
-  padding: 13px 14px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 18px;
   background: color-mix(in srgb, var(--surface) 72%, var(--bg));
   border: 1px solid var(--border);
   border-left-width: 4px;
@@ -1397,10 +1414,11 @@ body {
 
 /* ── GIF ── */
 .modal-gif {
+  grid-area: gif;
   border-radius: 18px;
   overflow: hidden;
   background: var(--bg);
-  min-height: 160px;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1409,7 +1427,8 @@ body {
 
 .modal-gif img {
   width: 100%;
-  max-height: 210px;
+  height: 100%;
+  max-height: none;
   object-fit: cover;
   display: block;
 }
@@ -1552,7 +1571,8 @@ body {
   background: var(--accent-2-soft);
   border: 1px solid color-mix(in srgb, var(--accent-2) 20%, var(--border));
   border-radius: 999px;
-  padding: 7px 10px;
+  min-height: 38px;
+  padding: 8px 10px;
   white-space: nowrap;
 }
 
@@ -2306,6 +2326,11 @@ body {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
+  .overlay {
+    align-items: flex-end;
+    padding: max(10px, env(safe-area-inset-top)) 0 0;
+  }
+
   header {
     padding: 14px 18px;
   }
@@ -2332,6 +2357,17 @@ body {
     padding: 14px 14px max(18px, calc(18px + env(safe-area-inset-bottom)));
     max-height: calc(100vh - max(10px, env(safe-area-inset-top)));
     max-height: calc(100dvh - max(10px, env(safe-area-inset-top)));
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "handle"
+      "header"
+      "pron"
+      "speed"
+      "examples"
+      "gif";
+    gap: 12px;
+    border-bottom: 0;
   }
 
   .modal-handle {
@@ -2353,7 +2389,8 @@ body {
     align-items: flex-start;
     gap: 10px;
     padding-right: 38px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
+    padding-bottom: 10px;
   }
 
   .modal-title-block {
@@ -2388,7 +2425,7 @@ body {
   .pron-grid {
     grid-template-columns: 1fr;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .pron-arrow {
@@ -2427,7 +2464,7 @@ body {
     align-items: stretch;
     gap: 8px;
     padding: 9px 10px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .speed-bar-lbl {
@@ -2453,7 +2490,7 @@ body {
 
   .ex-block {
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .ex-text {
@@ -2472,6 +2509,7 @@ body {
   }
 
   .modal-gif img {
+    height: auto;
     max-height: 150px;
   }
 

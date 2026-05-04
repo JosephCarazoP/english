@@ -978,9 +978,10 @@ if ("speechSynthesis" in window) {
 function resolveSpeechRate(speedValue, kind) {
   const speed = parseFloat(speedValue);
   const isSentence = kind === "sentence";
-  if (speed <= 0.75) return isSentence ? 0.62 : 0.54;
-  if (speed >= 1.15) return isSentence ? 1.08 : 1.12;
-  return isSentence ? 0.9 : 0.92;
+  if (speed <= 0.55) return isSentence ? 0.42 : 0.28;
+  if (speed <= 0.75) return isSentence ? 0.48 : 0.34;
+  if (speed >= 1.15) return isSentence ? 1.14 : 1.18;
+  return isSentence ? 0.88 : 0.9;
 }
 
 function prepareSpeechText(text, kind) {
@@ -1010,12 +1011,12 @@ function speakVerb(text, opts) {
   if (typeof opts.rate === "number") {
     rate = opts.rate;
   } else if (opts.rate === "slow") {
-    rate = kind === "sentence" ? 0.56 : 0.48;
+    rate = kind === "sentence" ? 0.42 : 0.28;
   } else {
     rate = resolveSpeechRate(currentSpeed, kind);
   }
   // Web Speech rate is clamped 0.1–2. Stay in safe range.
-  rate = Math.min(2, Math.max(0.3, rate));
+  rate = Math.min(2, Math.max(0.18, rate));
 
   const utter = new SpeechSynthesisUtterance(speechText);
   utter.lang = opts.lang || "en-US";
@@ -1181,9 +1182,9 @@ function applyVFCSettings(s) {
   // Audio speed
   const v = parseFloat(s.audioSpeed || "1");
   if (!isNaN(v) && v > 0) {
-    currentSpeed = v;
+    currentSpeed = (v > 0.55 && v <= 0.75) ? 0.45 : v;
     document.querySelectorAll(".speed-chip").forEach(chip => {
-      const active = Math.abs(parseFloat(chip.dataset.speed) - v) < 0.01;
+      const active = Math.abs(parseFloat(chip.dataset.speed) - currentSpeed) < 0.01;
       chip.classList.toggle("active", active);
       chip.setAttribute("aria-checked", String(active));
     });
@@ -1601,10 +1602,11 @@ function closeVocabularyLibrary() {
   document.body.style.overflow = "";
 }
 
-/* ── SPEED CONTROL (3 chips only: 0.7 / 1 / 1.2) ── */
+/* ── SPEED CONTROL (3 chips only: slow / normal / fast) ── */
 const SPEED_KEY = "vfc_speed";
 function setSpeed(value) {
-  const v = Math.min(1.4, Math.max(0.4, parseFloat(value) || 1));
+  let v = Math.min(1.4, Math.max(0.25, parseFloat(value) || 1));
+  if (v > 0.55 && v <= 0.75) v = 0.45;
   currentSpeed = v;
   try { localStorage.setItem(SPEED_KEY, String(v)); } catch (e) { }
   syncSpeedUI();
@@ -1612,7 +1614,8 @@ function setSpeed(value) {
 
 function syncSpeedUI() {
   document.querySelectorAll(".speed-chip, .speed-preset").forEach(b => {
-    const matches = Math.abs(parseFloat(b.dataset.speed) - currentSpeed) < 0.01;
+    const speed = parseFloat(b.dataset.speed);
+    const matches = Math.abs(speed - currentSpeed) < 0.01 || (speed <= 0.55 && currentSpeed <= 0.75);
     b.classList.toggle("active", matches);
     b.setAttribute("aria-checked", matches ? "true" : "false");
   });
@@ -1622,7 +1625,10 @@ function syncSpeedUI() {
 (function restoreSpeed() {
   try {
     const saved = parseFloat(localStorage.getItem(SPEED_KEY));
-    if (!isNaN(saved) && saved > 0) currentSpeed = Math.min(1.4, Math.max(0.4, saved));
+    if (!isNaN(saved) && saved > 0) {
+      currentSpeed = Math.min(1.4, Math.max(0.25, saved));
+      if (currentSpeed > 0.55 && currentSpeed <= 0.75) currentSpeed = 0.45;
+    }
   } catch (e) { }
 })();
 
@@ -3046,7 +3052,7 @@ function closeGoalsModal() {
     chip.addEventListener("click", () => {
       const v = parseFloat(chip.dataset.speed);
       const s = _gReadStats();
-      if (v <= 0.7) s.usedSlow = true;
+    if (v <= 0.55) s.usedSlow = true;
       if (v >= 1.2) s.usedFast = true;
       _gWriteStats(s);
       checkGoals({ silent: false });
@@ -3152,7 +3158,7 @@ document.querySelectorAll(".speed-chip").forEach(chip => {
   chip.addEventListener("click", () => {
     const v = parseFloat(chip.dataset.speed);
     const s = _gReadStats();
-    if (v <= 0.7) s.usedSlow = true;
+    if (v <= 0.55) s.usedSlow = true;
     if (v >= 1.2) s.usedFast = true;
     _gWriteStats(s);
     checkGoals({ silent: false });
@@ -3305,7 +3311,13 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     const tEl = document.getElementById("settingTheme");
     const aEl = document.getElementById("settingAudioSpeed");
     if (tEl) tEl.value = s.theme;
-    if (aEl) aEl.value = s.audioSpeed;
+    if (aEl) {
+      if (parseFloat(s.audioSpeed) > 0.55 && parseFloat(s.audioSpeed) <= 0.75) {
+        s.audioSpeed = "0.45";
+        saveVFCSettings(s);
+      }
+      aEl.value = s.audioSpeed;
+    }
     _syncToggle("settingAnimations", s.animations === "on");
     _syncToggle("settingAutoPlay", s.autoPlay === "on");
     _syncVerbUI();
