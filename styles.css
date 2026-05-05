@@ -2204,6 +2204,83 @@ body {
   font-weight: 700;
 }
 
+/* ── Sentence completion mechanic ── */
+.qsent-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.qsent-text {
+  width: 100%;
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--accent-soft) 52%, var(--bg));
+  border: 1.5px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.qsent-blank {
+  display: inline-block;
+  width: clamp(82px, 24vw, 132px);
+  height: 0.9em;
+  margin: 0 4px;
+  border-bottom: 3px solid var(--accent);
+  transform: translateY(3px);
+}
+
+.qsent-hint {
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+  border-radius: 999px;
+  padding: 7px 12px;
+}
+
+.qsent-wrap input {
+  font-family: "DM Mono", monospace;
+  font-size: 19px;
+  font-weight: 500;
+  text-align: center;
+  width: min(100%, 270px);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.qsent-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+  transform: translateY(-1px);
+}
+
+.qsent-wrap input.right {
+  border-color: var(--quiz-ok);
+  color: var(--quiz-ok);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--quiz-ok) 14%, transparent);
+}
+
+.qsent-wrap input.wrong {
+  border-color: var(--quiz-no);
+  color: var(--quiz-no);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--quiz-no) 14%, transparent);
+}
+
 /* ── Bubble mechanic ── */
 .qbubble-wrap {
   display: flex;
@@ -2625,6 +2702,21 @@ body {
 
   .qtype-wrap input {
     width: min(100%, 280px);
+  }
+
+  .qsent-text {
+    font-size: 17px;
+    line-height: 1.45;
+    padding: 14px 12px;
+  }
+
+  .qsent-wrap input {
+    width: min(100%, 280px);
+    font-size: 18px;
+  }
+
+  .qsent-blank {
+    width: clamp(72px, 32vw, 112px);
   }
 
   .qbubble-canvas {

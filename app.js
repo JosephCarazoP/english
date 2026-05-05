@@ -1653,10 +1653,44 @@ function getDistractors(correctPast, pool) {
   return shuffle(pool.filter(v => v.past !== correctPast)).slice(0, 3).map(v => v.past);
 }
 
+function normalizeQuizAnswer(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[.,!?;:]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getPastTargets(verb) {
+  return String(verb.past || "")
+    .toLowerCase()
+    .split("/")
+    .map(s => normalizeQuizAnswer(s))
+    .filter(Boolean);
+}
+
+function buildSentencePrompt(verb) {
+  const html = verb.sentencePast || "";
+  let answer = "";
+  let promptHtml = html.replace(/<b>(.*?)<\/b>/i, (_, raw) => {
+    answer = stripHtml(raw);
+    return '<span class="qsent-blank" aria-hidden="true"></span>';
+  });
+
+  if (!answer) {
+    answer = String(verb.past || "").split("/")[0].trim();
+    promptHtml = stripHtml(html).replace(answer, "________");
+  }
+
+  const meaning = VERB_MEANINGS_ES[verb.present] || verb.present;
+  const targets = Array.from(new Set([normalizeQuizAnswer(answer), ...getPastTargets(verb)])).filter(Boolean);
+  return { promptHtml, answer, targets, hint: `${meaning} en pasado` };
+}
+
 /* ── Build question ── */
 function buildQuestion(verb, pool) {
   const roll = Math.random();
-  if (roll < 0.333) {
+  if (roll < 0.25) {
     const distractor = getDistractor(verb.past, pool);
     const correctOnRight = Math.random() > 0.5;
     return {
@@ -1666,8 +1700,11 @@ function buildQuestion(verb, pool) {
       correctSide: correctOnRight ? "right" : "left",
     };
   }
-  if (roll < 0.666) {
+  if (roll < 0.50) {
     return { mech: "type", label: "Type the past tense", verb };
+  }
+  if (roll < 0.75) {
+    return { mech: "sentence", label: "Complete the sentence", verb, sentence: buildSentencePrompt(verb) };
   }
   const opts = shuffle([verb.past, ...getDistractors(verb.past, pool)]);
   return { mech: "choice", label: "Pop the correct bubble", opts, correct: verb.past, verb };
@@ -1799,6 +1836,12 @@ const QUIZ_LABELS = {
     color: "var(--accent)",
     bg: "var(--accent-soft)",
   },
+  sentence: {
+    icon: "T",
+    text: "Complete the sentence",
+    color: "var(--accent)",
+    bg: "var(--accent-soft)",
+  },
 };
 
 /* ── Render current quiz question ── */
@@ -1822,7 +1865,7 @@ function renderQuizQuestion(animateIn = false) {
 
   c1.style.cssText = "";
   c1.className = "quiz-card top";
-  if (q.mech === "choice") c1.classList.add("no-drag");
+  if (q.mech !== "swipe") c1.classList.add("no-drag");
   if (animateIn) {
     void c1.offsetWidth;
     c1.classList.add("anim-enter");
@@ -1873,8 +1916,8 @@ function renderQuizQuestion(animateIn = false) {
       if (e.key !== "Enter") return;
       e.preventDefault();
       if (quizLocked) return;
-      const val = this.value.trim().toLowerCase();
-      const targets = q.verb.past.toLowerCase().split("/").map(s => s.trim());
+      const val = normalizeQuizAnswer(this.value);
+      const targets = getPastTargets(q.verb);
       const isOk = targets.includes(val);
       this.className = isOk ? "right" : "wrong";
       const fb = document.getElementById("qTypeFb");
@@ -1885,6 +1928,35 @@ function renderQuizQuestion(animateIn = false) {
       registerQuizAnswer(q.verb, isOk);
       updateQuizHeader();
       animateToNextQuestion("up", 820);
+    });
+    setTimeout(() => { try { inp.focus(); } catch (e) { } }, 80);
+
+  } else if (q.mech === "sentence") {
+    dirRow.style.display = "none";
+    body.innerHTML =
+      `<div class="qsent-wrap">` +
+      `<div class="qsent-text">${q.sentence.promptHtml}</div>` +
+      `<div class="qsent-hint">(${q.sentence.hint})</div>` +
+      `<input id="qSentenceInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="complete the blank..." />` +
+      `<div class="qtype-fb" id="qSentenceFb"></div>` +
+      `</div>`;
+
+    const inp = document.getElementById("qSentenceInput");
+    inp.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      if (quizLocked) return;
+      const val = normalizeQuizAnswer(this.value);
+      const isOk = q.sentence.targets.includes(val);
+      this.className = isOk ? "right" : "wrong";
+      const fb = document.getElementById("qSentenceFb");
+      fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.sentence.answer;
+      fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
+      this.disabled = true;
+      quizLocked = true;
+      registerQuizAnswer(q.verb, isOk);
+      updateQuizHeader();
+      animateToNextQuestion("up", 900);
     });
     setTimeout(() => { try { inp.focus(); } catch (e) { } }, 80);
 
