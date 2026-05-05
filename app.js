@@ -1088,23 +1088,274 @@ function buildShareText(kind) {
   );
 }
 
+function getShareStats(kind) {
+  if (kind === "quiz") {
+    const total = quizOriginalTotal || quizQuestions.length || 0;
+    const pct = total ? Math.round((quizOk / total) * 100) : 0;
+    return {
+      kind,
+      title: "Final Quiz",
+      subtitle: "Verb Flashcards",
+      primaryLabel: "Score",
+      primaryValue: pct,
+      leftLabel: "Correct",
+      leftValue: quizOk,
+      rightLabel: "Wrong",
+      rightValue: quizNo,
+      total,
+      accent: "#7c5cfc",
+      accent2: "#0dbfa0",
+      warning: "#f43f5e",
+    };
+  }
+
+  const total = originalDeckLen || deck.length || 0;
+  const pct = total ? Math.round((correct / total) * 100) : 0;
+  return {
+    kind,
+    title: "Round Complete",
+    subtitle: "Verb Flashcards",
+    primaryLabel: "Mastery",
+    primaryValue: pct,
+    leftLabel: "Learned",
+    leftValue: correct,
+    rightLabel: "Skipped",
+    rightValue: skipped,
+    total,
+    accent: "#ff6b35",
+    accent2: "#7c5cfc",
+    warning: "#9a9690",
+  };
+}
+
+function canvasRoundRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function canvasFillRoundRect(ctx, x, y, w, h, r, fill) {
+  canvasRoundRect(ctx, x, y, w, h, r);
+  ctx.fillStyle = fill;
+  ctx.fill();
+}
+
+function canvasStrokeRoundRect(ctx, x, y, w, h, r, stroke, lineWidth) {
+  canvasRoundRect(ctx, x, y, w, h, r);
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = lineWidth || 1;
+  ctx.stroke();
+}
+
+function drawCenteredText(ctx, text, x, y, maxWidth, fontSize, weight, color) {
+  let size = fontSize;
+  do {
+    ctx.font = `${weight || 700} ${size}px "DM Sans", Arial, sans-serif`;
+    if (ctx.measureText(text).width <= maxWidth || size <= 18) break;
+    size -= 2;
+  } while (size > 18);
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, x, y);
+}
+
+function drawMetricCard(ctx, x, y, w, h, label, value, color) {
+  canvasFillRoundRect(ctx, x, y, w, h, 28, "rgba(255,255,255,0.82)");
+  canvasStrokeRoundRect(ctx, x, y, w, h, 28, "rgba(26,25,22,0.08)", 2);
+  ctx.fillStyle = color;
+  ctx.font = '800 54px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(String(value), x + 34, y + 70);
+  ctx.fillStyle = "#7a756d";
+  ctx.font = '700 24px "DM Mono", Consolas, monospace';
+  ctx.fillText(label.toUpperCase(), x + 34, y + 112);
+}
+
+function drawShareDashboard(kind) {
+  const stats = getShareStats(kind);
+  const W = 1200;
+  const H = 1600;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, "#faf8f5");
+  bg.addColorStop(0.45, "#f6f0ea");
+  bg.addColorStop(1, "#f0ecff");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.globalAlpha = 0.35;
+  ctx.fillStyle = stats.accent;
+  ctx.beginPath();
+  ctx.arc(1000, 150, 260, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = stats.accent2;
+  ctx.beginPath();
+  ctx.arc(130, 1360, 280, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  canvasFillRoundRect(ctx, 80, 80, 1040, 1440, 42, "rgba(255,255,255,0.74)");
+  canvasStrokeRoundRect(ctx, 80, 80, 1040, 1440, 42, "rgba(26,25,22,0.10)", 2);
+
+  canvasFillRoundRect(ctx, 130, 130, 92, 92, 26, stats.accent);
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 8;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(166, 180);
+  ctx.lineTo(166, 154);
+  ctx.lineTo(194, 154);
+  ctx.moveTo(166, 180);
+  ctx.lineTo(202, 180);
+  ctx.stroke();
+
+  ctx.fillStyle = "#1a1916";
+  ctx.font = '800 58px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(stats.title, 250, 180);
+  ctx.fillStyle = "#7a756d";
+  ctx.font = '700 25px "DM Mono", Consolas, monospace';
+  ctx.fillText(stats.subtitle.toUpperCase(), 252, 222);
+
+  const dateText = new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#7c5cfc";
+  ctx.font = '800 28px "DM Sans", Arial, sans-serif';
+  ctx.fillText(dateText, 1060, 177);
+
+  const cx = 600;
+  const cy = 585;
+  const radius = 218;
+  ctx.lineWidth = 34;
+  ctx.strokeStyle = "#ece9e3";
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.stroke();
+
+  const start = -Math.PI / 2;
+  const end = start + Math.PI * 2 * (stats.primaryValue / 100);
+  const ring = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
+  ring.addColorStop(0, stats.accent);
+  ring.addColorStop(1, stats.accent2);
+  ctx.strokeStyle = ring;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, start, end);
+  ctx.stroke();
+
+  drawCenteredText(ctx, `${stats.primaryValue}%`, cx, cy - 10, 360, 112, 800, "#1a1916");
+  drawCenteredText(ctx, stats.primaryLabel.toUpperCase(), cx, cy + 82, 320, 25, 800, "#9a9690");
+
+  drawMetricCard(ctx, 150, 900, 430, 160, stats.leftLabel, stats.leftValue, stats.accent2);
+  drawMetricCard(ctx, 620, 900, 430, 160, stats.rightLabel, stats.rightValue, stats.warning);
+
+  canvasFillRoundRect(ctx, 150, 1115, 900, 150, 30, "#1a1916");
+  ctx.fillStyle = "#faf8f5";
+  ctx.font = '800 42px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = "left";
+  ctx.fillText(`${stats.total} total verbs`, 198, 1178);
+  ctx.fillStyle = "rgba(250,248,245,0.70)";
+  ctx.font = '600 24px "DM Sans", Arial, sans-serif';
+  ctx.fillText("Practice, review, repeat.", 200, 1222);
+
+  const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
+  ctx.fillStyle = "#7a756d";
+  ctx.font = '700 22px "DM Mono", Consolas, monospace';
+  ctx.textAlign = "center";
+  ctx.fillText(url ? url.replace(/^https?:\/\//, "") : "Verb Flashcards", 600, 1430);
+
+  return canvas;
+}
+
+function canvasToPngFile(canvas, name) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (!blob) {
+        reject(new Error("No se pudo crear la imagen."));
+        return;
+      }
+      resolve(new File([blob], name, { type: "image/png" }));
+    }, "image/png", 0.96);
+  });
+}
+
+function downloadShareImage(file) {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = file.name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 async function shareResults(kind) {
   const text = buildShareText(kind);
   const title = kind === "quiz" ? "My Final Quiz Results" : "My Flashcards Round";
   const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : undefined;
+  let imageFile = null;
 
-  // 1. Try native Web Share API (mobile + some desktops)
+  try {
+    const canvas = drawShareDashboard(kind);
+    imageFile = await canvasToPngFile(canvas, `verb-flashcards-${kind}-results.png`);
+  } catch (err) {
+    imageFile = null;
+  }
+
+  // 1. Try native Web Share API with a generated PNG dashboard.
+  if (imageFile && navigator.share) {
+    try {
+      const payload = { title, text, files: [imageFile] };
+      if (!navigator.canShare || navigator.canShare(payload)) {
+        await navigator.share(payload);
+        return;
+      }
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+    }
+  }
+
+  // 2. Fallback: copy the image to clipboard when supported.
+  if (imageFile && navigator.clipboard && window.ClipboardItem) {
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": imageFile })]);
+      showShareToast("Image copied to clipboard ✓");
+      return;
+    } catch (err) { /* ignore */ }
+  }
+
+  // 3. Fallback: download the dashboard image.
+  if (imageFile) {
+    downloadShareImage(imageFile);
+    showShareToast("Dashboard image downloaded ✓");
+    return;
+  }
+
+  // 4. Last fallback: share/copy text.
   if (navigator.share) {
     try {
       await navigator.share({ title, text, url });
       return;
     } catch (err) {
-      // user cancelled or share failed; fall through to clipboard
       if (err && err.name === "AbortError") return;
     }
   }
 
-  // 2. Fallback: copy to clipboard
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(text);
