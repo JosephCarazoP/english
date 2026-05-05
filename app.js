@@ -1188,26 +1188,41 @@ function drawShareDashboard(kind) {
   const ctx = canvas.getContext("2d");
 
   const bg = ctx.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0, "#faf8f5");
-  bg.addColorStop(0.45, "#f6f0ea");
-  bg.addColorStop(1, "#f0ecff");
+  bg.addColorStop(0, "#fff7ed");
+  bg.addColorStop(0.42, "#faf8f5");
+  bg.addColorStop(1, "#eef9f6");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
   ctx.save();
-  ctx.globalAlpha = 0.35;
+  ctx.globalAlpha = 0.18;
   ctx.fillStyle = stats.accent;
   ctx.beginPath();
-  ctx.arc(1000, 150, 260, 0, Math.PI * 2);
+  ctx.arc(980, 190, 300, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = stats.accent2;
   ctx.beginPath();
-  ctx.arc(130, 1360, 280, 0, Math.PI * 2);
+  ctx.arc(170, 1290, 330, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  canvasFillRoundRect(ctx, 80, 80, 1040, 1440, 42, "rgba(255,255,255,0.74)");
-  canvasStrokeRoundRect(ctx, 80, 80, 1040, 1440, 42, "rgba(26,25,22,0.10)", 2);
+  canvasFillRoundRect(ctx, 78, 78, 1044, 1444, 48, "rgba(255,255,255,0.78)");
+  canvasStrokeRoundRect(ctx, 78, 78, 1044, 1444, 48, "rgba(26,25,22,0.10)", 2);
+
+  const hero = ctx.createLinearGradient(130, 270, 1070, 850);
+  hero.addColorStop(0, stats.accent);
+  hero.addColorStop(1, stats.accent2);
+  canvasFillRoundRect(ctx, 130, 280, 940, 560, 44, hero);
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.arc(930, 360, 180, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(245, 790, 220, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
 
   canvasFillRoundRect(ctx, 130, 130, 92, 92, 26, stats.accent);
   ctx.strokeStyle = "#fff";
@@ -1238,32 +1253,35 @@ function drawShareDashboard(kind) {
   ctx.fillText(dateText, 1060, 177);
 
   const cx = 600;
-  const cy = 585;
-  const radius = 218;
+  const cy = 560;
+  const radius = 185;
   ctx.lineWidth = 34;
-  ctx.strokeStyle = "#ece9e3";
+  ctx.strokeStyle = "rgba(255,255,255,0.30)";
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
   ctx.stroke();
 
   const start = -Math.PI / 2;
   const end = start + Math.PI * 2 * (stats.primaryValue / 100);
-  const ring = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
-  ring.addColorStop(0, stats.accent);
-  ring.addColorStop(1, stats.accent2);
-  ctx.strokeStyle = ring;
+  ctx.strokeStyle = "#ffffff";
   ctx.lineCap = "round";
   ctx.beginPath();
   ctx.arc(cx, cy, radius, start, end);
   ctx.stroke();
 
-  drawCenteredText(ctx, `${stats.primaryValue}%`, cx, cy - 10, 360, 112, 800, "#1a1916");
-  drawCenteredText(ctx, stats.primaryLabel.toUpperCase(), cx, cy + 82, 320, 25, 800, "#9a9690");
+  drawCenteredText(ctx, `${stats.primaryValue}%`, cx, cy - 8, 340, 118, 800, "#ffffff");
+  drawCenteredText(ctx, stats.primaryLabel.toUpperCase(), cx, cy + 90, 320, 25, 800, "rgba(255,255,255,0.76)");
 
-  drawMetricCard(ctx, 150, 900, 430, 160, stats.leftLabel, stats.leftValue, stats.accent2);
-  drawMetricCard(ctx, 620, 900, 430, 160, stats.rightLabel, stats.rightValue, stats.warning);
+  canvasFillRoundRect(ctx, 190, 755, 820, 52, 26, "rgba(255,255,255,0.18)");
+  ctx.fillStyle = "#ffffff";
+  ctx.font = '700 24px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = "center";
+  ctx.fillText(`${stats.leftValue} ${stats.leftLabel.toLowerCase()}  /  ${stats.rightValue} ${stats.rightLabel.toLowerCase()}`, 600, 790);
 
-  canvasFillRoundRect(ctx, 150, 1115, 900, 150, 30, "#1a1916");
+  drawMetricCard(ctx, 150, 895, 430, 164, stats.leftLabel, stats.leftValue, stats.accent2);
+  drawMetricCard(ctx, 620, 895, 430, 164, stats.rightLabel, stats.rightValue, stats.warning);
+
+  canvasFillRoundRect(ctx, 150, 1115, 900, 150, 34, "#1a1916");
   ctx.fillStyle = "#faf8f5";
   ctx.font = '800 42px "DM Sans", Arial, sans-serif';
   ctx.textAlign = "left";
@@ -1273,10 +1291,13 @@ function drawShareDashboard(kind) {
   ctx.fillText("Practice, review, repeat.", 200, 1222);
 
   const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
-  ctx.fillStyle = "#7a756d";
+  ctx.fillStyle = "#6b6760";
   ctx.font = '700 22px "DM Mono", Consolas, monospace';
   ctx.textAlign = "center";
-  ctx.fillText(url ? url.replace(/^https?:\/\//, "") : "Verb Flashcards", 600, 1430);
+  ctx.fillText(url ? url.replace(/^https?:\/\//, "") : "Verb Flashcards", 600, 1408);
+  ctx.fillStyle = "#1a1916";
+  ctx.font = '800 28px "DM Sans", Arial, sans-serif';
+  ctx.fillText("Made by Joseph Carazo", 600, 1454);
 
   return canvas;
 }
