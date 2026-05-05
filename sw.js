@@ -1,6 +1,27 @@
 /* ── Verb Flashcards — Service Worker ── */
-const CACHE = "vfc-v1";
-const PRECACHE = ["./", "./index.html", "./app.js", "./styles.css", "./manifest.webmanifest"];
+const CACHE = "vfc-v2";
+const PRECACHE = [
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./css/base.css",
+  "./css/flashcards.css",
+  "./css/modals.css",
+  "./css/quiz.css",
+  "./css/status-share-streak.css",
+  "./css/goals-settings.css",
+  "./css/onboarding-pwa-level.css",
+  "./js/data.js",
+  "./js/streak.js",
+  "./js/shared.js",
+  "./js/flashcards.js",
+  "./js/modals.js",
+  "./js/quiz.js",
+  "./js/app-init.js",
+  "./js/goals.js",
+  "./js/settings-pwa.js",
+  "./manifest.webmanifest"
+];
 
 /* Install: pre-cache shell assets */
 self.addEventListener("install", e => {
