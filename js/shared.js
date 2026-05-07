@@ -258,17 +258,79 @@ function drawCenteredText(ctx, text, x, y, maxWidth, fontSize, weight, color) {
   ctx.fillText(text, x, y);
 }
 
-function drawMetricCard(ctx, x, y, w, h, label, value, color) {
-  canvasFillRoundRect(ctx, x, y, w, h, 28, "rgba(255,255,255,0.82)");
-  canvasStrokeRoundRect(ctx, x, y, w, h, 28, "rgba(26,25,22,0.08)", 2);
+function canvasShadow(ctx, color, blur, offsetY) {
+  ctx.shadowColor = color;
+  ctx.shadowBlur = blur;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = offsetY || 0;
+}
+
+function drawFittedText(ctx, text, x, y, maxWidth, fontSize, weight, color, align) {
+  let size = fontSize;
+  do {
+    ctx.font = `${weight || 700} ${size}px "DM Sans", Arial, sans-serif`;
+    if (ctx.measureText(text).width <= maxWidth || size <= 20) break;
+    size -= 2;
+  } while (size > 20);
   ctx.fillStyle = color;
-  ctx.font = '800 54px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = align || "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(text, x, y);
+}
+
+function drawSharePill(ctx, x, y, w, h, text, fill, color, align) {
+  canvasFillRoundRect(ctx, x, y, w, h, h / 2, fill);
+  ctx.fillStyle = color;
+  ctx.font = '800 22px "DM Mono", Consolas, monospace';
+  ctx.textAlign = align || "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text.toUpperCase(), align === "left" ? x + 28 : x + w / 2, y + h / 2 + 1);
+}
+
+function drawShareMetricCard(ctx, x, y, w, h, label, value, color, note) {
+  ctx.save();
+  canvasShadow(ctx, "rgba(26,25,22,0.08)", 22, 10);
+  canvasFillRoundRect(ctx, x, y, w, h, 30, "#ffffff");
+  ctx.restore();
+  canvasStrokeRoundRect(ctx, x, y, w, h, 30, "rgba(26,25,22,0.08)", 2);
+  canvasFillRoundRect(ctx, x + 22, y + 24, 10, h - 48, 999, color);
+
+  ctx.fillStyle = "#1a1916";
+  ctx.font = '900 60px "DM Sans", Arial, sans-serif';
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
-  ctx.fillText(String(value), x + 34, y + 70);
+  ctx.fillText(String(value), x + 56, y + 78);
   ctx.fillStyle = "#7a756d";
-  ctx.font = '700 24px "DM Mono", Consolas, monospace';
-  ctx.fillText(label.toUpperCase(), x + 34, y + 112);
+  ctx.font = '800 22px "DM Mono", Consolas, monospace';
+  ctx.fillText(label.toUpperCase(), x + 58, y + 116);
+  if (note) {
+    ctx.fillStyle = "#9a9690";
+    ctx.font = '600 20px "DM Sans", Arial, sans-serif';
+    ctx.fillText(note, x + 58, y + 148);
+  }
+}
+
+function drawShareLogo(ctx, x, y, size, accent, accent2) {
+  const logoGrad = ctx.createLinearGradient(x, y, x + size, y + size);
+  logoGrad.addColorStop(0, accent);
+  logoGrad.addColorStop(1, accent2);
+
+  ctx.save();
+  canvasShadow(ctx, "rgba(124,92,252,0.22)", 20, 8);
+  canvasFillRoundRect(ctx, x, y, size, size, 26, logoGrad);
+  ctx.restore();
+
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 8;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(x + 30, y + 52);
+  ctx.lineTo(x + 30, y + 26);
+  ctx.lineTo(x + 58, y + 26);
+  ctx.moveTo(x + 30, y + 52);
+  ctx.lineTo(x + 66, y + 52);
+  ctx.stroke();
 }
 
 function drawShareDashboard(kind) {
@@ -282,73 +344,97 @@ function drawShareDashboard(kind) {
 
   const bg = ctx.createLinearGradient(0, 0, W, H);
   bg.addColorStop(0, "#fff7ed");
-  bg.addColorStop(0.42, "#faf8f5");
-  bg.addColorStop(1, "#eef9f6");
+  bg.addColorStop(0.32, "#faf8f5");
+  bg.addColorStop(0.72, "#f0ecff");
+  bg.addColorStop(1, "#e6faf7");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
   ctx.save();
-  ctx.globalAlpha = 0.18;
+  ctx.globalAlpha = 0.16;
+  ctx.strokeStyle = "#1a1916";
+  ctx.lineWidth = 2;
+  for (let x = 90; x <= 1110; x += 78) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x - 420, H);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 0.28;
   ctx.fillStyle = stats.accent;
-  ctx.beginPath();
-  ctx.arc(980, 190, 300, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillRect(0, 0, W, 16);
   ctx.fillStyle = stats.accent2;
-  ctx.beginPath();
-  ctx.arc(170, 1290, 330, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillRect(0, 16, W, 10);
   ctx.restore();
 
-  canvasFillRoundRect(ctx, 78, 78, 1044, 1444, 48, "rgba(255,255,255,0.78)");
-  canvasStrokeRoundRect(ctx, 78, 78, 1044, 1444, 48, "rgba(26,25,22,0.10)", 2);
-
-  const hero = ctx.createLinearGradient(130, 270, 1070, 850);
-  hero.addColorStop(0, stats.accent);
-  hero.addColorStop(1, stats.accent2);
-  canvasFillRoundRect(ctx, 130, 280, 940, 560, 44, hero);
   ctx.save();
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  ctx.arc(930, 360, 180, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(245, 790, 220, 0, Math.PI * 2);
-  ctx.fill();
+  canvasShadow(ctx, "rgba(26,25,22,0.13)", 42, 18);
+  canvasFillRoundRect(ctx, 70, 66, 1060, 1468, 58, "rgba(255,255,255,0.92)");
   ctx.restore();
+  canvasStrokeRoundRect(ctx, 70, 66, 1060, 1468, 58, "rgba(26,25,22,0.09)", 2);
 
-  canvasFillRoundRect(ctx, 130, 130, 92, 92, 26, stats.accent);
-  ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 8;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.beginPath();
-  ctx.moveTo(166, 180);
-  ctx.lineTo(166, 154);
-  ctx.lineTo(194, 154);
-  ctx.moveTo(166, 180);
-  ctx.lineTo(202, 180);
-  ctx.stroke();
+  drawShareLogo(ctx, 130, 126, 92, stats.accent, stats.accent2);
 
   ctx.fillStyle = "#1a1916";
-  ctx.font = '800 58px "DM Sans", Arial, sans-serif';
+  ctx.font = '900 60px "DM Sans", Arial, sans-serif';
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
-  ctx.fillText(stats.title, 250, 180);
+  ctx.fillText(stats.title, 250, 174);
   ctx.fillStyle = "#7a756d";
-  ctx.font = '700 25px "DM Mono", Consolas, monospace';
-  ctx.fillText(stats.subtitle.toUpperCase(), 252, 222);
+  ctx.font = '800 24px "DM Mono", Consolas, monospace';
+  ctx.fillText(stats.subtitle.toUpperCase(), 252, 216);
 
   const dateText = new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  ctx.textAlign = "right";
-  ctx.fillStyle = "#7c5cfc";
-  ctx.font = '800 28px "DM Sans", Arial, sans-serif';
-  ctx.fillText(dateText, 1060, 177);
+  drawSharePill(ctx, 818, 134, 252, 58, dateText, "#f4f0ea", "#6b6760");
 
-  const cx = 600;
-  const cy = 560;
-  const radius = 185;
-  ctx.lineWidth = 34;
+  const hero = ctx.createLinearGradient(130, 284, 1070, 874);
+  hero.addColorStop(0, stats.accent);
+  hero.addColorStop(0.56, stats.accent2);
+  hero.addColorStop(1, stats.accent2);
+  ctx.save();
+  canvasShadow(ctx, "rgba(124,92,252,0.24)", 34, 16);
+  canvasFillRoundRect(ctx, 130, 276, 940, 604, 46, hero);
+  ctx.restore();
+
+  ctx.save();
+  canvasRoundRect(ctx, 130, 276, 940, 604, 46);
+  ctx.clip();
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = "#fff";
+  for (let y = 318; y < 840; y += 76) {
+    ctx.fillRect(158, y, 884, 2);
+  }
+  ctx.globalAlpha = 0.12;
+  ctx.translate(832, 194);
+  ctx.rotate(-0.18);
+  canvasFillRoundRect(ctx, 0, 0, 360, 560, 46, "#ffffff");
+  ctx.translate(-690, 492);
+  ctx.rotate(0.28);
+  canvasFillRoundRect(ctx, 0, 0, 330, 420, 46, "#ffffff");
+  ctx.restore();
+
+  drawSharePill(ctx, 184, 346, 220, 54, stats.primaryLabel, "rgba(255,255,255,0.20)", "#ffffff");
+  drawFittedText(ctx, `${stats.primaryValue}%`, 184, 514, 420, 142, 900, "#ffffff");
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.font = '700 30px "DM Sans", Arial, sans-serif';
+  ctx.fillText(kind === "quiz" ? "final quiz score" : "round mastery", 190, 572);
+
+  ctx.fillStyle = "rgba(255,255,255,0.74)";
+  ctx.font = '600 25px "DM Sans", Arial, sans-serif';
+  ctx.fillText(`${stats.leftValue} ${stats.leftLabel.toLowerCase()} of ${stats.total} total verbs`, 190, 646);
+
+  canvasFillRoundRect(ctx, 184, 714, 428, 32, 16, "rgba(255,255,255,0.22)");
+  const barW = Math.max(24, 428 * (stats.primaryValue / 100));
+  canvasFillRoundRect(ctx, 184, 714, barW, 32, 16, "#ffffff");
+
+  const cx = 806;
+  const cy = 588;
+  const radius = 170;
+  ctx.save();
+  canvasShadow(ctx, "rgba(26,25,22,0.12)", 28, 12);
+  canvasFillRoundRect(ctx, cx - 214, cy - 214, 428, 428, 44, "rgba(255,255,255,0.17)");
+  ctx.restore();
+  ctx.lineWidth = 36;
   ctx.strokeStyle = "rgba(255,255,255,0.30)";
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
@@ -362,35 +448,46 @@ function drawShareDashboard(kind) {
   ctx.arc(cx, cy, radius, start, end);
   ctx.stroke();
 
-  drawCenteredText(ctx, `${stats.primaryValue}%`, cx, cy - 8, 340, 118, 800, "#ffffff");
-  drawCenteredText(ctx, stats.primaryLabel.toUpperCase(), cx, cy + 90, 320, 25, 800, "rgba(255,255,255,0.76)");
+  drawCenteredText(ctx, `${stats.primaryValue}%`, cx, cy - 4, 300, 98, 900, "#ffffff");
+  drawCenteredText(ctx, "COMPLETE", cx, cy + 82, 260, 22, 800, "rgba(255,255,255,0.74)");
 
-  canvasFillRoundRect(ctx, 190, 755, 820, 52, 26, "rgba(255,255,255,0.18)");
-  ctx.fillStyle = "#ffffff";
-  ctx.font = '700 24px "DM Sans", Arial, sans-serif';
+  canvasFillRoundRect(ctx, 184, 792, 830, 46, 23, "rgba(255,255,255,0.18)");
+  ctx.fillStyle = "rgba(255,255,255,0.92)";
+  ctx.font = '800 22px "DM Mono", Consolas, monospace';
   ctx.textAlign = "center";
-  ctx.fillText(`${stats.leftValue} ${stats.leftLabel.toLowerCase()}  /  ${stats.rightValue} ${stats.rightLabel.toLowerCase()}`, 600, 790);
+  ctx.fillText(`${stats.leftLabel}: ${stats.leftValue}   /   ${stats.rightLabel}: ${stats.rightValue}`, 600, 822);
 
-  drawMetricCard(ctx, 150, 895, 430, 164, stats.leftLabel, stats.leftValue, stats.accent2);
-  drawMetricCard(ctx, 620, 895, 430, 164, stats.rightLabel, stats.rightValue, stats.warning);
+  const totalNote = kind === "quiz" ? "questions answered" : "cards reviewed";
+  drawShareMetricCard(ctx, 130, 946, 286, 174, stats.leftLabel, stats.leftValue, stats.accent2, "kept moving");
+  drawShareMetricCard(ctx, 456, 946, 286, 174, stats.rightLabel, stats.rightValue, stats.warning, "to review");
+  drawShareMetricCard(ctx, 782, 946, 288, 174, "Total", stats.total, stats.accent, totalNote);
 
-  canvasFillRoundRect(ctx, 150, 1115, 900, 150, 34, "#1a1916");
+  ctx.save();
+  canvasShadow(ctx, "rgba(26,25,22,0.14)", 24, 10);
+  canvasFillRoundRect(ctx, 130, 1188, 940, 164, 36, "#1a1916");
+  ctx.restore();
+  canvasFillRoundRect(ctx, 164, 1224, 78, 78, 22, stats.accent);
   ctx.fillStyle = "#faf8f5";
-  ctx.font = '800 42px "DM Sans", Arial, sans-serif';
+  ctx.font = '900 38px "DM Sans", Arial, sans-serif';
   ctx.textAlign = "left";
-  ctx.fillText(`${stats.total} total verbs`, 198, 1178);
+  ctx.fillText(kind === "quiz" ? "Quiz snapshot" : "Practice snapshot", 270, 1252);
   ctx.fillStyle = "rgba(250,248,245,0.70)";
-  ctx.font = '600 24px "DM Sans", Arial, sans-serif';
-  ctx.fillText("Practice, review, repeat.", 200, 1222);
+  ctx.font = '650 24px "DM Sans", Arial, sans-serif';
+  ctx.fillText("Practice, review, repeat. Tiny reps add up.", 272, 1296);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = '900 40px "DM Sans", Arial, sans-serif';
+  ctx.textAlign = "center";
+  ctx.fillText("VF", 203, 1277);
 
   const url = (typeof location !== "undefined" && location.href) ? location.href.split("#")[0] : "";
-  ctx.fillStyle = "#6b6760";
-  ctx.font = '700 22px "DM Mono", Consolas, monospace';
+  const cleanUrl = url ? url.replace(/^https?:\/\//, "").replace(/\/$/, "") : "Verb Flashcards";
+  ctx.fillStyle = "#7a756d";
+  ctx.font = '800 21px "DM Mono", Consolas, monospace';
   ctx.textAlign = "center";
-  ctx.fillText(url ? url.replace(/^https?:\/\//, "") : "Verb Flashcards", 600, 1408);
+  drawFittedText(ctx, cleanUrl, 600, 1438, 860, 21, 800, "#7a756d", "center");
   ctx.fillStyle = "#1a1916";
-  ctx.font = '800 28px "DM Sans", Arial, sans-serif';
-  ctx.fillText("Made by Joseph Carazo", 600, 1454);
+  ctx.font = '900 30px "DM Sans", Arial, sans-serif';
+  ctx.fillText("Made by Joseph Carazo", 600, 1486);
 
   return canvas;
 }
