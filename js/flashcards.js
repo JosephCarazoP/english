@@ -102,8 +102,8 @@ function showPracticePill(show) {
       pill.innerHTML = (
         '<span class="practice-banner-icon">🎯</span>' +
         '<div class="practice-banner-body">' +
-        '<div class="practice-banner-title">Practicando errores</div>' +
-        '<div class="practice-banner-sub">Domina cada verbo para terminar la ronda</div>' +
+        '<div class="practice-banner-title">Repaso de I don\'t know</div>' +
+        '<div class="practice-banner-sub">Vuelve a ver las cards marcadas y domina cada verbo</div>' +
         '</div>' +
         '<div class="practice-banner-count"><b id="practiceCount">0</b><span>por dominar</span></div>'
       );
