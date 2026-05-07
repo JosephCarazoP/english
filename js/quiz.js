@@ -11,18 +11,34 @@ let quizFailedSet = new Set(); // verbos fallados pendientes de dominar
 let quizPracticeMode = false;     // true cuando repasamos los fallados
 let quizOriginalTotal = 0;         // total del quiz original (para el resumen)
 
-/* ── Get distractors ── */
-function getDistractor(correctPast, pool) {
-  return shuffle(pool.filter(v => v.past !== correctPast))[0].past;
+/* ── Tense helpers ── */
+function pickQuizTense() {
+  return Math.random() < 0.5 ? "present" : "past";
 }
-function getDistractors(correctPast, pool) {
-  return shuffle(pool.filter(v => v.past !== correctPast)).slice(0, 3).map(v => v.past);
+
+function getTenseName(tense) {
+  return tense === "present" ? "present tense" : "past tense";
+}
+
+function getTenseHintEs(tense) {
+  return tense === "present" ? "presente" : "pasado";
+}
+
+function getOppositeTense(tense) {
+  return tense === "present" ? "past" : "present";
+}
+
+function getVerbForm(verb, tense) {
+  return tense === "present" ? verb.present : verb.past;
 }
 
 function normalizeQuizAnswer(value) {
   return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/[.,!?;:]/g, "")
+    .replace(/[.,!?;:"'`]/g, "")
+    .replace(/[“”‘’]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -35,8 +51,41 @@ function getPastTargets(verb) {
     .filter(Boolean);
 }
 
-function buildSentencePrompt(verb) {
-  const html = verb.sentencePast || "";
+function getTenseTargets(verb, tense) {
+  if (tense === "present") return [normalizeQuizAnswer(verb.present)].filter(Boolean);
+  return getPastTargets(verb);
+}
+
+function getSpanishMeaningOptions(verb) {
+  return String(VERB_MEANINGS_ES[verb.present] || verb.present)
+    .split("/")
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function getPrimarySpanishMeaning(verb) {
+  return getSpanishMeaningOptions(verb)[0] || verb.present;
+}
+
+function getSpanishTenseName(tense) {
+  return tense === "present" ? "presente" : "pasado";
+}
+
+/* ── Get distractors ── */
+function getDistractor(correctVerb, pool, tense) {
+  const correctTargets = new Set(getTenseTargets(correctVerb, tense));
+  const choices = pool.filter(v => !getTenseTargets(v, tense).some(target => correctTargets.has(target)));
+  return getVerbForm(shuffle(choices)[0] || correctVerb, tense);
+}
+function getDistractors(correctVerb, pool, tense) {
+  const correctTargets = new Set(getTenseTargets(correctVerb, tense));
+  return shuffle(pool.filter(v => !getTenseTargets(v, tense).some(target => correctTargets.has(target))))
+    .slice(0, 3)
+    .map(v => getVerbForm(v, tense));
+}
+
+function buildSentencePrompt(verb, tense) {
+  const html = tense === "present" ? (verb.sentencePres || "") : (verb.sentencePast || "");
   let answer = "";
   let promptHtml = html.replace(/<b>(.*?)<\/b>/i, (_, raw) => {
     answer = stripHtml(raw);
@@ -44,36 +93,90 @@ function buildSentencePrompt(verb) {
   });
 
   if (!answer) {
-    answer = String(verb.past || "").split("/")[0].trim();
+    answer = String(getVerbForm(verb, tense) || "").split("/")[0].trim();
     promptHtml = stripHtml(html).replace(answer, "________");
   }
 
   const meaning = VERB_MEANINGS_ES[verb.present] || verb.present;
-  const targets = Array.from(new Set([normalizeQuizAnswer(answer), ...getPastTargets(verb)])).filter(Boolean);
-  return { promptHtml, answer, targets, hint: `${meaning} en pasado` };
+  const formTargets = tense === "past" ? getTenseTargets(verb, tense) : [];
+  const targets = Array.from(new Set([normalizeQuizAnswer(answer), ...formTargets])).filter(Boolean);
+  return { promptHtml, answer, targets, hint: `${meaning} en ${getTenseHintEs(tense)}` };
+}
+
+function buildTranslationPrompt(verb, tense) {
+  const direction = Math.random() < 0.5 ? "es-en" : "en-es";
+  const tenseName = getTenseName(tense);
+  const spanishTense = getSpanishTenseName(tense);
+  const englishForms = getTenseTargets(verb, tense).map(target => target.replace(/\s*\/\s*/g, " / "));
+  const spanishMeanings = getSpanishMeaningOptions(verb);
+  const primaryEnglishForm = getVerbForm(verb, tense);
+  const primarySpanishMeaning = getPrimarySpanishMeaning(verb);
+
+  if (direction === "es-en") {
+    const source = `Yo uso "${primarySpanishMeaning}" en ${spanishTense}.`;
+    const answer = `I use "${primaryEnglishForm}" in the ${tenseName}.`;
+    const targets = Array.from(new Set([
+      normalizeQuizAnswer(answer),
+      ...englishForms.map(form => normalizeQuizAnswer(`I use "${form}" in the ${tenseName}.`)),
+    ])).filter(Boolean);
+    return {
+      direction,
+      source,
+      answer,
+      targets,
+      hint: `Traduce al inglés. Usa ${tenseName}.`,
+    };
+  }
+
+  const source = `I use "${primaryEnglishForm}" in the ${tenseName}.`;
+  const answer = `Yo uso "${primarySpanishMeaning}" en ${spanishTense}.`;
+  const targets = Array.from(new Set([
+    normalizeQuizAnswer(answer),
+    ...spanishMeanings.map(meaning => normalizeQuizAnswer(`Yo uso "${meaning}" en ${spanishTense}.`)),
+  ])).filter(Boolean);
+  return {
+    direction,
+    source,
+    answer,
+    targets,
+    hint: `Translate to Spanish. Usa ${spanishTense}.`,
+  };
 }
 
 /* ── Build question ── */
 function buildQuestion(verb, pool) {
-  const roll = Math.random();
-  if (roll < 0.25) {
-    const distractor = getDistractor(verb.past, pool);
+  const mechs = ["swipe", "type", "sentence", "choice", "translate"];
+  const mech = mechs[Math.floor(Math.random() * mechs.length)];
+  const tense = pickQuizTense();
+  const sourceTense = getOppositeTense(tense);
+  const source = getVerbForm(verb, sourceTense);
+  const answer = getVerbForm(verb, tense);
+  const tenseName = getTenseName(tense);
+  if (mech === "swipe") {
+    const distractor = getDistractor(verb, pool, tense);
     const correctOnRight = Math.random() > 0.5;
     return {
-      mech: "swipe", label: "Swipe to the past tense", verb,
-      leftOpt: correctOnRight ? distractor : verb.past,
-      rightOpt: correctOnRight ? verb.past : distractor,
+      mech: "swipe", label: `Swipe to the ${tenseName}`, verb, tense, source,
+      leftOpt: correctOnRight ? distractor : answer,
+      rightOpt: correctOnRight ? answer : distractor,
       correctSide: correctOnRight ? "right" : "left",
     };
   }
-  if (roll < 0.50) {
-    return { mech: "type", label: "Type the past tense", verb };
+  if (mech === "type") {
+    return { mech: "type", label: `Type the ${tenseName}`, verb, tense, source, answer };
   }
-  if (roll < 0.75) {
-    return { mech: "sentence", label: "Complete the sentence", verb, sentence: buildSentencePrompt(verb) };
+  if (mech === "sentence") {
+    return { mech: "sentence", label: `Complete the ${tenseName} sentence`, verb, tense, sentence: buildSentencePrompt(verb, tense) };
   }
-  const opts = shuffle([verb.past, ...getDistractors(verb.past, pool)]);
-  return { mech: "choice", label: "Pop the correct bubble", opts, correct: verb.past, verb };
+  if (mech === "translate") {
+    const translation = buildTranslationPrompt(verb, tense);
+    const label = translation.direction === "es-en"
+      ? `Traduce al inglés (${tenseName})`
+      : `Translate to Spanish (${getSpanishTenseName(tense)})`;
+    return { mech: "translate", label, verb, tense, translation };
+  }
+  const opts = shuffle([answer, ...getDistractors(verb, pool, tense)]);
+  return { mech: "choice", label: `Pop the ${tenseName}`, opts, correct: answer, verb, tense, source };
 }
 
 function buildQuiz(verbPool) {
@@ -186,13 +289,13 @@ function promoteBackCards() {
 const QUIZ_LABELS = {
   swipe: {
     icon: "👈👉",
-    text: "Swipe to the correct past tense",
+    text: "Swipe to the requested tense",
     color: "var(--accent-2)",
     bg: "var(--accent-2-soft)",
   },
   type: {
     icon: "⌨️",
-    text: "Type the past tense &amp; press Enter",
+    text: "Type the requested tense &amp; press Enter",
     color: "var(--accent-3)",
     bg: "var(--accent-3-soft)",
   },
@@ -207,6 +310,12 @@ const QUIZ_LABELS = {
     text: "Complete the sentence",
     color: "var(--accent)",
     bg: "var(--accent-soft)",
+  },
+  translate: {
+    icon: "⇄",
+    text: "Translate the sentence",
+    color: "var(--accent-3)",
+    bg: "var(--accent-3-soft)",
   },
 };
 
@@ -253,14 +362,14 @@ function renderQuizQuestion(animateIn = false) {
   document.getElementById("qLabel").innerHTML =
     `<span class="qlabel-pill" style="background:${lbl.bg};color:${lbl.color};">` +
     `<span class="qlabel-icon">${lbl.icon}</span>` +
-    `<span class="qlabel-text">${lbl.text}</span>` +
+    `<span class="qlabel-text">${q.label || lbl.text}</span>` +
     `</span>`;
 
   if (q.mech === "swipe") {
     dirRow.style.display = "flex";
     body.innerHTML =
-      `<div class="qsw-verb">${q.verb.present}</div>` +
-      `<div class="qsw-sub">past tense</div>` +
+      `<div class="qsw-verb">${q.source}</div>` +
+      `<div class="qsw-sub">${getTenseName(q.tense)}</div>` +
       `<div class="qsw-opts">` +
       `<div class="qsw-opt" id="qOptL">${q.leftOpt}</div>` +
       `<div class="qsw-or">or</div>` +
@@ -270,10 +379,10 @@ function renderQuizQuestion(animateIn = false) {
   } else if (q.mech === "type") {
     dirRow.style.display = "none";
     body.innerHTML =
-      `<div class="qtype-verb">${q.verb.present}</div>` +
+      `<div class="qtype-verb">${q.source}</div>` +
       `<div class="qtype-wrap">` +
-      `<div class="qtype-tip">Write the past tense below</div>` +
-      `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="past tense…" />` +
+      `<div class="qtype-tip">Write the ${getTenseName(q.tense)} below</div>` +
+      `<input id="qTypeInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="${getTenseName(q.tense)}..." />` +
       `<div class="qtype-fb" id="qTypeFb"></div>` +
       `</div>`;
 
@@ -283,11 +392,11 @@ function renderQuizQuestion(animateIn = false) {
       e.preventDefault();
       if (quizLocked) return;
       const val = normalizeQuizAnswer(this.value);
-      const targets = getPastTargets(q.verb);
+      const targets = getTenseTargets(q.verb, q.tense);
       const isOk = targets.includes(val);
       this.className = isOk ? "right" : "wrong";
       const fb = document.getElementById("qTypeFb");
-      fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.verb.past;
+      fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.answer;
       fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
       this.disabled = true;
       quizLocked = true;
@@ -326,11 +435,40 @@ function renderQuizQuestion(animateIn = false) {
     });
     setTimeout(() => { try { inp.focus(); } catch (e) { } }, 80);
 
+  } else if (q.mech === "translate") {
+    dirRow.style.display = "none";
+    body.innerHTML =
+      `<div class="qsent-wrap">` +
+      `<div class="qsent-text">${q.translation.source}</div>` +
+      `<div class="qsent-hint">(${q.translation.hint})</div>` +
+      `<input id="qTranslateInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="write the translation..." />` +
+      `<div class="qtype-fb" id="qTranslateFb"></div>` +
+      `</div>`;
+
+    const inp = document.getElementById("qTranslateInput");
+    inp.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      if (quizLocked) return;
+      const val = normalizeQuizAnswer(this.value);
+      const isOk = q.translation.targets.includes(val);
+      this.className = isOk ? "right" : "wrong";
+      const fb = document.getElementById("qTranslateFb");
+      fb.textContent = isOk ? "✓ Correct!" : "Answer: " + q.translation.answer;
+      fb.style.color = isOk ? "var(--quiz-ok)" : "var(--quiz-no)";
+      this.disabled = true;
+      quizLocked = true;
+      registerQuizAnswer(q.verb, isOk);
+      updateQuizHeader();
+      animateToNextQuestion("up", 900);
+    });
+    setTimeout(() => { try { inp.focus(); } catch (e) { } }, 80);
+
   } else {
     dirRow.style.display = "none";
     body.innerHTML =
       `<div class="qbubble-wrap">` +
-      `<div class="qbubble-verb">${q.verb.present}</div>` +
+      `<div class="qbubble-verb">${q.source}</div>` +
       `<canvas class="qbubble-canvas" id="qBubbleCanvas"></canvas>` +
       `</div>`;
     setTimeout(() => initBubbles(q.opts, q.correct), 40);
