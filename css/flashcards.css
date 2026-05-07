@@ -9,10 +9,7 @@
 }
 
 body.is-card-review .card-scene {
-  max-width: 400px;
-  filter:
-    drop-shadow(0 26px 34px rgba(255, 107, 53, 0.13))
-    drop-shadow(0 12px 18px rgba(13, 191, 160, 0.10));
+  filter: drop-shadow(0 22px 42px rgba(255, 107, 53, 0.12));
 }
 
 .card-inner {
@@ -27,12 +24,10 @@ body.is-card-review .card-scene {
 body.is-card-review .card-inner::before {
   content: "";
   position: absolute;
-  inset: -12px;
-  border: 1px solid color-mix(in srgb, var(--quiz-accent) 24%, var(--border));
-  border-radius: 32px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--surface) 42%, transparent), transparent 64%),
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent) 0 1px, transparent 1px 22px);
+  inset: -8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
+  border-radius: 30px;
+  background: color-mix(in srgb, var(--surface) 38%, transparent);
   transform: translateZ(-1px);
   pointer-events: none;
 }
@@ -61,10 +56,8 @@ body.is-card-review .card-inner::before {
 }
 
 body.is-card-review .back {
-  border-color: color-mix(in srgb, var(--quiz-accent) 26%, var(--border));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 94%, var(--accent-soft)), var(--surface)),
-    repeating-linear-gradient(0deg, transparent 0 30px, color-mix(in srgb, var(--accent) 7%, transparent) 30px 31px);
+  border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
+  background: color-mix(in srgb, var(--surface) 94%, var(--accent-soft));
 }
 
 .type-badge {
@@ -266,17 +259,14 @@ body.is-card-review .back {
 }
 
 body.is-card-review .front::after {
-  right: 18px;
-  top: 18px;
-  width: 84px;
-  height: 84px;
-  border-radius: 18px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: 0.72;
-  transform: rotate(4deg);
+  right: -34px;
+  top: -34px;
+  width: 142px;
+  height: 142px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+  opacity: 1;
+  transform: none;
 }
 
 .front::before {
@@ -292,16 +282,13 @@ body.is-card-review .front::after {
 }
 
 body.is-card-review .front::before {
-  left: 18px;
-  bottom: 18px;
-  width: 66px;
-  height: 38px;
-  border-radius: 10px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.24) 0 8px, transparent 8px 14px),
-    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 14px 100%, 100% 10px;
-  opacity: 0.72;
+  left: -22px;
+  bottom: -22px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  opacity: 1;
 }
 
 /* ── FLASHCARD ACTIONS ── */
@@ -346,9 +333,7 @@ body.is-card-review .front::before {
 }
 
 body.is-card-review .btn-correct {
-  box-shadow:
-    0 6px 18px rgba(16, 185, 129, 0.35),
-    0 0 0 5px color-mix(in srgb, var(--quiz-ok) 10%, transparent);
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.32);
 }
 
 .btn-correct:hover {
@@ -364,9 +349,9 @@ body.is-card-review .btn-correct {
 }
 
 body.is-card-review .btn-skip {
-  background: color-mix(in srgb, var(--surface) 82%, var(--bg));
-  border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
-  color: color-mix(in srgb, var(--accent) 72%, var(--text));
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
+  color: color-mix(in srgb, var(--accent) 60%, var(--subtext));
 }
 
 .btn-skip:hover {

@@ -18,9 +18,7 @@
 }
 
 body.is-quiz-review .quiz-stack-cards {
-  filter:
-    drop-shadow(0 26px 36px rgba(124, 92, 252, 0.13))
-    drop-shadow(0 12px 18px rgba(244, 63, 94, 0.08));
+  filter: drop-shadow(0 22px 42px rgba(124, 92, 252, 0.12));
 }
 
 .quiz-stack-cards.results-mode {
@@ -47,10 +45,8 @@ body.is-quiz-review .quiz-stack-cards {
 }
 
 body.is-quiz-review .quiz-card {
-  border-color: color-mix(in srgb, var(--quiz-accent) 22%, var(--border));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, var(--quiz-accent-soft)), var(--surface)),
-    repeating-linear-gradient(0deg, transparent 0 32px, color-mix(in srgb, var(--quiz-accent) 6%, transparent) 32px 33px);
+  border-color: color-mix(in srgb, var(--quiz-accent) 16%, var(--border));
+  background: color-mix(in srgb, var(--surface) 94%, var(--quiz-accent-soft));
 }
 
 .quiz-card.c2 {
@@ -63,8 +59,8 @@ body.is-quiz-review .quiz-card {
 }
 
 body.is-quiz-review .quiz-card.c2 {
-  transform: translateY(10px) scale(0.965) rotate(-1deg);
-  background: color-mix(in srgb, var(--surface) 86%, var(--quiz-accent-soft));
+  transform: translateY(9px) scale(0.96);
+  background: color-mix(in srgb, var(--surface) 90%, var(--quiz-accent-soft));
 }
 
 .quiz-card.c3 {
@@ -77,8 +73,8 @@ body.is-quiz-review .quiz-card.c2 {
 }
 
 body.is-quiz-review .quiz-card.c3 {
-  transform: translateY(20px) scale(0.93) rotate(1.2deg);
-  background: color-mix(in srgb, var(--surface) 82%, var(--quiz-no-bg));
+  transform: translateY(18px) scale(0.92);
+  background: color-mix(in srgb, var(--surface) 88%, var(--quiz-no-bg));
 }
 
 .quiz-card.top {
@@ -88,13 +84,11 @@ body.is-quiz-review .quiz-card.c3 {
 }
 
 body.is-quiz-review .quiz-card.top {
-  box-shadow:
-    0 26px 60px color-mix(in srgb, var(--quiz-accent) 16%, transparent),
-    0 1px 0 rgba(255, 255, 255, 0.52) inset;
+  box-shadow: 0 24px 54px color-mix(in srgb, var(--quiz-accent) 12%, transparent);
 }
 
 body.is-quiz-review .quiz-card.top::before {
-  content: "";
+  content: none;
   position: absolute;
   inset: 14px;
   border-radius: 16px;
@@ -205,9 +199,7 @@ body.is-quiz-review .quiz-card.top::before {
 }
 
 body.is-quiz-review .qlabel-pill {
-  box-shadow:
-    0 6px 16px color-mix(in srgb, var(--quiz-accent) 16%, transparent),
-    0 0 0 4px color-mix(in srgb, var(--quiz-accent) 8%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--quiz-accent) 12%, transparent);
 }
 
 .qlabel-icon {

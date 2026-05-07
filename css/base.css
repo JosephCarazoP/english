@@ -82,31 +82,22 @@ body {
 
 body.is-card-review,
 body.is-quiz-review {
-  --bg: #fffaf2;
+  --bg: #fff8f1;
   --bg-mesh:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0.70)),
-    linear-gradient(rgba(26, 25, 22, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 25, 22, 0.03) 1px, transparent 1px),
-    radial-gradient(ellipse 88% 72% at 12% -8%, rgba(255, 107, 53, 0.22) 0%, transparent 58%),
-    radial-gradient(ellipse 72% 56% at 92% 6%, rgba(13, 191, 160, 0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 58% 48% at 54% 104%, rgba(124, 92, 252, 0.16) 0%, transparent 62%),
-    #fffaf2;
-  background-size: auto, 34px 34px, 34px 34px, auto, auto, auto, auto;
+    radial-gradient(ellipse 70% 46% at 50% -8%, rgba(255, 107, 53, 0.16) 0%, transparent 66%),
+    radial-gradient(ellipse 48% 36% at 86% 18%, rgba(13, 191, 160, 0.12) 0%, transparent 64%),
+    linear-gradient(180deg, #fff8f1 0%, #fbf7f0 100%);
   --progress-fill: #ff6b35;
   --quiz-accent: #0dbfa0;
   --quiz-accent-soft: #e6faf7;
 }
 
 body.is-quiz-review {
-  --bg: #f8fbff;
+  --bg: #f7f8ff;
   --bg-mesh:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.46) 48%, rgba(255, 255, 255, 0.72)),
-    linear-gradient(rgba(26, 25, 22, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 25, 22, 0.03) 1px, transparent 1px),
-    radial-gradient(ellipse 86% 68% at 8% -6%, rgba(124, 92, 252, 0.22) 0%, transparent 58%),
-    radial-gradient(ellipse 70% 54% at 94% 8%, rgba(244, 63, 94, 0.16) 0%, transparent 60%),
-    radial-gradient(ellipse 58% 48% at 52% 104%, rgba(13, 191, 160, 0.16) 0%, transparent 62%),
-    #f8fbff;
+    radial-gradient(ellipse 70% 46% at 50% -8%, rgba(124, 92, 252, 0.16) 0%, transparent 66%),
+    radial-gradient(ellipse 48% 36% at 86% 18%, rgba(244, 63, 94, 0.10) 0%, transparent 64%),
+    linear-gradient(180deg, #f7f8ff 0%, #f7faf8 100%);
   --progress-fill: #7c5cfc;
   --quiz-accent: #7c5cfc;
   --quiz-accent-soft: #f0ecff;
@@ -114,15 +105,11 @@ body.is-quiz-review {
 
 [data-theme="dark"] body.is-card-review,
 [data-theme="dark"] body.is-quiz-review {
-  --bg: #171410;
+  --bg: #171411;
   --bg-mesh:
-    linear-gradient(115deg, rgba(20, 18, 16, 0.38), rgba(20, 18, 16, 0.82) 52%, rgba(20, 18, 16, 0.52)),
-    linear-gradient(rgba(240, 236, 230, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240, 236, 230, 0.028) 1px, transparent 1px),
-    radial-gradient(ellipse 86% 66% at 10% -6%, rgba(255, 107, 53, 0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 72% 56% at 92% 8%, rgba(13, 191, 160, 0.14) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 48% at 54% 104%, rgba(124, 92, 252, 0.18) 0%, transparent 64%),
-    #171410;
+    radial-gradient(ellipse 70% 46% at 50% -8%, rgba(255, 107, 53, 0.16) 0%, transparent 66%),
+    radial-gradient(ellipse 48% 36% at 86% 18%, rgba(13, 191, 160, 0.10) 0%, transparent 64%),
+    linear-gradient(180deg, #171411 0%, #141210 100%);
   --progress-bg: #302a24;
   --quiz-accent-soft: #0a2420;
 }
@@ -130,13 +117,9 @@ body.is-quiz-review {
 [data-theme="dark"] body.is-quiz-review {
   --bg: #111520;
   --bg-mesh:
-    linear-gradient(115deg, rgba(17, 21, 32, 0.38), rgba(17, 21, 32, 0.82) 52%, rgba(17, 21, 32, 0.52)),
-    linear-gradient(rgba(240, 236, 230, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240, 236, 230, 0.028) 1px, transparent 1px),
-    radial-gradient(ellipse 86% 66% at 10% -6%, rgba(124, 92, 252, 0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 72% 56% at 92% 8%, rgba(244, 63, 94, 0.14) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 48% at 54% 104%, rgba(13, 191, 160, 0.14) 0%, transparent 64%),
-    #111520;
+    radial-gradient(ellipse 70% 46% at 50% -8%, rgba(124, 92, 252, 0.18) 0%, transparent 66%),
+    radial-gradient(ellipse 48% 36% at 86% 18%, rgba(244, 63, 94, 0.10) 0%, transparent 64%),
+    linear-gradient(180deg, #111520 0%, #121519 100%);
   --progress-bg: #252b3a;
   --quiz-accent-soft: #28183f;
 }
@@ -363,14 +346,12 @@ body.is-quiz-review {
 body.is-card-review .progress-wrap,
 body.is-quiz-review .progress-wrap {
   width: min(760px, calc(100% - 32px));
-  margin: 12px auto 8px;
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--quiz-accent) 24%, var(--border));
-  border-radius: 16px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--bg) 82%, transparent)),
-    repeating-linear-gradient(90deg, transparent 0 18px, color-mix(in srgb, var(--quiz-accent) 8%, transparent) 18px 19px);
-  box-shadow: 0 18px 44px color-mix(in srgb, var(--quiz-accent) 13%, transparent);
+  margin: 10px auto 6px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--quiz-accent) 16%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 88%, var(--bg));
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--quiz-accent) 8%, transparent);
 }
 
 .progress-bar {
@@ -430,9 +411,9 @@ body.is-quiz-review .score-row {
 
 body.is-card-review .score-item,
 body.is-quiz-review .score-item {
-  border-color: color-mix(in srgb, var(--quiz-accent) 18%, var(--border));
-  background: color-mix(in srgb, var(--surface) 88%, var(--bg));
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--quiz-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--quiz-accent) 12%, var(--border));
+  background: color-mix(in srgb, var(--surface) 92%, var(--bg));
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--quiz-accent) 7%, transparent);
 }
 
 .score-val {
@@ -482,12 +463,10 @@ body.is-card-review .stage::before,
 body.is-quiz-review .quiz-stage::before {
   content: "";
   position: absolute;
-  inset: 8px max(16px, calc((100vw - 760px) / 2)) 22px;
-  border: 1px dashed color-mix(in srgb, var(--quiz-accent) 22%, transparent);
-  border-radius: 28px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface) 34%, transparent), transparent 48%),
-    repeating-linear-gradient(0deg, transparent 0 30px, color-mix(in srgb, var(--quiz-accent) 7%, transparent) 30px 31px);
+  inset: 18px max(18px, calc((100vw - 720px) / 2)) 28px;
+  border-radius: 30px;
+  background: color-mix(in srgb, var(--surface) 24%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--surface) 60%, transparent) inset;
   pointer-events: none;
   z-index: -1;
 }
