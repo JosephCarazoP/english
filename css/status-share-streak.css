@@ -768,20 +768,20 @@
 .practice-banner {
   display: none;
   align-items: center;
-  gap: 12px;
-  margin: 12px auto 0;
-  padding: 11px 14px 11px 12px;
-  width: min(760px, calc(100% - 32px));
+  gap: 10px;
+  margin: 10px auto 2px;
+  padding: 8px 8px 8px 10px;
+  width: min(560px, calc(100% - 32px));
   max-width: calc(100% - 32px);
-  min-height: 64px;
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--surface) 92%, var(--bg));
-  border: 1px solid color-mix(in srgb, var(--quiz-accent) 16%, var(--border));
+  min-height: 54px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 96%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--text) 10%, var(--border));
   font-family: "DM Sans", sans-serif;
   color: var(--text);
   box-shadow:
-    0 14px 34px color-mix(in srgb, var(--quiz-accent) 10%, transparent),
-    0 1px 0 rgba(255, 255, 255, 0.62) inset;
+    0 10px 30px color-mix(in srgb, var(--text) 8%, transparent),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
   animation: practiceBannerIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1);
   position: relative;
   overflow: hidden;
@@ -792,13 +792,13 @@
 }
 
 .practice-banner::before {
-  content: "";
+  content: none;
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  width: 5px;
-  background: var(--accent);
+  width: 0;
+  background: transparent;
 }
 
 .practice-banner::after {
@@ -821,15 +821,19 @@
 
 .practice-banner-icon {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-  border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
+  font-family: "DM Mono", monospace;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+  background: #ff6b35;
+  color: #fff;
+  border: none;
   box-shadow: none;
   animation: none;
   position: relative;
@@ -837,8 +841,8 @@
 }
 
 .practice-banner-quiz .practice-banner-icon {
-  background: color-mix(in srgb, var(--accent-2) 12%, var(--surface));
-  border-color: color-mix(in srgb, var(--accent-2) 14%, var(--border));
+  background: #7c5cfc;
+  color: #fff;
 }
 
 @keyframes practiceIconPulse {
@@ -856,7 +860,7 @@
 .practice-banner-body {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
   min-width: 0;
   flex: 1;
   position: relative;
@@ -864,7 +868,7 @@
 }
 
 .practice-banner-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -872,7 +876,7 @@
 }
 
 .practice-banner-sub {
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 500;
   color: var(--subtext);
   letter-spacing: 0.01em;
@@ -882,41 +886,44 @@
 .practice-banner-count {
   flex-shrink: 0;
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 7px 12px;
-  border-radius: 13px;
-  background: var(--text);
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #1a1916;
   color: #fff;
-  margin-left: 4px;
-  min-width: 62px;
+  margin-left: 0;
+  min-width: 118px;
   box-shadow: none;
   position: relative;
   z-index: 1;
 }
 
 .practice-banner-quiz .practice-banner-count {
-  background: var(--text);
+  background: #1a1916;
   box-shadow: none;
 }
 
 .practice-banner-count b {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
   line-height: 1;
   font-variant-numeric: tabular-nums;
   display: block;
+  color: #fff;
 }
 
 .practice-banner-count span {
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.78);
+  opacity: 1;
   line-height: 1.2;
-  margin-top: 3px;
+  margin-top: 0;
 }
 
 .practice-banner-count b.count-bump {
@@ -950,10 +957,25 @@
 }
 
 [data-theme="dark"] .practice-banner {
-  background: color-mix(in srgb, var(--surface) 88%, var(--bg));
+  background: color-mix(in srgb, var(--surface) 92%, var(--bg));
+  border-color: color-mix(in srgb, var(--text) 9%, var(--border));
   box-shadow:
-    0 14px 34px color-mix(in srgb, var(--quiz-accent) 14%, transparent),
+    0 10px 30px rgba(0, 0, 0, 0.28),
     0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+[data-theme="dark"] .practice-banner-count,
+[data-theme="dark"] .practice-banner-quiz .practice-banner-count {
+  background: #f0ece6;
+  color: #141210;
+}
+
+[data-theme="dark"] .practice-banner-count b {
+  color: #141210;
+}
+
+[data-theme="dark"] .practice-banner-count span {
+  color: rgba(20, 18, 16, 0.72);
 }
 
 /* ════════════════════════════════════════════════════════
@@ -1114,21 +1136,21 @@
   }
 
   .practice-banner {
-    gap: 10px;
-    padding: 9px 12px 9px 10px;
-    border-radius: 14px;
+    gap: 8px;
+    padding: 7px 7px 7px 9px;
+    border-radius: 999px;
     max-width: calc(100% - 24px);
   }
 
   .practice-banner-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 17px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+    border-radius: 50%;
   }
 
   .practice-banner-title {
-    font-size: 13px;
+    font-size: 12.5px;
   }
 
   .practice-banner-sub {
@@ -1136,8 +1158,10 @@
   }
 
   .practice-banner-count {
-    padding: 5px 10px;
-    min-width: 48px;
+    gap: 5px;
+    padding: 7px 10px;
+    min-width: 104px;
+    border-radius: 999px;
   }
 
   .practice-banner-count b {

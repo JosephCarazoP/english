@@ -100,10 +100,10 @@ function showPracticePill(show) {
       pill.id = "practicePill";
       pill.className = "practice-banner practice-banner-round";
       pill.innerHTML = (
-        '<span class="practice-banner-icon">🎯</span>' +
+        '<span class="practice-banner-icon">!</span>' +
         '<div class="practice-banner-body">' +
-        '<div class="practice-banner-title">Repaso de I don\'t know</div>' +
-        '<div class="practice-banner-sub">Vuelve a ver las cards marcadas y domina cada verbo</div>' +
+        '<div class="practice-banner-title">Pendientes</div>' +
+        '<div class="practice-banner-sub">Cards marcadas como I don\'t know</div>' +
         '</div>' +
         '<div class="practice-banner-count"><b id="practiceCount">0</b><span>por dominar</span></div>'
       );

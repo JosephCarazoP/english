@@ -1216,10 +1216,10 @@ function showQuizPracticePill(show) {
       pill.id = "quizPracticePill";
       pill.className = "practice-banner practice-banner-quiz";
       pill.innerHTML = (
-        '<span class="practice-banner-icon">🔁</span>' +
+        '<span class="practice-banner-icon">!</span>' +
         '<div class="practice-banner-body">' +
-        '<div class="practice-banner-title">Repaso de Wrong answers</div>' +
-        '<div class="practice-banner-sub">Corrige cada fallo hasta limpiar el quiz</div>' +
+        '<div class="practice-banner-title">Corrección activa</div>' +
+        '<div class="practice-banner-sub">Wrong answers pendientes</div>' +
         '</div>' +
         '<div class="practice-banner-count"><b id="quizPracticeCount">0</b><span>por dominar</span></div>'
       );
