@@ -390,6 +390,7 @@ function buildQuiz(verbPool) {
 /* ── Start quiz ── */
 function startQuiz() {
   if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
+  document.body.classList.remove("is-card-review", "is-quiz-review");
 
   updateDeck();
   const s = loadVFCSettings();
@@ -1191,6 +1192,8 @@ function registerQuizAnswer(verb, isOk) {
 /* ── Inicia una vuelta de práctica con los verbos fallados ── */
 function startQuizPracticeRound() {
   quizPracticeMode = true;
+  document.body.classList.add("is-quiz-review");
+  document.body.classList.remove("is-card-review");
   const pool = ALL_VERBS.slice(0, deck.length);
   const failedArr = Array.from(quizFailedSet);
   // Para cada verbo fallado generamos una nueva pregunta (mecánica aleatoria)
@@ -1235,8 +1238,9 @@ function showQuizPracticePill(show) {
         cnt.classList.add("count-bump");
       }
     }
-  } else if (pill) {
-    pill.classList.remove("show");
+  } else {
+    document.body.classList.remove("is-quiz-review");
+    if (pill) pill.classList.remove("show");
   }
 }
 
@@ -1291,6 +1295,7 @@ function backToCards() {
   if (bubbleRAF) { cancelAnimationFrame(bubbleRAF); bubbleRAF = null; }
   showQuizPracticePill(false);
   quizPracticeMode = false;
+  document.body.classList.remove("is-card-review", "is-quiz-review");
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
   const qResultScreen = document.getElementById("quizResultScreen");

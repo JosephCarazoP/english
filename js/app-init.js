@@ -44,6 +44,7 @@ document.getElementById("btnSkip").addEventListener("click", (e) => {
 document.getElementById("btnDetail").addEventListener("click", (e) => { e.stopPropagation(); openDetail(); });
 
 document.getElementById("restartBtn").addEventListener("click", () => {
+  document.body.classList.remove("is-card-review", "is-quiz-review");
   buildDeck();
   showPracticePill(false);
   document.getElementById("finishScreen").classList.remove("show");
@@ -97,6 +98,7 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
+    document.body.classList.remove("is-card-review", "is-quiz-review");
     document.querySelector(".score-correct .score-lbl").textContent = "Learned";
     document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
     isFlipped = false;
@@ -110,6 +112,7 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 });
 
 document.getElementById("shuffleBtn").addEventListener("click", () => {
+  document.body.classList.remove("is-card-review", "is-quiz-review");
   document.querySelector(".score-correct .score-lbl").textContent = "Learned";
   document.querySelector(".score-skip    .score-lbl").textContent = "Skipped";
   isFlipped = false;

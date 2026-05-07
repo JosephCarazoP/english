@@ -80,6 +80,29 @@ body {
   overflow-x: hidden;
 }
 
+body.is-card-review,
+body.is-quiz-review {
+  --bg: #f7f2ff;
+  --bg-mesh: radial-gradient(ellipse 80% 62% at 20% 0%, #c4b5fd70 0%, transparent 60%),
+    radial-gradient(ellipse 64% 52% at 82% 12%, #f0abfc55 0%, transparent 58%),
+    radial-gradient(ellipse 52% 42% at 50% 92%, #99f6e455 0%, transparent 62%),
+    #f7f2ff;
+  --progress-fill: #8b5cf6;
+  --quiz-accent: #8b5cf6;
+  --quiz-accent-soft: #f3e8ff;
+}
+
+[data-theme="dark"] body.is-card-review,
+[data-theme="dark"] body.is-quiz-review {
+  --bg: #171126;
+  --bg-mesh: radial-gradient(ellipse 80% 62% at 20% 0%, #7c3aed46 0%, transparent 60%),
+    radial-gradient(ellipse 64% 52% at 82% 12%, #c026d33a 0%, transparent 58%),
+    radial-gradient(ellipse 52% 42% at 50% 92%, #0f766e32 0%, transparent 62%),
+    #171126;
+  --progress-bg: #2d2440;
+  --quiz-accent-soft: #28183f;
+}
+
 /* ── HEADER (2 rows) ── */
 .app-header {
   display: flex;

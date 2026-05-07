@@ -82,6 +82,8 @@ function next() {
 function startPracticeRound() {
   // Reordena el deck con los pendientes y entra en modo práctica
   practiceMode = true;
+  document.body.classList.add("is-card-review");
+  document.body.classList.remove("is-quiz-review");
   deck = shuffle(skippedDeck);
   cursor = 0;
   isFlipped = false;
@@ -120,8 +122,9 @@ function showPracticePill(show) {
         cnt.classList.add("count-bump");
       }
     }
-  } else if (pill) {
-    pill.classList.remove("show");
+  } else {
+    document.body.classList.remove("is-card-review");
+    if (pill) pill.classList.remove("show");
   }
 }
 

@@ -676,6 +676,7 @@ function updateDeck() {
 }
 
 function buildDeck() {
+  document.body.classList.remove("is-card-review", "is-quiz-review");
   updateDeck();
   const base = currentFilter === "all"
     ? deck
