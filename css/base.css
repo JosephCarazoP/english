@@ -67,6 +67,19 @@
   --quiz-hover-text: #a78bfa;
 }
 
+
+
+html,
+body {
+  touch-action: manipulation;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
 /* ── BASE ── */
 body {
   font-family: "DM Sans", "Helvetica Neue", Helvetica, sans-serif;
