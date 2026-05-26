@@ -13,19 +13,19 @@ function isVerbInFilter(verb, filterKey = "all") {
   const isIrregular = verb.type === "irregular";
 
   const FILTER_VERB_MAP = {
-    "same-spelling": new Set(["bet", "bid", "broadcast", "burst", "cast", "cost", "cut", "hit", "hurt", "knit", "let", "put", "read", "set", "shut", "split", "spread", "sweat", "thrust", "wet"]),
-    "i-to-a": new Set(["begin", "drink", "ring", "sing", "sink", "sit", "spit", "spring", "swim", "stink"]),
-    "i-to-o": new Set(["drive", "ride", "rise", "shine", "stride", "write"]),
+    "same-spelling": new Set(["beat", "bet", "bid", "broadcast", "burst", "cast", "cost", "cut", "hit", "hurt", "knit", "let", "put", "read", "set", "shut", "split", "spread", "sweat", "thrust", "wet"]),
+    "i-to-a": new Set(["begin", "drink", "forbid", "give", "forgive", "ring", "shrink", "sing", "sink", "sit", "spit", "spring", "swim", "stink"]),
+    "i-to-o": new Set(["drive", "ride", "rise", "shine", "stride", "win", "write"]),
     "ending-ew": new Set(["blow", "draw", "fly", "grow", "know", "throw", "withdraw"]),
-    "ending-t": new Set(["bend", "build", "burn", "creep", "deal", "dream", "feel", "forget", "get", "keep", "kneel", "leap", "learn", "leave", "lend", "light", "lose", "mean", "meet", "shoot", "sleep", "smell", "spell", "spend", "spill", "spoil", "sweep", "weep"]),
+    "ending-t": new Set(["bend", "bite", "build", "burn", "creep", "deal", "dream", "feel", "forget", "get", "keep", "kneel", "lean", "leap", "learn", "leave", "lend", "light", "lose", "mean", "meet", "shoot", "sleep", "smell", "spell", "spend", "spill", "spoil", "sweep", "weep"]),
     "ought-pattern": new Set(["bring", "buy", "fight", "seek", "think"]),
     "aught-pattern": new Set(["catch", "teach"]),
-    "ending-d": new Set(["bleed", "breed", "feed", "find", "flee", "grind", "have", "hear", "hold", "lead", "pay", "say", "sell", "send", "slide", "speed", "stand", "tell", "understand", "wind"]),
+    "ending-d": new Set(["bind", "bleed", "breed", "feed", "find", "flee", "grind", "have", "hear", "hide", "hold", "lay", "lead", "pay", "say", "sell", "slide", "speed", "stand", "tell", "understand", "wind"]),
     "different-spelling": new Set(["be", "do", "go"]),
     "ending-ung": new Set(["cling", "hang", "sting", "swing", "wring"]),
     "ending-unk": new Set(["stink"]),
     "ending-ore": new Set(["bear", "shear", "swear", "tear", "wear"]),
-    "a-to-e": new Set(["fall"])
+    "a-to-e": new Set(["draw", "fall"])
   };
 
   if (filterKey === "all") return true;
@@ -35,11 +35,6 @@ function isVerbInFilter(verb, filterKey = "all") {
   if (!allowedVerbs) return false;
   if (!allowedVerbs.has(present)) return false;
 
-  // Guardrail: for multi-form past entries, only allow explicit categories
-  // where the user asked for those verbs.
-  if (past.includes(" / ")) {
-    return filterKey === "different-spelling" || (filterKey === "ending-unk" && present === "stink");
-  }
   return true;
 }
 
