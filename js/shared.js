@@ -10,44 +10,32 @@ function isVerbInFilter(verb, filterKey = "all") {
   if (!verb) return false;
   const present = String(verb.present || "").toLowerCase().trim();
   const past = String(verb.past || "").toLowerCase().trim();
+  const isIrregular = verb.type === "irregular";
 
-  const isSimplePast = !past.includes(" / ");
-  const isIrregular = verb.type === "irregular" && isSimplePast;
-  const sameSpelling = present === past;
-  const hasIToA = /i/.test(present) && /a/.test(past) && !sameSpelling;
-  const hasIToO = /i/.test(present) && /o/.test(past) && !sameSpelling;
-  const endingEw = past.endsWith("ew");
-  const endingT = past.endsWith("t");
-  const oughtPattern = past.includes("ought");
-  const aughtPattern = past.includes("aught");
-  const endingD = past.endsWith("d");
-  const endingUng = past.endsWith("ung");
-  const endingUnk = past.endsWith("unk");
-  const endingOre = past.endsWith("ore");
-  const hasAToE = /a/.test(present) && /e/.test(past) && !sameSpelling;
-  const completelyDifferentSpelling = (() => {
-    if (!isIrregular || sameSpelling) return false;
-    const shared = [...new Set(present.split(""))].filter(ch => past.includes(ch)).length;
-    return shared <= 1;
-  })();
+  const FILTER_VERB_MAP = {
+    "same-spelling": new Set(["beat", "bet", "bid", "broadcast", "burst", "cast", "cost", "cut", "hit", "hurt", "knit", "let", "put", "read", "set", "shut", "split", "spread", "sweat", "thrust", "wet"]),
+    "i-to-a": new Set(["begin", "drink", "forbid", "give", "forgive", "ring", "shrink", "sing", "sink", "sit", "spit", "spring", "swim", "stink"]),
+    "i-to-o": new Set(["drive", "ride", "rise", "shine", "stride", "win", "write"]),
+    "ending-ew": new Set(["blow", "draw", "fly", "grow", "know", "throw", "withdraw"]),
+    "ending-t": new Set(["bend", "bite", "build", "burn", "creep", "deal", "dream", "feel", "forget", "get", "keep", "kneel", "lean", "leap", "learn", "leave", "lend", "light", "lose", "mean", "meet", "shoot", "sleep", "smell", "spell", "spend", "spill", "spoil", "sweep", "weep"]),
+    "ought-pattern": new Set(["bring", "buy", "fight", "seek", "think"]),
+    "aught-pattern": new Set(["catch", "teach"]),
+    "ending-d": new Set(["bind", "bleed", "breed", "feed", "find", "flee", "grind", "have", "hear", "hide", "hold", "lay", "lead", "pay", "say", "sell", "slide", "speed", "stand", "tell", "understand", "wind"]),
+    "different-spelling": new Set(["be", "do", "go"]),
+    "ending-ung": new Set(["cling", "hang", "sting", "swing", "wring"]),
+    "ending-unk": new Set(["stink"]),
+    "ending-ore": new Set(["bear", "shear", "swear", "tear", "wear"]),
+    "a-to-e": new Set(["draw", "fall"])
+  };
 
   if (filterKey === "all") return true;
   if (filterKey === "irregular" || filterKey === "regular") return verb.type === filterKey;
   if (!isIrregular) return false;
-  if (filterKey === "same-spelling") return sameSpelling;
-  if (filterKey === "i-to-a") return hasIToA;
-  if (filterKey === "i-to-o") return hasIToO;
-  if (filterKey === "ending-ew") return endingEw;
-  if (filterKey === "ending-t") return endingT;
-  if (filterKey === "ought-pattern") return oughtPattern;
-  if (filterKey === "aught-pattern") return aughtPattern;
-  if (filterKey === "ending-d") return endingD;
-  if (filterKey === "ending-ung") return endingUng;
-  if (filterKey === "ending-unk") return endingUnk;
-  if (filterKey === "ending-ore") return endingOre;
-  if (filterKey === "a-to-e") return hasAToE;
-  if (filterKey === "different-spelling") return completelyDifferentSpelling;
-  return false;
+  const allowedVerbs = FILTER_VERB_MAP[filterKey];
+  if (!allowedVerbs) return false;
+  if (!allowedVerbs.has(present)) return false;
+
+  return true;
 }
 
 /* ── PRÁCTICA DE ERRORES (round) ── */
