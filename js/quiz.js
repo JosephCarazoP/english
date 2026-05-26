@@ -396,9 +396,7 @@ function startQuiz() {
   const s = loadVFCSettings();
   const mode = s.verbMode || "all";
 
-  const fullPool = currentFilter === "all"
-    ? deck
-    : deck.filter(v => v.type === currentFilter);
+  const fullPool = deck.filter(v => isVerbInFilter(v, currentFilter));
 
   const QUIZ_CAP = 30;
   let verbPool;

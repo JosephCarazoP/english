@@ -82,7 +82,7 @@ const ONBOARDING_KEY = "vfc_hasSeenOnboarding";
     if (!el) return;
     const vm = s.verbMode || "all";
     const filter = window.currentFilter || "all";
-    const base = filter === "all" ? ALL_VERBS : ALL_VERBS.filter(v => v.type === filter);
+    const base = ALL_VERBS.filter(v => isVerbInFilter(v, filter));
 
     if (vm === "all") {
       el.textContent = `${base.length} verbos disponibles · Quiz: 30 preguntas aleatorias`;
