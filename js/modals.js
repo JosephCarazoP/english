@@ -134,7 +134,7 @@ function vocabArrowSvg() {
 function getVocabularyMatches() {
   const q = vocabQuery.trim().toLowerCase();
   return ALL_VERBS.filter(verb => {
-    if (vocabFilter !== "all" && verb.type !== vocabFilter) return false;
+    if (!isVerbInFilter(verb, vocabFilter)) return false;
     if (!q) return true;
     const meaning = VERB_MEANINGS_ES[verb.present] || "";
     return [
