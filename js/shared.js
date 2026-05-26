@@ -6,6 +6,50 @@ let correct = 0;
 let skipped = 0;
 let currentFilter = "all";
 
+function isVerbInFilter(verb, filterKey = "all") {
+  if (!verb) return false;
+  const present = String(verb.present || "").toLowerCase().trim();
+  const past = String(verb.past || "").toLowerCase().trim();
+
+  const isSimplePast = !past.includes(" / ");
+  const isIrregular = verb.type === "irregular" && isSimplePast;
+  const sameSpelling = present === past;
+  const hasIToA = /i/.test(present) && /a/.test(past) && !sameSpelling;
+  const hasIToO = /i/.test(present) && /o/.test(past) && !sameSpelling;
+  const endingEw = past.endsWith("ew");
+  const endingT = past.endsWith("t");
+  const oughtPattern = past.includes("ought");
+  const aughtPattern = past.includes("aught");
+  const endingD = past.endsWith("d");
+  const endingUng = past.endsWith("ung");
+  const endingUnk = past.endsWith("unk");
+  const endingOre = past.endsWith("ore");
+  const hasAToE = /a/.test(present) && /e/.test(past) && !sameSpelling;
+  const completelyDifferentSpelling = (() => {
+    if (!isIrregular || sameSpelling) return false;
+    const shared = [...new Set(present.split(""))].filter(ch => past.includes(ch)).length;
+    return shared <= 1;
+  })();
+
+  if (filterKey === "all") return true;
+  if (filterKey === "irregular" || filterKey === "regular") return verb.type === filterKey;
+  if (!isIrregular) return false;
+  if (filterKey === "same-spelling") return sameSpelling;
+  if (filterKey === "i-to-a") return hasIToA;
+  if (filterKey === "i-to-o") return hasIToO;
+  if (filterKey === "ending-ew") return endingEw;
+  if (filterKey === "ending-t") return endingT;
+  if (filterKey === "ought-pattern") return oughtPattern;
+  if (filterKey === "aught-pattern") return aughtPattern;
+  if (filterKey === "ending-d") return endingD;
+  if (filterKey === "ending-ung") return endingUng;
+  if (filterKey === "ending-unk") return endingUnk;
+  if (filterKey === "ending-ore") return endingOre;
+  if (filterKey === "a-to-e") return hasAToE;
+  if (filterKey === "different-spelling") return completelyDifferentSpelling;
+  return false;
+}
+
 /* ── PRÁCTICA DE ERRORES (round) ── */
 let skippedDeck = [];   // verbos marcados como skipped en la ronda actual
 let practiceMode = false; // true cuando estamos repasando los skipped
@@ -678,9 +722,7 @@ function updateDeck() {
 function buildDeck() {
   document.body.classList.remove("is-card-review", "is-quiz-review");
   updateDeck();
-  const base = currentFilter === "all"
-    ? deck
-    : deck.filter(v => v.type === currentFilter);
+  const base = deck.filter(v => isVerbInFilter(v, currentFilter));
   deck = shuffle(base);
   cursor = 0; correct = 0; skipped = 0; isFlipped = false;
   skippedDeck = [];
