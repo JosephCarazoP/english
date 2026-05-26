@@ -21,6 +21,10 @@ function isVerbInFilter(verb, filterKey = "all") {
   const oughtPattern = past.includes("ought");
   const aughtPattern = past.includes("aught");
   const endingD = past.endsWith("d");
+  const endingUng = past.endsWith("ung");
+  const endingUnk = past.endsWith("unk");
+  const endingOre = past.endsWith("ore");
+  const hasAToE = /a/.test(present) && /e/.test(past) && !sameSpelling;
   const completelyDifferentSpelling = (() => {
     if (!isIrregular || sameSpelling) return false;
     const shared = [...new Set(present.split(""))].filter(ch => past.includes(ch)).length;
@@ -38,6 +42,10 @@ function isVerbInFilter(verb, filterKey = "all") {
   if (filterKey === "ought-pattern") return oughtPattern;
   if (filterKey === "aught-pattern") return aughtPattern;
   if (filterKey === "ending-d") return endingD;
+  if (filterKey === "ending-ung") return endingUng;
+  if (filterKey === "ending-unk") return endingUnk;
+  if (filterKey === "ending-ore") return endingOre;
+  if (filterKey === "a-to-e") return hasAToE;
   if (filterKey === "different-spelling") return completelyDifferentSpelling;
   return false;
 }

@@ -719,13 +719,15 @@
 }
 
 .vocab-filter-group {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
   padding: 4px;
-  border-radius: 999px;
+  border-radius: 16px;
   background: var(--bg);
   border: 1px solid var(--border);
+  max-width: 100%;
 }
 
 .vocab-filter {
@@ -739,6 +741,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s;
 }
