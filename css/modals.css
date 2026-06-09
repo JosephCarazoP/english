@@ -817,6 +817,7 @@
   color: var(--accent-2);
   background: var(--accent-2-soft);
   border: 1px solid color-mix(in srgb, var(--accent-2) 20%, var(--border));
+  flex-shrink: 0;
 }
 
 .vocab-card[data-type="regular"] .vocab-card-icon {
@@ -856,7 +857,7 @@
 
 .vocab-forms {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
   gap: 6px;
   min-width: 0;
   max-width: 100%;
@@ -906,6 +907,7 @@
 }
 
 .vocab-form-word {
+  min-width: 0;
   color: var(--text);
   font-size: 12px;
   font-weight: 800;
@@ -915,6 +917,7 @@
 }
 
 .vocab-ipa {
+  min-width: 0;
   color: var(--subtext);
   font-family: "DM Mono", monospace;
   font-size: 10px;
@@ -1001,12 +1004,22 @@
 }
 
 @media (max-width: 680px) {
+  .vocab-overlay {
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .vocab-panel {
+    gap: 14px;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
   .vocab-controls {
     grid-template-columns: 1fr;
   }
 
   .vocab-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .vocab-card {
@@ -1019,6 +1032,68 @@
 
   .vocab-card-meta {
     display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .vocab-panel {
+    padding: 14px;
+  }
+
+  .vocab-header {
+    gap: 12px;
+  }
+
+  .vocab-title-group {
+    gap: 10px;
+  }
+
+  .vocab-kicker,
+  .vocab-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .vocab-title {
+    font-size: 22px;
+  }
+
+  .vocab-subtitle,
+  .vocab-count {
+    display: none;
+  }
+
+  .vocab-card {
+    gap: 9px;
+    padding: 10px;
+    align-items: start;
+  }
+
+  .vocab-present {
+    grid-template-columns: 1fr;
+    row-gap: 2px;
+  }
+
+  .vocab-past,
+  .vocab-participle {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 6px;
+    padding: 5px 6px;
+  }
+
+  .vocab-form-label {
+    min-width: 20px;
+    padding: 2px 3px;
+    font-size: 9px;
+  }
+
+  .vocab-form-word {
+    font-size: 11.5px;
+  }
+
+  .vocab-ipa {
+    font-size: 9px;
   }
 }
 
