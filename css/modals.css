@@ -818,6 +818,7 @@
   color: var(--accent-2);
   background: var(--accent-2-soft);
   border: 1px solid color-mix(in srgb, var(--accent-2) 20%, var(--border));
+  flex-shrink: 0;
 }
 
 .vocab-card[data-type="regular"] .vocab-card-icon {
@@ -1101,6 +1102,68 @@
     max-width: 24px;
     min-height: 26px;
     font-size: 8.5px;
+  }
+
+  .vocab-form-word {
+    font-size: 11.5px;
+  }
+
+  .vocab-ipa {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 420px) {
+  .vocab-panel {
+    padding: 14px;
+  }
+
+  .vocab-header {
+    gap: 12px;
+  }
+
+  .vocab-title-group {
+    gap: 10px;
+  }
+
+  .vocab-kicker,
+  .vocab-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .vocab-title {
+    font-size: 22px;
+  }
+
+  .vocab-subtitle,
+  .vocab-count {
+    display: none;
+  }
+
+  .vocab-card {
+    gap: 9px;
+    padding: 10px;
+    align-items: start;
+  }
+
+  .vocab-present {
+    grid-template-columns: 1fr;
+    row-gap: 2px;
+  }
+
+  .vocab-past,
+  .vocab-participle {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 6px;
+    padding: 5px 6px;
+  }
+
+  .vocab-form-label {
+    min-width: 20px;
+    padding: 2px 3px;
+    font-size: 9px;
   }
 
   .vocab-form-word {
