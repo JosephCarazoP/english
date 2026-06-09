@@ -109,7 +109,16 @@
           <span class="tap-hint">tap to flip</span>
         </div>
         <div class="card-face back">
-          <div class="verb-text" id="cardPast"></div>
+          <div class="verb-forms" id="cardForms">
+            <div class="verb-form-row">
+              <span class="verb-form-label">Past simple</span>
+              <span class="verb-text" id="cardPast"></span>
+            </div>
+            <div class="verb-form-row">
+              <span class="verb-form-label">Past participle</span>
+              <span class="verb-text" id="cardParticiple"></span>
+            </div>
+          </div>
           <div class="present-ref" id="cardPresentRef"></div>
           <span class="see-more">tap ✦ for details</span>
         </div>
@@ -218,12 +227,28 @@
         </div>
 
         <article class="pron-card pron-past">
-          <div class="pron-tag">Past</div>
+          <div class="pron-tag">Past simple</div>
           <div class="pron-word" id="modalPast"></div>
           <div class="pron-ipa" id="modalIpaPast"></div>
           <div class="pron-actions">
             <button class="pron-btn pron-btn-single" data-form="past" type="button"
-              aria-label="Reproducir verbo en pasado">
+              aria-label="Reproducir verbo en pasado simple">
+              <svg class="ui-icon pron-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+              </svg>
+              <span class="pron-btn-lbl">Escuchar</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="pron-card pron-participle">
+          <div class="pron-tag">Past participle</div>
+          <div class="pron-word" id="modalParticiple"></div>
+          <div class="pron-ipa" id="modalIpaParticiple"></div>
+          <div class="pron-actions">
+            <button class="pron-btn pron-btn-single" data-form="participle" type="button"
+              aria-label="Reproducir verbo en pasado participio">
               <svg class="ui-icon pron-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
                 <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
@@ -328,7 +353,7 @@
             <path d="m21 21-4.3-4.3"></path>
             <circle cx="11" cy="11" r="7"></circle>
           </svg>
-          <input id="vocabSearch" type="search" placeholder="Search verb, past tense, meaning..." autocomplete="off" />
+          <input id="vocabSearch" type="search" placeholder="Search verb, past tense, participle, meaning..." autocomplete="off" />
         </label>
         <div class="vocab-filter-group" role="tablist" aria-label="Vocabulary filter">
           <button class="vocab-filter active" type="button" data-vocab-filter="all">All</button>

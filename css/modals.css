@@ -135,7 +135,7 @@
   border-radius: 999px;
 }
 
-/* ── HERO: pron-grid (Present + arrow + Past) ── */
+/* ── HERO: pron-grid (Present + arrow + Past + Participle) ── */
 .pron-grid {
   grid-area: pron;
   display: grid;
@@ -178,6 +178,13 @@
   border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
 }
 
+.pron-participle {
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--accent-3) 16%, var(--bg)), var(--bg) 74%),
+    var(--bg);
+  border-color: color-mix(in srgb, var(--accent-3) 28%, var(--border));
+}
+
 .pron-tag {
   font-family: "DM Mono", monospace;
   font-size: 9px;
@@ -193,6 +200,10 @@
 
 .pron-past .pron-tag {
   color: var(--accent);
+}
+
+.pron-participle .pron-tag {
+  color: var(--accent-3);
 }
 
 .pron-word {
@@ -835,7 +846,8 @@
   white-space: nowrap;
 }
 
-.vocab-past {
+.vocab-past,
+.vocab-participle {
   font-family: "DM Mono", monospace;
   font-size: 10px;
   font-weight: 700;
@@ -843,6 +855,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.vocab-past::before {
+  content: "past: ";
+}
+
+.vocab-participle::before {
+  content: "pp: ";
 }
 
 .vocab-meaning {

@@ -2,13 +2,15 @@
 async function openDetail(verbOverride) {
   const verb = verbOverride || deck[cursor];
   if (!verb) return;
-  const ipa = VERB_IPA[verb.present] || { pres: "", past: "" };
+  const ipa = VERB_IPA[verb.present] || { pres: "", past: "", participle: "" };
 
   // Hero words
   document.getElementById("modalPresent").textContent = verb.present;
   document.getElementById("modalPast").textContent = verb.past;
+  document.getElementById("modalParticiple").textContent = verb.participle;
   document.getElementById("modalIpaPres").textContent = ipa.pres || "";
   document.getElementById("modalIpaPast").textContent = ipa.past || "";
+  document.getElementById("modalIpaParticiple").textContent = ipa.participle || "";
 
   // Spanish meaning chip
   document.getElementById("modalMeaningChip").textContent =
@@ -34,11 +36,12 @@ async function openDetail(verbOverride) {
   // Pronunciation: a single "Escuchar" button per card. Rate is taken from currentSpeed.
   const presWord = verb.present;
   const pastWord = verb.past.split("/")[0].trim();
+  const participleWord = verb.participle.split("/")[0].trim();
   document.querySelectorAll(".pron-btn").forEach(btn => {
     const form = btn.dataset.form;
     btn.onclick = (e) => {
       e.stopPropagation();
-      const text = form === "pres" ? presWord : pastWord;
+      const text = form === "pres" ? presWord : form === "participle" ? participleWord : pastWord;
       playDetailAudio(btn, text, "word");
     };
   });
@@ -185,11 +188,15 @@ function renderVocabularyLibrary() {
     past.className = "vocab-past";
     past.textContent = verb.past;
 
+    const participle = document.createElement("span");
+    participle.className = "vocab-participle";
+    participle.textContent = verb.participle;
+
     const meaningEl = document.createElement("span");
     meaningEl.className = "vocab-meaning";
     meaningEl.textContent = meaning;
 
-    title.append(present, past);
+    title.append(present, past, participle);
     main.append(title, meaningEl);
 
     const meta = document.createElement("span");
