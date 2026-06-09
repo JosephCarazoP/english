@@ -734,11 +734,12 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
+  min-width: 0;
+  max-width: 100%;
   padding: 4px;
   border-radius: 16px;
   background: var(--bg);
   border: 1px solid var(--border);
-  max-width: 100%;
 }
 
 .vocab-filter {
@@ -1029,7 +1030,40 @@
   }
 
   .vocab-controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .vocab-filter-group {
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 2px 2px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vocab-filter-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vocab-filter {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
   }
 
   .vocab-grid {
@@ -1069,6 +1103,17 @@
     font-size: 22px;
   }
 
+  .vocab-filter-group {
+    gap: 6px;
+    padding-bottom: 6px;
+  }
+
+  .vocab-filter {
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
+
   .vocab-subtitle,
   .vocab-count {
     display: none;
@@ -1102,68 +1147,6 @@
     max-width: 24px;
     min-height: 26px;
     font-size: 8.5px;
-  }
-
-  .vocab-form-word {
-    font-size: 11.5px;
-  }
-
-  .vocab-ipa {
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 420px) {
-  .vocab-panel {
-    padding: 14px;
-  }
-
-  .vocab-header {
-    gap: 12px;
-  }
-
-  .vocab-title-group {
-    gap: 10px;
-  }
-
-  .vocab-kicker,
-  .vocab-card-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-  }
-
-  .vocab-title {
-    font-size: 22px;
-  }
-
-  .vocab-subtitle,
-  .vocab-count {
-    display: none;
-  }
-
-  .vocab-card {
-    gap: 9px;
-    padding: 10px;
-    align-items: start;
-  }
-
-  .vocab-present {
-    grid-template-columns: 1fr;
-    row-gap: 2px;
-  }
-
-  .vocab-past,
-  .vocab-participle {
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 6px;
-    padding: 5px 6px;
-  }
-
-  .vocab-form-label {
-    min-width: 20px;
-    padding: 2px 3px;
-    font-size: 9px;
   }
 
   .vocab-form-word {
