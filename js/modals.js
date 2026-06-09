@@ -1,8 +1,20 @@
 /* ── DETAIL MODAL ── */
+function getVerbIpa(verb) {
+  const ipa = VERB_IPA[verb.present] || {};
+  const pastIpa = ipa.past || "";
+  const participleIpa = ipa.participle || (verb.participle === verb.past ? pastIpa : "");
+
+  return {
+    pres: ipa.pres || "",
+    past: pastIpa,
+    participle: participleIpa
+  };
+}
+
 async function openDetail(verbOverride) {
   const verb = verbOverride || deck[cursor];
   if (!verb) return;
-  const ipa = VERB_IPA[verb.present] || { pres: "", past: "", participle: "" };
+  const ipa = getVerbIpa(verb);
 
   // Hero words
   document.getElementById("modalPresent").textContent = verb.present;
@@ -140,13 +152,17 @@ function getVocabularyMatches() {
     if (!isVerbInFilter(verb, vocabFilter)) return false;
     if (!q) return true;
     const meaning = VERB_MEANINGS_ES[verb.present] || "";
+    const ipa = getVerbIpa(verb);
     return [
       verb.present,
       verb.past,
       verb.participle,
       verb.type,
       verb.sound,
-      meaning
+      meaning,
+      ipa.pres,
+      ipa.past,
+      ipa.participle
     ].some(value => String(value || "").toLowerCase().includes(q));
   });
 }
@@ -164,6 +180,7 @@ function renderVocabularyLibrary() {
 
   matches.forEach(verb => {
     const meaning = VERB_MEANINGS_ES[verb.present] || "Sin traducción disponible";
+    const ipa = getVerbIpa(verb);
     const card = document.createElement("button");
     card.className = "vocab-card";
     card.type = "button";
@@ -182,21 +199,49 @@ function renderVocabularyLibrary() {
 
     const present = document.createElement("span");
     present.className = "vocab-present";
-    present.textContent = verb.present;
 
-    const past = document.createElement("span");
-    past.className = "vocab-past";
-    past.textContent = verb.past;
+    const presentWord = document.createElement("span");
+    presentWord.className = "vocab-present-word";
+    presentWord.textContent = verb.present;
 
-    const participle = document.createElement("span");
-    participle.className = "vocab-participle";
-    participle.textContent = verb.participle;
+    const presentIpa = document.createElement("span");
+    presentIpa.className = "vocab-ipa vocab-present-ipa";
+    presentIpa.textContent = ipa.pres || "Pronunciación pendiente";
+
+    present.append(presentWord, presentIpa);
+
+    function createFormPill(className, label, word, formIpa) {
+      const pill = document.createElement("span");
+      pill.className = className;
+
+      const labelEl = document.createElement("span");
+      labelEl.className = "vocab-form-label";
+      labelEl.textContent = label;
+
+      const wordEl = document.createElement("span");
+      wordEl.className = "vocab-form-word";
+      wordEl.textContent = word;
+
+      const ipaEl = document.createElement("span");
+      ipaEl.className = "vocab-ipa vocab-form-ipa";
+      ipaEl.textContent = formIpa || "IPA pendiente";
+
+      pill.append(labelEl, wordEl, ipaEl);
+      return pill;
+    }
+
+    const forms = document.createElement("span");
+    forms.className = "vocab-forms";
+
+    const past = createFormPill("vocab-past", "p:", verb.past, ipa.past);
+    const participle = createFormPill("vocab-participle", "pp:", verb.participle, ipa.participle);
+    forms.append(past, participle);
 
     const meaningEl = document.createElement("span");
     meaningEl.className = "vocab-meaning";
     meaningEl.textContent = meaning;
 
-    title.append(present, past, participle);
+    title.append(present, forms);
     main.append(title, meaningEl);
 
     const meta = document.createElement("span");
