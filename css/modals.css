@@ -772,7 +772,7 @@
 
 .vocab-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
   overflow-y: auto;
   padding-right: 4px;
@@ -831,19 +831,17 @@
 
 .vocab-card-title {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 8px;
+  flex-direction: column;
+  gap: 7px;
   min-width: 0;
 }
 
 .vocab-present {
-  display: flex;
-  flex: 1 1 92px;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  min-width: 92px;
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 8px;
+  min-width: 0;
 }
 
 .vocab-present-word {
@@ -856,6 +854,13 @@
   white-space: nowrap;
 }
 
+.vocab-forms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+  min-width: 0;
+}
+
 .vocab-past,
 .vocab-participle {
   display: grid;
@@ -863,9 +868,7 @@
   align-items: center;
   column-gap: 5px;
   row-gap: 1px;
-  flex: 1 1 108px;
   min-width: 0;
-  max-width: 128px;
   padding: 5px 7px;
   border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
   border-radius: 12px;
@@ -919,7 +922,7 @@
 }
 
 .vocab-present-ipa {
-  max-width: 96px;
+  min-width: 0;
 }
 
 .vocab-form-ipa {

@@ -854,6 +854,7 @@ body.is-quiz-review .qlabel-pill {
   }
 
   .vocab-card {
+    grid-template-columns: auto minmax(0, 1fr);
     min-height: 68px;
     border-radius: 15px;
     padding: 10px;
@@ -867,17 +868,20 @@ body.is-quiz-review .qlabel-pill {
   }
 
   .vocab-present {
-    min-width: 82px;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2px;
   }
 
   .vocab-present-word {
     font-size: 15px;
   }
 
-  .vocab-past,
-  .vocab-participle {
-    flex-basis: 96px;
-    max-width: none;
+  .vocab-forms {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vocab-card-meta {
+    display: none;
   }
 
   .vocab-meaning {

@@ -230,14 +230,18 @@ function renderVocabularyLibrary() {
       return pill;
     }
 
+    const forms = document.createElement("span");
+    forms.className = "vocab-forms";
+
     const past = createFormPill("vocab-past", "p:", verb.past, ipa.past);
     const participle = createFormPill("vocab-participle", "pp:", verb.participle, ipa.participle);
+    forms.append(past, participle);
 
     const meaningEl = document.createElement("span");
     meaningEl.className = "vocab-meaning";
     meaningEl.textContent = meaning;
 
-    title.append(present, past, participle);
+    title.append(present, forms);
     main.append(title, meaningEl);
 
     const meta = document.createElement("span");
