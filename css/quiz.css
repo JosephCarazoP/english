@@ -878,6 +878,20 @@ body.is-quiz-review .qlabel-pill {
 
   .vocab-forms {
     grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .vocab-past,
+  .vocab-participle {
+    grid-template-columns: minmax(21px, max-content) minmax(0, 1fr);
+    column-gap: 5px;
+    padding: 5px 6px;
+  }
+
+  .vocab-form-label {
+    min-width: 21px;
+    padding-inline: 3px;
+    font-size: 9px;
   }
 
   .vocab-card-meta {
@@ -934,5 +948,35 @@ body.is-quiz-review .qlabel-pill {
 
   .finish-title {
     font-size: 32px;
+  }
+}
+
+
+@media (max-width: 360px) {
+  .vocab-overlay {
+    padding-inline: 6px;
+  }
+
+  .vocab-panel {
+    padding-inline: 10px;
+  }
+
+  .vocab-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vocab-card-icon {
+    display: none;
+  }
+
+  .vocab-past,
+  .vocab-participle {
+    grid-template-columns: minmax(20px, max-content) minmax(0, 1fr);
+    padding-inline: 5px;
+  }
+
+  .vocab-form-label {
+    min-width: 20px;
+    font-size: 8.5px;
   }
 }
