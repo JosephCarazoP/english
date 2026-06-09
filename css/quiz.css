@@ -867,7 +867,17 @@ body.is-quiz-review .qlabel-pill {
   }
 
   .vocab-present {
+    min-width: 82px;
+  }
+
+  .vocab-present-word {
     font-size: 15px;
+  }
+
+  .vocab-past,
+  .vocab-participle {
+    flex-basis: 96px;
+    max-width: none;
   }
 
   .vocab-meaning {
