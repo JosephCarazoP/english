@@ -110,10 +110,31 @@ body.is-card-review .back {
   line-height: 1;
 }
 
+.back .verb-forms {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+}
+
+.back .verb-form-row {
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+}
+
+.back .verb-form-label {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--subtext);
+}
+
 .back .verb-text {
-  font-size: clamp(44px, 10vw, 66px);
+  font-size: clamp(32px, 8vw, 48px);
   font-weight: 800;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
   color: var(--text);
   text-align: center;
   line-height: 1;

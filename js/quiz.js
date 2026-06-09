@@ -13,23 +13,36 @@ let quizOriginalTotal = 0;         // total del quiz original (para el resumen)
 
 /* ── Tense helpers ── */
 function pickQuizTense() {
-  return Math.random() < 0.5 ? "present" : "past";
+  const tenses = ["present", "past", "participle"];
+  return tenses[Math.floor(Math.random() * tenses.length)];
 }
 
 function getTenseName(tense) {
-  return tense === "present" ? "present tense" : "past tense";
+  if (tense === "present") return "present tense";
+  if (tense === "participle") return "past participle";
+  return "past simple";
 }
 
 function getTenseHintEs(tense) {
-  return tense === "present" ? "presente" : "pasado";
+  if (tense === "present") return "presente";
+  if (tense === "participle") return "pasado participio";
+  return "pasado simple";
 }
 
-function getOppositeTense(tense) {
-  return tense === "present" ? "past" : "present";
+function getSourceTense(verb, tense) {
+  const targetForm = normalizeQuizAnswer(getVerbForm(verb, tense));
+  const differentOptions = ["present", "past", "participle"].filter(item => (
+    item !== tense && normalizeQuizAnswer(getVerbForm(verb, item)) !== targetForm
+  ));
+  const fallbackOptions = ["present", "past", "participle"].filter(item => item !== tense);
+  const options = differentOptions.length ? differentOptions : fallbackOptions;
+  return options[Math.floor(Math.random() * options.length)];
 }
 
 function getVerbForm(verb, tense) {
-  return tense === "present" ? verb.present : verb.past;
+  if (tense === "present") return verb.present;
+  if (tense === "participle") return verb.participle;
+  return verb.past;
 }
 
 function normalizeQuizAnswer(value) {
@@ -43,8 +56,8 @@ function normalizeQuizAnswer(value) {
     .trim();
 }
 
-function getPastTargets(verb) {
-  return String(verb.past || "")
+function getFormTargets(value) {
+  return String(value || "")
     .toLowerCase()
     .split("/")
     .map(s => normalizeQuizAnswer(s))
@@ -52,12 +65,13 @@ function getPastTargets(verb) {
 }
 
 function getTenseTargets(verb, tense) {
-  if (tense === "present") return [normalizeQuizAnswer(verb.present)].filter(Boolean);
-  return getPastTargets(verb);
+  return getFormTargets(getVerbForm(verb, tense));
 }
 
 function getSpanishTenseName(tense) {
-  return tense === "present" ? "presente" : "pasado";
+  if (tense === "present") return "presente";
+  if (tense === "participle") return "pasado participio";
+  return "pasado simple";
 }
 
 const QUIZ_SENTENCE_TRANSLATIONS_ES = {
@@ -314,7 +328,7 @@ function buildSentencePrompt(verb, tense) {
   }
 
   const meaning = VERB_MEANINGS_ES[verb.present] || verb.present;
-  const formTargets = tense === "past" ? getTenseTargets(verb, tense) : [];
+  const formTargets = tense !== "present" ? getTenseTargets(verb, tense) : [];
   const targets = Array.from(new Set([normalizeQuizAnswer(answer), ...formTargets])).filter(Boolean);
   return { promptHtml, answer, targets, hint: `${meaning} en ${getTenseHintEs(tense)}` };
 }
@@ -349,10 +363,12 @@ function buildTranslationPrompt(verb, tense) {
 
 /* ── Build question ── */
 function buildQuestion(verb, pool) {
-  const mechs = ["swipe", "type", "sentence", "choice", "translate"];
-  const mech = mechs[Math.floor(Math.random() * mechs.length)];
   const tense = pickQuizTense();
-  const sourceTense = getOppositeTense(tense);
+  const mechs = tense === "participle"
+    ? ["swipe", "type", "choice"]
+    : ["swipe", "type", "sentence", "choice", "translate"];
+  const mech = mechs[Math.floor(Math.random() * mechs.length)];
+  const sourceTense = getSourceTense(verb, tense);
   const source = getVerbForm(verb, sourceTense);
   const answer = getVerbForm(verb, tense);
   const tenseName = getTenseName(tense);

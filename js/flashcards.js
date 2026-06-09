@@ -9,6 +9,7 @@ function renderCard(animate = true) {
 
   document.getElementById("cardPresent").textContent = verb.present;
   document.getElementById("cardPast").textContent = verb.past;
+  document.getElementById("cardParticiple").textContent = verb.participle;
   document.getElementById("cardPresentRef").textContent = `← ${verb.present}`;
 
   const badge = document.getElementById("cardBadge");
@@ -34,7 +35,7 @@ function toggleFlip() {
   isFlipped = !isFlipped;
   if (isFlipped) {
     scene.classList.add("flipped");
-    document.getElementById("sideHint").textContent = "Past tense";
+    document.getElementById("sideHint").textContent = "Past forms";
     setTimeout(() => { document.getElementById("actions").classList.add("visible"); }, 350);
   } else {
     scene.classList.remove("flipped");
@@ -47,7 +48,7 @@ function toggleFlip() {
 function next() {
   const scene = document.getElementById("cardScene");
   const cardInner = scene.querySelector(".card-inner");
-  const backText = document.getElementById("cardPast");
+  const backText = document.getElementById("cardForms");
 
   backText.style.visibility = "hidden";
   cardInner.style.transition = "none";
@@ -58,7 +59,6 @@ function next() {
 
   document.getElementById("actions").classList.remove("visible");
   document.getElementById("sideHint").textContent = "Present tense";
-  backText.textContent = "";
   cursor++;
 
   if (cursor >= deck.length) {
