@@ -782,7 +782,7 @@
 
 .vocab-card {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
   min-width: 0;
@@ -856,19 +856,22 @@
 
 .vocab-forms {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   min-width: 0;
+  max-width: 100%;
 }
 
 .vocab-past,
 .vocab-participle {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(22px, max-content) minmax(0, 1fr);
   align-items: center;
   column-gap: 5px;
   row-gap: 1px;
   min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   padding: 5px 7px;
   border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
   border-radius: 12px;
@@ -884,7 +887,8 @@
 .vocab-form-label {
   display: inline-grid;
   place-items: center;
-  min-width: 24px;
+  min-width: 22px;
+  max-width: 100%;
   padding: 2px 4px;
   border-radius: 999px;
   color: var(--bg);
@@ -894,6 +898,7 @@
   font-weight: 900;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .vocab-participle .vocab-form-label {
@@ -993,6 +998,28 @@
 
 .vocab-empty[hidden] {
   display: none;
+}
+
+@media (max-width: 680px) {
+  .vocab-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .vocab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vocab-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .vocab-forms {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vocab-card-meta {
+    display: none;
+  }
 }
 
 /* ── SOUND TAG (still used in flashcards) ── */
